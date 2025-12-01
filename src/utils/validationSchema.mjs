@@ -56,3 +56,30 @@ export const indexValidationSchema = {
     }
 
 };
+
+export const createProductValidationSchema = {
+    id: {
+        in: ['body'],
+        isString: {
+            errorMessage: "ID must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Must not be Empty"
+        }
+    },
+    product_name: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Product Name must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Product Name Must not be Empty"
+        }
+    },
+    description: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Product Name must be a String"
+        },
+    }
+}

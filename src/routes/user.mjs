@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { User } from '../mongoose/schemas/user.mjs';
 import { createUserValidationSchema, indexValidationSchema } from '../utils/validationSchema.mjs';
 import { checkSchema, matchedData, validationResult } from 'express-validator';
-import { resolveByUserId } from '../utils/middlewares.mjs';
+import { findByUserId, updateByUserId, updateSpecificByUserId } from '../utils/middlewares.mjs';
 const router = Router();
 
 router.post('/api/user', checkSchema(createUserValidationSchema), async (req, res) => {
@@ -37,7 +37,7 @@ router.get('/api/user', async (req, res) => {
     }
 });
 
-router.get('/api/user/:id', checkSchema(indexValidationSchema), resolveByUserId, async (req, res) => {
+router.get('/api/user/:id', checkSchema(indexValidationSchema), findByUserId, async (req, res) => {
     try {
 
         const { findUserIndex } = req;
@@ -49,5 +49,34 @@ router.get('/api/user/:id', checkSchema(indexValidationSchema), resolveByUserId,
         });
     }
 });
+
+router.put('/api/user/:id', updateByUserId, (req, res) => {
+    try {
+        const { updatedUser } = req;
+        return res.status(200).send({ message: "Successfully Updated", data: updatedUser })
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
+})
+
+router.patch('/api/user/:id', updateSpecificByUserId, (req, res) => {
+    try {
+        const { updatedUser } = req;
+        return res.status(200).send({ message: "Successfully Updated", data: updatedUser })
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
+})
+
+router.delete('/api/user/:id', async (req, res) => {
+    try {
+        const { body, params: { id } } = req;
+        const deletedUser = await User.findOneAndDelete({ id: id });
+        if (!deletedUser) return res.status(404).send("User Not Found")
+        return res.status(200).send({ message: "Successfully Deleted", })
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
+})
 
 export default router;
