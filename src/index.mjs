@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import router from './routes/users.mjs';
+import router from './routes/index.mjs';
+
 
 const app = express();
 

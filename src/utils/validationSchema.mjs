@@ -39,3 +39,20 @@ export const createUserValidationSchema = {
     },
 
 };
+
+export const indexValidationSchema = {
+
+    id: {
+        in: ["params"],
+        notEmpty: {
+            errorMessage: "ID must not be empty"
+        },
+        isInt: {
+            options: { min: 1 },
+            errorMessage: "ID must be number and  greater than 0"
+        },
+
+
+    }
+
+};
