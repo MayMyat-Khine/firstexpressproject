@@ -28,8 +28,8 @@ router.post('/api/user', checkSchema(createUserValidationSchema), async (req, re
 router.get('/api/user', async (req, res) => {
     try {
         console.log("here is get user api");
-        const newUser = await User.find();
-        res.json(newUser);
+        const users = await User.find();
+        res.json(users);
     } catch (error) {
         return res.status(400).json({
             message: error.message
@@ -70,7 +70,7 @@ router.patch('/api/user/:id', updateSpecificByUserId, (req, res) => {
 
 router.delete('/api/user/:id', async (req, res) => {
     try {
-        const { body, params: { id } } = req;
+        const { params: { id } } = req;
         const deletedUser = await User.findOneAndDelete({ id: id });
         if (!deletedUser) return res.status(404).send("User Not Found")
         return res.status(200).send({ message: "Successfully Deleted", })
