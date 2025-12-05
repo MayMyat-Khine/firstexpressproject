@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import { User } from '../mongoose/schemas/user.mjs';
 import { Product } from '../mongoose/schemas/product.mjs';
+import { Stock } from "../mongoose/schemas/stock.mjs";
 export const findByUserId = async (req, res, next) => {
 
     const { body, params: { id } } = req;
@@ -20,9 +21,19 @@ export const findByProductId = async (req, res, next) => {
 
     console.log("Product ID", id);
     const foundProduct = await Product.findOne({ id: id })
-    console.log("Product ", foundProduct);
+    console.log("Found Product ", foundProduct);
 
     req.foundProduct = foundProduct;
+    req.id = id;
+    next();
+}
+
+export const findProductFromStock = async (req, res, next) => {
+    const { params: { id } } = req;
+    console.log("Here is product id", id);
+    const foundProduct = await Stock.findOne({ product_id: id });
+    console.log("here is product from stock db", foundProduct);
+    req.foundProductFromStock = foundProduct;
     next();
 }
 

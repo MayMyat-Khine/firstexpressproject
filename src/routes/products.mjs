@@ -6,26 +6,27 @@ import { findByProductId, updateByProductId, updateSpecificByProductId } from ".
 
 const router = Router();
 
-router.post('/api/product', checkSchema(createProductValidationSchema), async (req, res) => {
-    console.log("Product Create Post ");
-    const result = validationResult(req);
-    if (!result.isEmpty()) return res.status(400).send(result.array());
+router.post('/api/product', checkSchema(createProductValidationSchema),
+    async (req, res) => {
+        console.log("Product Create Post ");
+        const result = validationResult(req);
+        if (!result.isEmpty()) return res.status(400).send(result.array());
 
-    const data = matchedData(req);
-    console.log("here is data before process to model", data);
-    const newProduct = Product(data);
+        const data = matchedData(req);
+        console.log("here is data before process to model", data);
+        const newProduct = Product(data);
 
-    try {
-        console.log("here is product before save to db ", newProduct);
-        const savedProduct = await newProduct.save();
-        return res.send(savedProduct);
-    } catch (error) {
-        console.log("Product Create Post error");
-        return res.status(400).json({ success: false, message: error.message, errors: error.errors || null });
+        try {
+            console.log("here is product before save to db ", newProduct);
+            const savedProduct = await newProduct.save();
+            return res.send(savedProduct);
+        } catch (error) {
+            console.log("Product Create Post error");
+            return res.status(400).json({ success: false, message: error.message, errors: error.errors || null });
 
-    }
+        }
 
-})
+    })
 
 router.get("/api/products", async (req, res) => {
     console.log("Product Get Fectched");
@@ -38,6 +39,11 @@ router.get("/api/products", async (req, res) => {
 })
 
 router.get("/api/product/:id", checkSchema(indexValidationSchema), findByProductId, (req, res) => {
+    const result = validationResult(req);
+
+    console.log(result.array());
+
+    if (!result.isEmpty()) return res.status(400).send(result.array());
     try {
         const { foundProduct } = req;
         if (foundProduct === null) return res.sendStatus(404);

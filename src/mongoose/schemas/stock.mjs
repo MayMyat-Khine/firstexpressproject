@@ -10,18 +10,15 @@ const StockSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
-    "current_stock": {
+    "stock": {
         type: mongoose.Schema.Types.Number,
         required: true,
     },
-    "max_stock": {
+    "low_stock": {
         type: mongoose.Schema.Types.Number,
         required: true,
     },
-    "min_stock": {
-        type: mongoose.Schema.Types.Number,
-        required: true,
-    },
+
 });
 
 export const Stock = mongoose.model('stock', StockSchema)

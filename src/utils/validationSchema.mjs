@@ -47,9 +47,9 @@ export const indexValidationSchema = {
         notEmpty: {
             errorMessage: "ID must not be empty"
         },
-        isInt: {
-            options: { min: 1 },
-            errorMessage: "ID must be number and  greater than 0"
+        isString: {
+
+            errorMessage: "ID must be a String"
         },
 
 
@@ -82,4 +82,28 @@ export const createProductValidationSchema = {
             errorMessage: "Product Name must be a String"
         },
     }
+}
+
+export const createStockValidationSchema = {
+    id: {
+        in: ["body"],
+        isString: { errorMessage: "ID must be string" },
+        notEmpty: { errorMessage: "ID must not be Empty" }
+    },
+    product_id: {
+        in: ["body"],
+        isString: { errorMessage: "Product ID must be string" },
+        notEmpty: { errorMessage: "Product ID must not be Empty" }
+    },
+    stock: {
+        in: ["body"],
+        isNaN: { errorMessage: "Stock must be a number" },
+        notEmpty: { errorMessage: "Stock must not be Empty" }
+    },
+    low_stock: {
+        in: ["body"],
+        isNaN: { errorMessage: "Low Stock must be a number" },
+        notEmpty: { errorMessage: "Low Stock must not be Empty" }
+    },
+
 }
