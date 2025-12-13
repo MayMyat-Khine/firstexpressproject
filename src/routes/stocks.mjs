@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createStockValidationSchema, indexValidationSchema } from '../utils/validationSchema.mjs';
 import { checkSchema, matchedData, validationResult } from 'express-validator';
-import { findByProductId, findProductFromStock } from '../utils/middlewares.mjs';
+import { findByProductId, findProductFromStock, updateSpecificStockByProductId, updateStockByProductId } from '../utils/middlewares.mjs';
 import { Stock } from '../mongoose/schemas/stock.mjs';
 
 const router = Router();
@@ -55,4 +55,31 @@ router.get("/api/stock/:id", checkSchema(indexValidationSchema), findProductFrom
         return res.status(400).send(error.message);
     }
 })
+
+router.put("/api/stock/:id", checkSchema(indexValidationSchema), findProductFromStock, findByProductId, updateStockByProductId,
+    (req, res) => {
+        const result = validationResult(req);
+        const { foundProduct, foundProductFromStock, updatedStock } = req;
+
+        if (!result.isEmpty()) return res.status(400).send(result.array());
+        if (!foundProduct || !foundProductFromStock) return res.status(404).send(`This product ${req.id} is not found`);
+
+
+        return res.status(200).send({ message: "Successfully Updated The Product", data: updatedStock });
+
+    })
+
+router.patch("/api/stock/:id", checkSchema(indexValidationSchema), findProductFromStock, findByProductId, updateSpecificStockByProductId,
+    (req, res) => {
+        const result = validationResult(req);
+        const { foundProduct, foundProductFromStock, updatedStock, } = req;
+        if (!result.isEmpty()) return res.status(400).send(result.array());
+        if (!foundProduct || !foundProductFromStock) return res.status(404).send(`This product ${req.id} is not found`);
+        return res.status(200).send({ message: "Successfully Updated The Product", data: updatedStock });
+
+    });
+// Soe MIn thein/maung aye
+
+router.delete("/api/stock/:id", checkSchema(indexValidationSchema),
+    (req, res) => { })
 export default router;

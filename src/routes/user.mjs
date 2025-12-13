@@ -29,7 +29,7 @@ router.get('/api/user', async (req, res) => {
     try {
         console.log("here is get user api");
         const users = await User.find();
-        res.json(users);
+        res.json({ success: true, body: users });
     } catch (error) {
         return res.status(400).json({
             message: error.message
@@ -42,7 +42,7 @@ router.get('/api/user/:id', checkSchema(indexValidationSchema), findByUserId, as
 
         const { findUserIndex } = req;
         if (findUserIndex === null) return res.send(400);
-        return res.status(200).send(findUserIndex);
+        return res.status(200).send({ success: true, body: [findUserIndex] });
     } catch (error) {
         return res.status(400).json({
             message: error.message

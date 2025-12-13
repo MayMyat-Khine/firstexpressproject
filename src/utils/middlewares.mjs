@@ -63,6 +63,31 @@ export const updateByProductId = async (req, res, next) => {
     next();
 }
 
+export const updateStockByProductId = async (req, res, next) => {
+    const { body, params: { id } } = req;
+    const updatedStock = await Stock.replaceOne({ product_id: id }, body);
+    if (!updatedStock) return res.status(400).json({
+        success: false,
+        message: `Product with ${id} not found`
+    });
+    req.updatedStock = updatedStock;
+    next();
+};
+
+export const updateSpecificStockByProductId = async (req, res, next) => {
+    const { body, params: { id } } = req;
+    const updatedStock = await Stock.updateOne(
+        { product_id: id },
+        { $set: body }
+    );
+    if (updatedStock.matchedCount === 0) return res.status(400).json({
+        success: false,
+        message: `User with id ${id} is  not found`
+    })
+    req.updatedStock = updatedStock;
+    next();
+}
+
 export const updateSpecificByUserId = async (req, res, next) => {
     const { body, params: { id } } = req;
     const updatedUser = await User.updateOne(
