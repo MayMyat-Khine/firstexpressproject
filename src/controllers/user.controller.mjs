@@ -1,18 +1,5 @@
 
-// /
-// async (req, res) => {
-//     try {
-//         console.log("here is get user api");
-//         const users = await User.find();
-//         res.json({ success: true, body: users });
-//     } catch (error) {
-//         return res.status(400).json({
-//             message: error.message
-//         });
-//     }
-// }/
-
-import { matchedData, validationResult } from "express-validator";
+import { matchedData } from "express-validator";
 import { User } from "../mongoose/schemas/user.mjs";
 
 export async function userCreateController(req, res) {

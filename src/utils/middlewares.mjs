@@ -27,7 +27,10 @@ export const findByProductId = async (req, res, next) => {
     console.log("Product ID", id);
     const foundProduct = await Product.findOne({ id: id })
     console.log("Found Product ", foundProduct);
-
+    if (foundProduct === null) return res.status(404).send({
+        success: false,
+        msg: `Product with ID ${id} not found`
+    });
     req.foundProduct = foundProduct;
     req.id = id;
     next();
@@ -44,17 +47,6 @@ export const findProductFromStock = async (req, res, next) => {
 
 
 
-
-export const updateByProductId = async (req, res, next) => {
-    const { body, params: { id } } = req;
-    const updatedProduct = await Product.findOneAndUpdate({ id: id }, body, { new: true, runValidatiors: true });
-    if (!updatedProduct) return res.status(400).json({
-        success: false,
-        message: `Product with ${id} not found`
-    });
-    req.updatedProduct = updatedProduct;
-    next();
-}
 
 export const updateStockByProductId = async (req, res, next) => {
     const { body, params: { id } } = req;
@@ -81,17 +73,3 @@ export const updateSpecificStockByProductId = async (req, res, next) => {
     next();
 }
 
-export const updateSpecificByProductId = async (req, res, next) => {
-    const { body, params: { id } } = req;
-    const updatedProuduct = await Product.updateOne(
-        { id: id },
-        { $set: body }
-    );
-    if (updatedProuduct.matchedCount === 0) return res.status(400).json({
-        success: false,
-        message: `Product with id ${id} is not found`
-    });
-
-    req.updatedProduct = updatedProuduct;
-    next();
-}
