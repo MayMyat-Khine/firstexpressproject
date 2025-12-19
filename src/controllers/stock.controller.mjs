@@ -66,7 +66,7 @@ export async function stockPatchByProductIdController(req, res) {
                 success: false,
                 message: `stock with id ${id} is  not found`
             })
-        return res.status(200).send({ message: "Successfully Updated", data: updatedstock })
+        return res.status(200).send({ message: "Successfully Updated", data: updatedStock })
     } catch (error) {
         return res.status(400).send(error.message);
     }

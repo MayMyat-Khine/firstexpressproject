@@ -1,6 +1,6 @@
 import { Product } from "../mongoose/schemas/product.mjs";
 import { matchedData } from "express-validator";
-import { createProductWithStock, deleteProdcutWithStock, productUpdateWithStock } from "../services/product.service.mjs";
+import { createProductWithStock, deleteProdcutWithStock, productUpdateWithStock, productPatchWithStock } from "../services/product.service.mjs";
 
 export async function productCreateController(req, res) {
 
@@ -64,10 +64,7 @@ export async function productUpdateByIdController(req, res) {
 export async function productPatchByIdController(req, res) {
     try {
         const { body, params: { id } } = req;
-        const updatedProduct = await Product.updateOne(
-            { id: id },
-            { $set: body }
-        );
+        const updatedProduct = productPatchWithStock(id, body);
         if (updatedProduct.matchedCount === 0) return res.status(400).json({
             success: false,
             message: `Product with id ${id} is  not found`

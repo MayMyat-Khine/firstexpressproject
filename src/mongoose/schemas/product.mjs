@@ -15,6 +15,7 @@ const ProductSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
     },
 
+
 })
 
 export const Product = mongoose.model('product', ProductSchema);

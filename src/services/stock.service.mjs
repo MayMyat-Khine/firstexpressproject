@@ -1,12 +1,15 @@
 import { Stock } from "../mongoose/schemas/stock.mjs";
-export const createStock = async ({ id, productId, stock = 0, lowStock = 0 }) => {
-
-    return await Stock.create({
+export const createStock = async ({ id, productId, stock = 0, lowStock = 0, session }) => {
+    // FORCE ERROR FOR TEST
+    if (stock < 0) {
+        throw new Error("Stock cannot be negative");
+    }
+    return await Stock.create([{
         id: id,
         product_id: productId,
         stock: stock,
         low_stock: lowStock,
-    },);
+    }], { session });
 };
 
 export const updateStock = async ({ id, stockData }) => {
