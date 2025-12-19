@@ -1,12 +1,14 @@
 import { Product } from "../mongoose/schemas/product.mjs";
 import { matchedData } from "express-validator";
+import { createProductWithStock, deleteProdcutWithStock, productUpdateWithStock } from "../services/product.service.mjs";
 
 export async function productCreateController(req, res) {
 
     try {
-        const data = matchedData(req);
-        const newProduct = new Product(data);
-        const savedProduct = await newProduct.save();
+
+        const validData = matchedData(req);
+        console.log("Here is valid data in product controller", validData);
+        const savedProduct = await createProductWithStock(validData);
         return res.status(201).send({ success: true, body: savedProduct });
     } catch (error) {
         return res.status(400).json({
@@ -44,7 +46,9 @@ export async function productUpdateByIdController(req, res) {
     try {
         // runValidators: true //check the schme validation
         //  { new: true } // give the updated obj if its false then will give the old data even the data is updated
-        const updatedProduct = await Product.findOneAndUpdate({ id: id }, body, { new: true, runValidators: true });
+        // const updatedProduct = await Product.findOneAndUpdate({ id: id }, body, { new: true, runValidators: true });
+        console.log("here is product update data at product controller", body);
+        const updatedProduct = await productUpdateWithStock(id, body);
         if (!updatedProduct) return res.status(400).json({
             success: false,
             message: `Product with id ${id} not found`
@@ -79,9 +83,8 @@ export async function productPatchByIdController(req, res) {
 export async function productDeleteByIdController(req, res) {
     try {
         const { id } = req.params;
-        const deletedProduct = await Product.findOneAndDelete({ id: id });
-        if (!deletedProduct) return res.status(404).send("Product Not Found")
-        return res.status(200).send({ message: "Successfully Deleted", })
+        await deleteProdcutWithStock(id);
+        return res.status(200).send({ message: "Successfully Deleted" })
     } catch (error) {
         return res.status(400).send(error.message);
     }

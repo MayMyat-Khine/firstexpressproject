@@ -36,11 +36,15 @@ export const findByProductId = async (req, res, next) => {
     next();
 }
 
-export const findProductFromStock = async (req, res, next) => {
+export const findStockByProductId = async (req, res, next) => {
     const { params: { id } } = req;
     console.log("Here is product id", id);
     const foundProduct = await Stock.findOne({ product_id: id });
     console.log("here is product from stock db", foundProduct);
+    if (foundProduct === null) return res.status(404).send({
+        success: false,
+        msg: `Product with ID ${id} not found`
+    });
     req.foundProductFromStock = foundProduct;
     next();
 }
@@ -48,28 +52,5 @@ export const findProductFromStock = async (req, res, next) => {
 
 
 
-export const updateStockByProductId = async (req, res, next) => {
-    const { body, params: { id } } = req;
-    const updatedStock = await Stock.replaceOne({ product_id: id }, body);
-    if (!updatedStock) return res.status(400).json({
-        success: false,
-        message: `Product with ${id} not found`
-    });
-    req.updatedStock = updatedStock;
-    next();
-};
 
-export const updateSpecificStockByProductId = async (req, res, next) => {
-    const { body, params: { id } } = req;
-    const updatedStock = await Stock.updateOne(
-        { product_id: id },
-        { $set: body }
-    );
-    if (updatedStock.matchedCount === 0) return res.status(400).json({
-        success: false,
-        message: `User with id ${id} is  not found`
-    })
-    req.updatedStock = updatedStock;
-    next();
-}
 

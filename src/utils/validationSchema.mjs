@@ -81,7 +81,23 @@ export const createProductValidationSchema = {
         isString: {
             errorMessage: "Product Name must be a String"
         },
-    }
+    },
+    stock_id: {
+        in: ["body"],
+        isString: { errorMessage: "Stock ID must be string" },
+        notEmpty: { errorMessage: "Stock ID must not be Empty" }
+    },
+
+    stock: {
+        in: ["body"],
+        isNaN: { errorMessage: "Stock must be a number" },
+        notEmpty: { errorMessage: "Stock must not be Empty" }
+    },
+    low_stock: {
+        in: ["body"],
+        isNaN: { errorMessage: "Low Stock must be a number" },
+        notEmpty: { errorMessage: "Low Stock must not be Empty" }
+    },
 }
 
 export const createStockValidationSchema = {
