@@ -21,6 +21,7 @@ export const findByUserId = async (req, res, next) => {
     next();
 }
 
+// find by id using at endPoint with params
 export const findByProductId = async (req, res, next) => {
     const { body, params: { id } } = req;
 

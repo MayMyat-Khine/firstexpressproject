@@ -6,32 +6,38 @@ const OrderScheme = mongoose.Schema({
         required: true,
         unique: true
     }),
-    "marchant_name": ({
+    "merchant_id": ({
         type: mongoose.Schema.Types.String,
         required: true,
 
     }),
-    "customer_name": ({
+    "customer_id": ({
         type: mongoose.Schema.Types.String,
         required: true,
 
     }),
-    "purchase_products": ({
-        type: mongoose.Schema.Types.Array,
+    "purchase_products": {
+        type: [{
+            product_id: {
+                type: mongoose.Schema.Types.String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                default: 1
+            },
+            price_per_unit: {
+                type: Number,
+                required: true
+            }
+        }],
         required: true,
 
-    }),
-    "total_amount": ({
-        type: mongoose.Schema.Types.Number,
-        required: true,
-
-    }),
-    "purchase_time": ({
-        type: mongoose.Schema.Types.Date,
-        required: true,
-    }),
-
-
+    },
 })
 
 export const Order = mongoose.model('order', OrderScheme);

@@ -123,3 +123,27 @@ export const createStockValidationSchema = {
     },
 
 }
+
+export const createOrderValidationSchema = {
+    order_id: {
+        in: ["body"],
+        isString: { errorMessage: "Order ID must be string" },
+        notEmpty: { errorMessage: "Order ID must not be Empty" }
+    },
+    merchant_id: {
+        in: ["body"],
+        isString: { errorMessage: "Merchant ID must be string" },
+        notEmpty: { errorMessage: "Merchant ID must not be Empty" }
+    },
+    customer_id: {
+        in: ["body"],
+        isString: { errorMessage: "Customer ID must be string" },
+        notEmpty: { errorMessage: "Customer ID must not be Empty" }
+    },
+
+    purchase_products: {
+        in: ["body"],
+        notEmpty: { errorMessage: "Products must not be Empty" }
+    },
+
+};
