@@ -31,6 +31,7 @@ export const updateStocksBulk = async (stockUpdates, session) => {
             update: { $set: stockData }
         }
     }));
+    // throw new Error("FORCED_TRANSACTION_FAILURE");
     return await Stock.bulkWrite(bulkOps, { session });
 }
 

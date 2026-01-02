@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import { User } from '../mongoose/schemas/user.mjs';
 import { Product } from '../mongoose/schemas/product.mjs';
 import { Stock } from "../mongoose/schemas/stock.mjs";
+import { Order } from "../mongoose/schemas/order.mjs";
 
 // True here middleware function
 export const findByUserId = async (req, res, next) => {
@@ -51,7 +52,17 @@ export const findStockByProductId = async (req, res, next) => {
 }
 
 
+export const findByOrderId = async (req, res, next) => {
+    const { params: { id } } = req;
 
+    const foundOrder = await Order.findOne({ order_id: id });
+    if (foundOrder === null) return res.status(404).send({
+        success: false,
+        msg: `Order with ID ${id} not found`
+    });
+    req.foundOrder = foundOrder;
+    next();
+};
 
 
 
