@@ -46,3 +46,12 @@ export const deleteUser = async (id) => {
         throw error;
     }
 };
+
+export const findUserById = async (id) => {
+    try {
+        const foundUser = await User.findOne({ id: id });
+        return foundUser;
+    } catch (error) {
+        throw error;
+    }
+}

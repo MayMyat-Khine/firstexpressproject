@@ -143,7 +143,27 @@ export const createOrderValidationSchema = {
 
     purchase_products: {
         in: ["body"],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Products must be an array with at least one item"
+
+        },
         notEmpty: { errorMessage: "Products must not be Empty" }
     },
+    // * means every object in the array
+    // Each object must have product_id
+    "purchase_products.*.id": {
+        in: ["body"],
+        isString: { errorMessage: "Product ID must be string" },
+        notEmpty: { errorMessage: "Product ID must not be empty" }
+    },
+
+    "purchase_products.*.quantity": {
+        in: ["body"],
+        isInt: {
+            options: { gt: 0 },
+            errorMessage: "Quantity must be greater than 0"
+        }
+    }
 
 };

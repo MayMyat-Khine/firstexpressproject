@@ -2,7 +2,7 @@ import { Router } from "express";
 import { checkSchema } from "express-validator";
 import { createOrderValidationSchema } from "../utils/validationSchema.mjs";
 import { validate } from "../utils/validate.middleware.mjs";
-import { orderCreateController } from "../controllers/addToCart.controller.mjs";
+import { orderCreateController } from "../controllers/order.controller.mjs";
 
 const router = Router();
 
@@ -11,3 +11,5 @@ router.post("/api/order",
     validate,
     orderCreateController
 );
+
+export default router;

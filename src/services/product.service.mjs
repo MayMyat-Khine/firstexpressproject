@@ -81,3 +81,14 @@ export const deleteProdcutWithStock = async (productId) => {
 
     }
 };
+
+export const findProductsByIds = async (ids) => {
+    try {
+
+        const foundProduct = await Product.find({ id: { $in: ids } });
+
+        return foundProduct;
+    } catch (error) {
+        throw error;
+    }
+};

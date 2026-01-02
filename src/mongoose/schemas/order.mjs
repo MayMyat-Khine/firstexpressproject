@@ -18,22 +18,14 @@ const OrderScheme = mongoose.Schema({
     }),
     "purchase_products": {
         type: [{
-            product_id: {
+            id: {
                 type: mongoose.Schema.Types.String,
-                required: true
-            },
-            name: {
-                type: String,
                 required: true
             },
             quantity: {
                 type: Number,
                 default: 1
             },
-            price_per_unit: {
-                type: Number,
-                required: true
-            }
         }],
         required: true,
 

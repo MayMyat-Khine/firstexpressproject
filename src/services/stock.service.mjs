@@ -1,5 +1,5 @@
 import { Stock } from "../mongoose/schemas/stock.mjs";
-export const createStock = async ({ id, productId, stock = 0, lowStock = 0, session }) => {
+export const createStock = async (id, productId, stock = 0, lowStock = 0, session) => {
     // FORCE ERROR FOR TEST
     if (stock < 0) {
         throw new Error("Stock cannot be negative");
@@ -12,7 +12,7 @@ export const createStock = async ({ id, productId, stock = 0, lowStock = 0, sess
     }], { session });
 };
 
-export const updateStock = async ({ id, stockData }) => {
+export const updateStock = async (id, stockData) => {
     //  const updatedStock = await Stock.replaceOne({ product_id: id }, body);
     return await Stock.findOneAndUpdate(
         { product_id: id },
@@ -23,7 +23,18 @@ export const updateStock = async ({ id, stockData }) => {
     );
 };
 
-export const updatePatchStock = async ({ id, stockData }) => {
+export const updateStocksBulk = async (stockUpdates, session) => {
+    console.log("Here is stock updates for bulk", stockUpdates);
+    const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
+        updateOne: {
+            filter: { product_id: product_id },
+            update: { $set: stockData }
+        }
+    }));
+    return await Stock.bulkWrite(bulkOps, { session });
+}
+
+export const updatePatchStock = async (id, stockData) => {
     return await Stock.updateOne(
         { product_id: id },            // Filter
         { $set: stockData } // Update operator
@@ -31,6 +42,15 @@ export const updatePatchStock = async ({ id, stockData }) => {
 
 };
 
-export const deleteStock = async ({ id }) => {
+export const deleteStock = async (id) => {
     return await Stock.findOneAndDelete({ product_id: id });
 };
+
+export const findStocksByProductIds = async (ids) => {
+    try {
+        return await Stock.find({ product_id: { $in: ids } });
+    } catch (error) {
+        throw error;
+    }
+};
+
