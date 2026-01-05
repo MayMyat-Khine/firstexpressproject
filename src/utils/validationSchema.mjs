@@ -214,6 +214,13 @@ export const updateOrderValidationSchema = {
         }
     },
 
+    "original_products.*.method": {
+        in: ["body"],
+        isString: { errorMessage: "Method must be a string" },
+        notEmpty: { errorMessage: "Method must not be empty" },
+        isIn: { options: [["ADD", "SUB"]], errorMessage: "Method must be either 'ADD' or 'SUB'" }
+    },
+
     "new_products.*.id": {
         in: ["body"],
         // if: (value, { req }) => Array.isArray(req.body.new_products),
