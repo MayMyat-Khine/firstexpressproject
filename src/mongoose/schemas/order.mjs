@@ -4,7 +4,7 @@ const OrderScheme = mongoose.Schema({
     "id": ({
         type: mongoose.Schema.Types.String,
         required: true,
-        unique: true
+        // unique: true
     }),
     "merchant_id": ({
         type: mongoose.Schema.Types.String,

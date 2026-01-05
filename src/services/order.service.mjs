@@ -70,6 +70,7 @@ export const createOrderService = async (orderData) => {
 
         // === Create order after all validation === // 
         const newOrder = new Order(orderData);
+        console.log("Order Create Before Save", newOrder);
         const savedOrder = await newOrder.save({ session });
 
 
@@ -221,11 +222,13 @@ export const updateOrder = async (orderId, orderData) => {
                 quantity: product.method === "ADD" ? product.quantity + oldProductsMap[product.id] : oldProductsMap[product.id] - product.quantity
             }
         });
-        const updatedOrder = await Order.findOneAndUpdate(
-            { id: orderId },
-            { $set: { purchase_products: mappedProducts } },
-            { new: true, runValidators: true }
-        );
+        const bulkOps = mappedProducts.map(p => ({
+            updateOne: {
+                filter: { id: orderId, "purchase_products.id": p.id },
+                update: { $set: { "purchase_products.$.quantity": p.quantity } }
+            }
+        }));
+        const updatedOrder = await Order.bulkWrite(bulkOps);
 
         // === Update Stock here === // Case Only for Existing Products
         // === Substract and Update the  stock  db === //
