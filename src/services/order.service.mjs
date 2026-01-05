@@ -95,3 +95,120 @@ export const createOrderService = async (orderData) => {
     }
 
 };
+
+export const updateOrder = async (orderId, orderData) => {
+    // here no case for PRODUCT HAD BEEN DELETED AND STOCK ADDING AS RETURN STOCK 
+    // but in real case need to handle that 
+    // check product presence
+    // check stock availability
+    // update order {session}
+    // update stock {session}
+    try {
+
+        console.log("Here is order id", orderId);
+        console.log("here is order update data", orderData);
+        // ==== Original Products Validation ==== //
+        const originalProductsIds = orderData['original_products'].map(product => product.id);
+
+        // ==== New Products Validation ==== //
+        const newProductsIds = orderData['new_products'] ? orderData['new_products'].map(product => product.id) : [];
+
+        // ==== Delete Products Validation === //
+        const deleteProductsIds = orderData['delete_products'] ? orderData['delete_products'].map(product => product.id) : [];
+
+
+        const validOriginalProducts = await findProductsByIds(originalProductsIds);
+        if (validOriginalProducts.length !== originalProductsIds.length) {
+            const error = Error("Invalid product id");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const validNewProducts = await findProductsByIds(newProductsIds);
+        if (validNewProducts.length !== newProductsIds.length) {
+            const error = Error("Invalid product id");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const validDeleteProducts = await findProductsByIds(deleteProductsIds);
+        if (validDeleteProducts.length !== deleteProductsIds.length) {
+            const error = Error("Invalid product id");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const validOriginalProductsIds = validOriginalProducts.map(product => product.id);
+        const validNewProductsIds = validNewProducts.map(product => product.id);
+        const validDeleteProductsIds = validDeleteProducts.map(product => product.id);
+
+        const originalStocks = await findStocksByProductIds(validOriginalProductsIds);
+        const newStocks = await findStocksByProductIds(validNewProductsIds);
+        const deleteStocks = await findStocksByProductIds(validDeleteProductsIds);
+
+        // === Stock Mapping === //
+        const originalStockMap = {};
+        originalStocks.forEach(stockData => {
+            originalStockMap[stockData.product_id] = stockData.stock;
+        });
+        const newStockMap = {};
+        newStocks.forEach(stockData => {
+            newStockMap[stockData.product_id] = stockData.stock;
+        });
+        const deleteStockMap = {};
+        deleteStocks.forEach(stockData => {
+            deleteStockMap[stockData.product_id] = stockData.stock;
+        });
+
+        //=========================== Here stop for new adding and delete for product update  ======================== //
+
+        // === Validate  Original Stock with Purchase Quantity === //
+        const originalProducts = orderData['original_products'];
+        const validateStockResult = originalProducts.map((item => {
+            const available = originalStockMap[item.id];
+
+            if (available === undefined) {
+                return { "product_id": item.id, "valid": false, "message": "No Product" };
+            }
+            else if (available < item.quantity) {
+                return { "product_id": item.id, "valid": false, "message": "Insufficient stock" };
+            }
+
+            return { "product_id": item.id, "valid": true };
+
+        }));
+
+        const hasInvalid = validateStockResult.some(result => !result.valid);
+        if (hasInvalid) {
+            const invalids = validateStockResult.filter(result => !result.valid);
+            const error = Error("Failed at stock checking");
+            error.statusCode = 400;
+            error.details = invalids;
+            throw error;
+        }
+
+        // === Update Order After Product and Stock Validation  === //
+        console.log("here is order update data after validation", orderId);
+        console.log("here is original products", originalProducts);
+        const updatedOrder = await Order.findOneAndUpdate(
+            { id: orderId },
+            { $set: { purchase_products: originalProducts } },
+            { new: true, runValidators: true }
+        );
+
+        // === Update Stock here === // Case Only for Existing Products
+        // === Substract and Update the  stock  db === //
+        const updatedStocks = await updateStocksBulk(originalProducts.map(({ id, quantity }) => ({
+            product_id: id,
+            stockData: { stock: originalStockMap[id] - quantity }
+        })));
+
+        if (updatedStocks.modifiedCount !== originalProducts.length) {
+            return Error("Failed to update all stocks after order create");
+        }
+        console.log("Here is updated order", updatedOrder);
+        return updatedOrder;
+    } catch (error) {
+        throw error;
+    }
+}

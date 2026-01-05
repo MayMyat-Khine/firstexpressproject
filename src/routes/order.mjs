@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
-import { createOrderValidationSchema, indexValidationSchema } from "../utils/validationSchema.mjs";
+import { createOrderValidationSchema, indexValidationSchema, updateOrderValidationSchema } from "../utils/validationSchema.mjs";
 import { validate } from "../utils/validate.middleware.mjs";
-import { orderCreateController, orderGetAllController, orderGetByIdController } from "../controllers/order.controller.mjs";
+import { orderCreateController, orderGetAllController, orderGetByIdController, orderUpdateByIdController } from "../controllers/order.controller.mjs";
 import { findByOrderId } from "../utils/middlewares.mjs";
 
 const router = Router();
@@ -20,6 +20,13 @@ router.get("/api/order/:id",
     findByOrderId,
     orderGetByIdController
 );
-// router.put("/api/order/:id",);
+
+router.put("/api/order/:id",
+    checkSchema(indexValidationSchema),
+    checkSchema(updateOrderValidationSchema),
+    validate,
+    findByOrderId,
+    orderUpdateByIdController
+);
 
 export default router;

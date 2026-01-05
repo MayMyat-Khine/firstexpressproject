@@ -125,7 +125,7 @@ export const createStockValidationSchema = {
 }
 
 export const createOrderValidationSchema = {
-    order_id: {
+    id: {
         in: ["body"],
         isString: { errorMessage: "Order ID must be string" },
         notEmpty: { errorMessage: "Order ID must not be Empty" }
@@ -165,5 +165,80 @@ export const createOrderValidationSchema = {
             errorMessage: "Quantity must be greater than 0"
         }
     }
+
+};
+
+export const updateOrderValidationSchema = {
+    original_products: {
+        in: ["body"],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Products must be an array with at least one item"
+
+        },
+        notEmpty: { errorMessage: "Products must not be Empty" }
+    },
+    new_products: {
+        in: ["body"],
+        optional: true,
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "New Products must be an array"
+
+        },
+    },
+    delete_products: {
+        in: ["body"],
+        optional: true,
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Delete Products must be an array"
+
+        },
+    },
+    // * means every object in the array
+
+    "original_products.*.id": {
+        in: ["body"],
+        // if: (value, { req }) => Array.isArray(req.body.new_products),
+        isString: { errorMessage: "Product ID must be string" },
+        notEmpty: { errorMessage: "Product ID must not be empty" }
+    },
+
+    "original_products.*.quantity": {
+        in: ["body"],
+        // if: (value, { req }) => Array.isArray(req.body.new_products),
+        isInt: {
+            options: { gt: 0 },
+            errorMessage: "Quantity must be greater than 0"
+        }
+    },
+
+    "new_products.*.id": {
+        in: ["body"],
+        // if: (value, { req }) => Array.isArray(req.body.new_products),
+        optional: { options: { nullable: true } },
+        isString: { errorMessage: "New Product ID must be string" },
+        notEmpty: { errorMessage: "New Product ID must not be empty" }
+    },
+
+    "new_products.*.quantity": {
+        in: ["body"],
+        // if: (value, { req }) => Array.isArray(req.body.new_products),
+        optional: { options: { nullable: true } },
+        isInt: {
+            options: { gt: 0 },
+            errorMessage: "Quantity must be greater than 0",
+        },
+    },
+
+    "delete_products.*.id": {
+        in: ["body"],
+        // if: (value, { req }) => Array.isArray(req.body.new_products),
+        optional: { options: { nullable: true } },
+        isString: { errorMessage: "Delete Product ID must be string" },
+        notEmpty: { errorMessage: "Delete Product ID must not be empty" }
+    },
+
 
 };
