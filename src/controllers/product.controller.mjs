@@ -7,7 +7,6 @@ export async function productCreateController(req, res) {
     try {
 
         const validData = matchedData(req);
-        console.log("Here is valid data in product controller", validData);
         const savedProduct = await createProductWithStock(validData);
         return res.status(201).send({ success: true, body: savedProduct });
     } catch (error) {

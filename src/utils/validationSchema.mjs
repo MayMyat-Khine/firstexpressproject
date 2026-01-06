@@ -239,13 +239,13 @@ export const updateOrderValidationSchema = {
         },
     },
 
-    "delete_products.*.id": {
-        in: ["body"],
-        // if: (value, { req }) => Array.isArray(req.body.new_products),
-        optional: { options: { nullable: true } },
-        isString: { errorMessage: "Delete Product ID must be string" },
-        notEmpty: { errorMessage: "Delete Product ID must not be empty" }
-    },
+    // "delete_products.*.id": {
+    //     in: ["body"],
+    //     // if: (value, { req }) => Array.isArray(req.body.new_products),
+    //     optional: { options: { nullable: true } },
+    //     isString: { errorMessage: "Delete Product ID must be string" },
+    //     notEmpty: { errorMessage: "Delete Product ID must not be empty" }
+    // },
 
 
 };

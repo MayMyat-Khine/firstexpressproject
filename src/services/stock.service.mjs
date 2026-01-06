@@ -4,6 +4,8 @@ export const createStock = async (id, productId, stock = 0, lowStock = 0, sessio
     if (stock < 0) {
         throw new Error("Stock cannot be negative");
     }
+    console.log("Here is stock data to create at service ", id);
+    console.log("Here is stock data to create at service prodcut id ", productId);
     return await Stock.create([{
         id: id,
         product_id: productId,

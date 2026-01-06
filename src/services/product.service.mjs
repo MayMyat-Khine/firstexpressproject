@@ -3,24 +3,23 @@ import mongoose from 'mongoose';
 import { Product } from '../mongoose/schemas/product.mjs';
 
 export const createProductWithStock = async (productData) => {
-    console.log("Here is product data in service", productData);
     const session = await mongoose.startSession();
 
 
     try {
         session.startTransaction();
-
+        console.log("Here is product data to create at service ", productData);
         const newProduct = new Product(productData);
         console.log("Here is new product before save", newProduct);
         const savedProduct = await newProduct.save({ session });
         console.log("Here is new product after save", savedProduct);
-        await createStock({
-            id: productData.stock_id,
-            productId: productData.id,
-            stock: productData.stock,
-            lowStock: productData.low_stock,
-            session: session
-        });
+        await createStock(
+            productData.stock_id,
+            productData.id,
+            productData.stock,
+            productData.low_stock,
+            session
+        );
         await session.commitTransaction();
         return savedProduct;
 
