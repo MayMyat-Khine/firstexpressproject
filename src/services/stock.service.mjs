@@ -26,15 +26,22 @@ export const updateStock = async (id, stockData) => {
 };
 
 export const updateStocksBulk = async (stockUpdates, session) => {
-    console.log("Here is stock updates for bulk", stockUpdates);
-    const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
-        updateOne: {
-            filter: { product_id: product_id },
-            update: { $set: stockData }
-        }
-    }));
-    // throw new Error("FORCED_TRANSACTION_FAILURE");
-    return await Stock.bulkWrite(bulkOps, { session });
+    try {
+        console.log("Here is stock updates for bulk", stockUpdates);
+        const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
+            updateOne: {
+                filter: { product_id: product_id },
+                update: { $set: stockData }
+            }
+        }));
+        // throw new Error("FORCED_TRANSACTION_FAILURE");
+        const result = await Stock.bulkWrite(bulkOps, { session });
+        console.log("Here is bulk update stocks result", result);
+        return result;
+    } catch (error) {
+        console.error("Error in bulk updating stocks:", error);
+        throw error;
+    }
 }
 
 export const updatePatchStock = async (id, stockData) => {
