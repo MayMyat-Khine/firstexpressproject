@@ -171,12 +171,13 @@ export const createOrderValidationSchema = {
 export const updateOrderValidationSchema = {
     original_products: {
         in: ["body"],
+        optional: true,
         isArray: {
             options: { min: 1 },
-            errorMessage: "Products must be an array with at least one item"
+            errorMessage: "Products must be an array "
 
         },
-        notEmpty: { errorMessage: "Products must not be Empty" }
+
     },
     new_products: {
         in: ["body"],

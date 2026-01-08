@@ -61,6 +61,7 @@ export const findByOrderId = async (req, res, next) => {
         msg: `Order with ID ${id} not found`
     });
     req.foundOrder = foundOrder;
+    console.log("Order ", foundOrder);
     next();
 };
 

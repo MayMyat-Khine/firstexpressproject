@@ -6,7 +6,6 @@ export async function orderCreateController(req, res) {
     try {
 
         const validDate = matchedData(req);
-        console.log("Here is valid data in order controller", req.body);
 
         const savedOrder = await createOrderService(validDate);
 
@@ -47,7 +46,6 @@ export async function orderUpdateByIdController(req, res) {
 
     try {
         const updatedOrder = await updateOrder(req.params.id, req.body);
-
         if (updatedOrder !== null) {
             return res.status(200).send({ message: "Successfully Updated", data: updatedOrder })
         } else {
