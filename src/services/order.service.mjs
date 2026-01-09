@@ -96,6 +96,43 @@ export const createOrderService = async (orderData) => {
 
 };
 
+const checkProductUniqueness = async (orderId, orderData) => {
+    const oldOrder = await getOrderById(orderId);
+    const oldProductsMap = new Map();
+    oldOrder.purchase_products.forEach(product => {
+        oldProductsMap.set(product.id, product.quantity);
+    });
+
+    // ==== Get Original/New Products  & Delete ProductsIds ==== //
+    const originalProducts = orderData['original_products'] ? orderData['original_products'] : [];
+    const newProducts = orderData['new_products'] ? orderData['new_products'] : [];
+    const deleteProductsIds = orderData['delete_products'] ?? [];
+
+
+    const oPIds = new Set(originalProducts.map(p => p.id));
+    const nPIds = new Set(newProducts.map(p => p.id));
+    const isIncludedForOriginal = [...oPIds].every(item => oldProductsMap.has(item));
+    if (!isIncludedForOriginal) {
+        const error = Error("You are updating a product that is not in your order");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const isIncludedForDelete = [...deleteProductsIds].every(p => oldProductsMap.has(p));
+    if (!isIncludedForDelete) {
+        const error = Error("You are deleting a product that is not in your order");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const isIncludedForNew = [...nPIds].some(item => oldProductsMap.has(item));
+    if (isIncludedForNew) {
+        const error = Error("You are adding a product that is already in your order");
+        error.statusCode = 400;
+        throw error;
+    }
+    return { originalProducts, newProducts, deleteProductsIds };
+};
 export const updateOrder = async (orderId, orderData) => {
     // here no case for PRODUCT HAD BEEN DELETED AND STOCK ADDING AS RETURN STOCK 
     // but in real case need to handle that 
@@ -108,19 +145,16 @@ export const updateOrder = async (orderId, orderData) => {
 
     const session = await mongoose.startSession();
     try {
+
         session.startTransaction();
         const oldOrder = await getOrderById(orderId);
         const oldProductsMap = new Map();
         oldOrder.purchase_products.forEach(product => {
             oldProductsMap.set(product.id, product.quantity);
         });
+        // ====Validate The Products Uniqueness and  Get Original/New Products  & Delete ProductsIds ==== //
+        const { originalProducts, newProducts, deleteProductsIds } = await checkProductUniqueness(orderId, orderData);
 
-        // ==== Get Original Products  ==== //
-        const originalProducts = orderData['original_products'] ? orderData['original_products'] : [];
-        // ====Get New Products  ==== //
-        const newProducts = orderData['new_products'] ? orderData['new_products'] : [];
-        // ====Get  Delete Products Ids  === //
-        const deleteProductsIds = orderData['delete_products'] ?? [];
         //=== Validate Product Existence and if all Valide then get Stocks of those products ==== //
         const allStocks = await validateProductsAndGetStocks(originalProducts, newProducts, deleteProductsIds);
 
@@ -132,10 +166,8 @@ export const updateOrder = async (orderId, orderData) => {
 
         // === Validate  Original/New Products Quantity with  Stock  === //
         validateStockMapping(allStockMap, originalProducts, newProducts);
-
         // === Check Old Prdoucts has the all delete_products(ONLY for Delete Products) ===//
         checkDeleteProductsInOldOrder(oldProductsMap, deleteProductsIds);
-
         // =====  Update Order After Product and Stock Validation  ===== //
         const mappedOriginalProducts = originalProducts.map(product => {
             if (product.method === "SUB" && product.quantity > oldProductsMap.get(product.id)) {
