@@ -56,7 +56,30 @@ export const indexValidationSchema = {
     }
 
 };
-
+export const createBranchValidationSchema = {
+    id: {
+        in: ['body'],
+        isString: {
+            errorMessage: "ID must be a String"
+        }, notEmpty: { errorMessage: "ID must not be empty" }
+    },
+    name: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Name must be a String"
+        }, notEmpty: { errorMessage: "Name must not be empty" }
+    },
+    address: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Address must be a String"
+        }, notEmpty: { errorMessage: "Address must not be empty" }
+    },
+    contact: {
+        in: ['body'],
+        optional: true,
+    }
+}
 export const createProductValidationSchema = {
     id: {
         in: ['body'],
@@ -64,7 +87,7 @@ export const createProductValidationSchema = {
             errorMessage: "ID must be a String"
         },
         notEmpty: {
-            errorMessage: "Must not be Empty"
+            errorMessage: "ID Must not be Empty"
         }
     },
     product_name: {

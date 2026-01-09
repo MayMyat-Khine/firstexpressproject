@@ -18,7 +18,10 @@ export const updateUser = async (id, body) => {
     try {
         // runValidators: true //check the schme validation
         //  { new: true } // give the updated obj if its false then will give the old data even the data is updated
-        const updatedUser = await User.findOneAndUpdate({ id: id }, body, { new: true, runValidators: true });
+        const updatedUser = await User.findOneAndUpdate(
+            { id: id },
+            body,
+            { new: true, runValidators: true });
         return updateUser;
     } catch (error) {
         throw error;

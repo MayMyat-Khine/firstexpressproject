@@ -3,6 +3,7 @@ import { User } from '../mongoose/schemas/user.mjs';
 import { Product } from '../mongoose/schemas/product.mjs';
 import { Stock } from "../mongoose/schemas/stock.mjs";
 import { Order } from "../mongoose/schemas/order.mjs";
+import { Branch } from "../mongoose/schemas/branch.mjs";
 
 // True here middleware function
 export const findByUserId = async (req, res, next) => {
@@ -21,6 +22,18 @@ export const findByUserId = async (req, res, next) => {
     req.foundUser = foundUser;
     next();
 }
+
+export const findByBranchId = async (req, res, next) => {
+    const { body, params: { id } } = req;
+    const foundBranch = await Branch.findOne({ id: id });
+    if (foundBranch === null) return res.status(400).send(
+        {
+            success: false,
+            message: `Branch with Id ${id} not found`
+        });
+    req.foundBranch = foundBranch;
+    next();
+};
 
 // find by id using at endPoint with params
 export const findByProductId = async (req, res, next) => {
