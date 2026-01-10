@@ -10,7 +10,10 @@ const ProductSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
-
+    "branch_id": {
+        type: mongoose.Schema.Types.Array,
+        required: true,
+    },
     "description": {
         type: mongoose.Schema.Types.String,
     },

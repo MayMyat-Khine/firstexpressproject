@@ -1,3 +1,5 @@
+import { getCachedBranchIds } from '../repositories/branch.repository.mjs';
+
 export const createUserValidationSchema = {
     id: {
         in: ["body"],
@@ -99,6 +101,29 @@ export const createProductValidationSchema = {
             errorMessage: "Product Name Must not be Empty"
         }
     },
+    branch_id: {
+        in: ['body'],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Branch ID must be an array "
+
+        },
+        notEmpty: {
+            errorMessage: "Branch ID Must not be Empty"
+        },
+        custom: {
+            options: async (value) => {
+                const branchIds = await getCachedBranchIds();
+                console.log('Branches Ids ', branchIds);
+                const allExist = value.every(b => branchIds.includes(b));
+                if (!allExist) {
+                    throw new Error("Branch is not valid");
+                }
+                return true;
+            }
+        }
+    },
+
     description: {
         in: ['body'],
         isString: {
