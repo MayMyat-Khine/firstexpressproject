@@ -298,3 +298,41 @@ export const updateOrderValidationSchema = {
 
 
 };
+
+export const transferProductsBToBValidationSchema = {
+    "sender_branch_id": {
+        in: ['body'],
+        isString: { errorMessage: "Sender Branch must be string" },
+        notEmpty: { errorMessage: "Sender Branch must not be empty" }
+    },
+    "receiver_branch_id": {
+        in: ['body'],
+        isString: { errorMessage: "Receiver Branch must be string" },
+        notEmpty: { errorMessage: "Receiver Branch must not be empty" }
+    },
+    "products": {
+        in: ['body'],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Transfer Producsts must be at least one"
+        },
+        notEmpty: { errorMessage: "Transfer Products must not be empty" }
+    },
+    "products.*.id": {
+        in: ["body"],
+        isString: { errorMessage: "Product ID must be string" },
+        notEmpty: { errorMessage: "Product ID must not be empty" }
+    },
+    "created_by": {
+        in: ['body'],
+        isString: { errorMessage: "Creator must be string" },
+        notEmpty: { errorMessage: "Creator must not be empty" }
+    },
+    "products.*.quantity": {
+        in: ["body"],
+        isInt: {
+            options: { gt: 0 },
+            errorMessage: "Quantity must be greater than 0"
+        }
+    }
+};

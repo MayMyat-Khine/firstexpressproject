@@ -37,4 +37,5 @@ router.delete("/api/product/:id",
     productDeleteByIdController
 );
 
+
 export default router;
