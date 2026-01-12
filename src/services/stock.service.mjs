@@ -43,6 +43,23 @@ export const updateStocksBulk = async (stockUpdates, session) => {
     }
 }
 
+
+export const updateStocksBulkWitStockId = async (stockUpdates, session) => {
+    try {
+        const bulkOps = stockUpdates.map(({ id, stockData }) => ({
+            updateOne: {
+                filter: { id: id },
+                update: { $set: stockData }
+            }
+        }));
+        // throw new Error("FORCED_TRANSACTION_FAILURE");
+        const result = await Stock.bulkWrite(bulkOps, { session });
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const updatePatchStock = async (id, stockData) => {
     return await Stock.updateOne(
         { product_id: id },            // Filter
