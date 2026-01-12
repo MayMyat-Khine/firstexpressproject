@@ -1,4 +1,4 @@
-import { getCachedBranchIds } from '../repositories/branch.repository.mjs';
+import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 
 export const createUserValidationSchema = {
     id: {
@@ -83,15 +83,15 @@ export const createBranchValidationSchema = {
     }
 }
 export const createProductValidationSchema = {
-    id: {
-        in: ['body'],
-        isString: {
-            errorMessage: "ID must be a String"
-        },
-        notEmpty: {
-            errorMessage: "ID Must not be Empty"
-        }
-    },
+    // id: {
+    //     in: ['body'],
+    //     isString: {
+    //         errorMessage: "ID must be a String"
+    //     },
+    //     notEmpty: {
+    //         errorMessage: "ID Must not be Empty"
+    //     }
+    // },
     product_name: {
         in: ['body'],
         isString: {
@@ -113,7 +113,7 @@ export const createProductValidationSchema = {
         },
         custom: {
             options: async (value) => {
-                const branchIds = await getCachedBranchIds();
+                const branchIds = await getCachedBranchIdsRepo();
                 console.log('Branches Ids ', branchIds);
                 const allExist = value.every(b => branchIds.includes(b));
                 if (!allExist) {
@@ -130,11 +130,11 @@ export const createProductValidationSchema = {
             errorMessage: "Product Name must be a String"
         },
     },
-    stock_id: {
-        in: ["body"],
-        isString: { errorMessage: "Stock ID must be string" },
-        notEmpty: { errorMessage: "Stock ID must not be Empty" }
-    },
+    // stock_id: {
+    //     in: ["body"],
+    //     isString: { errorMessage: "Stock ID must be string" },
+    //     notEmpty: { errorMessage: "Stock ID must not be Empty" }
+    // },
 
     stock: {
         in: ["body"],
@@ -149,15 +149,20 @@ export const createProductValidationSchema = {
 }
 
 export const createStockValidationSchema = {
-    id: {
-        in: ["body"],
-        isString: { errorMessage: "ID must be string" },
-        notEmpty: { errorMessage: "ID must not be Empty" }
-    },
+    // id: {
+    //     in: ["body"],
+    //     isString: { errorMessage: "ID must be string" },
+    //     notEmpty: { errorMessage: "ID must not be Empty" }
+    // },
     product_id: {
         in: ["body"],
         isString: { errorMessage: "Product ID must be string" },
         notEmpty: { errorMessage: "Product ID must not be Empty" }
+    },
+    branch_id: {
+        in: ["body"],
+        isString: { errorMessage: "branch id must be string" },
+        notEmpty: { errorMessage: "branch id must not be Empty" }
     },
     stock: {
         in: ["body"],
@@ -300,17 +305,17 @@ export const updateOrderValidationSchema = {
 };
 
 export const transferProductsBToBValidationSchema = {
-    "sender_branch_id": {
+    sender_branch_id: {
         in: ['body'],
         isString: { errorMessage: "Sender Branch must be string" },
         notEmpty: { errorMessage: "Sender Branch must not be empty" }
     },
-    "receiver_branch_id": {
+    receiver_branch_id: {
         in: ['body'],
         isString: { errorMessage: "Receiver Branch must be string" },
         notEmpty: { errorMessage: "Receiver Branch must not be empty" }
     },
-    "products": {
+    products: {
         in: ['body'],
         isArray: {
             options: { min: 1 },
@@ -323,7 +328,7 @@ export const transferProductsBToBValidationSchema = {
         isString: { errorMessage: "Product ID must be string" },
         notEmpty: { errorMessage: "Product ID must not be empty" }
     },
-    "created_by": {
+    created_by: {
         in: ['body'],
         isString: { errorMessage: "Creator must be string" },
         notEmpty: { errorMessage: "Creator must not be empty" }

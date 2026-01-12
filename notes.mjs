@@ -5,7 +5,7 @@
 // ✅ deletee/original_products are also inculded in order already
 
 // delete branch=> delete all data(prdocuts/stock/order/)
-
+// at product [branch1,branch2]=> check for if product is already , then add the new branch to that product and not create one so product with [branches] will valid
 
 // bulkWrite is great when:
 // updating many documents
