@@ -8,7 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(router);
 
-mongoose.connect("mongodb://127.0.0.1/firstexpressproject").then(() => console.log(`Connect db`)).catch((error) => console.log(error));
+mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1/local_db").then(() => console.log(`Connect db`)).catch((error) => console.log(error));
+// mongoose.connect("mongodb://127.0.0.1/firstexpressproject").then(() => console.log(`Connect db`)).catch((error) => console.log(error));
 
 const port = process.env.PORT || 3000;
 
