@@ -21,8 +21,10 @@ export async function userGetAllController(req, res) {
     try {
         console.log("here is get user api");
         const users = await User.find();
+        console.log("Users ", users)
         res.json({ success: true, body: users });
     } catch (error) {
+        console.log("Error in getting users ", error);
         return res.status(400).json({
             message: error.message
         });
