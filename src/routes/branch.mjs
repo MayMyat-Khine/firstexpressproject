@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
-import { createBranchValidationSchema, indexValidationSchema } from "../utils/validationSchema.mjs";
-import { validate } from "../utils/validate.middleware.mjs";
+import { createBranchValidationSchema, indexValidationSchema, updateBranchValidationSchema } from "../utils/validationSchema.mjs";
+import { validate, validatePatchBody } from "../utils/validate.middleware.mjs";
 import { branchCreateController, branchDeleteController, branchGetAllController, branchGetByIdController, branchUpdatedController } from "../controllers/branch.controller.mjs";
 import { findByBranchId } from "../utils/middlewares.mjs";
+import { updateBranch } from "../services/branch.service.mjs";
 
 const router = Router();
 
@@ -24,6 +25,8 @@ router.get('/api/branch/:id',
 
 router.patch('/api/branch/:id',
     checkSchema(indexValidationSchema),
+    validatePatchBody,
+    checkSchema(updateBranchValidationSchema),
     validate,
     branchUpdatedController
 )

@@ -118,6 +118,28 @@ export const createBranchValidationSchema = {
         optional: true,
     }
 }
+
+export const updateBranchValidationSchema = {
+    name: {
+        in: ['body'],
+        optional: true,
+        isString: {
+            errorMessage: "Name must be a String"
+        }, notEmpty: { errorMessage: "Name must not be empty" }
+    },
+    address: {
+        in: ['body'],
+        optional: true,
+        isString: {
+            errorMessage: "Address must be a String"
+        }, notEmpty: { errorMessage: "Address must not be empty" }
+    },
+    contact: {
+        in: ['body'],
+        optional: true,
+    }
+}
+
 export const createProductValidationSchema = {
     // id: {
     //     in: ['body'],

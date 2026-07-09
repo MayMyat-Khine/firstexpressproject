@@ -12,9 +12,9 @@ export const validate = (req, res, next) => {
 
 export const validatePatchBody = (req, res, next) => {
 
-    if (Object.keys(req.body).length === 0) {
+    if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).json({
-            message: "At least one field is required"
+            message: "Request body cannot be empty"
         });
     }
 
