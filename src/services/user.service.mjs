@@ -8,7 +8,7 @@ export const findUserById = async (id) => {
 
     const existId = await userRepo.findUserById(id);
 
-    if (existId == null) {
+    if (!existId) {
         throw new AppErrors(`User ${id} is not found`, 404);
     }
     return existId;
@@ -21,7 +21,7 @@ export const updateUser = async (id, body) => {
     await findUserById(id);
     const updatedUser = await userRepo.updateUserRepo(id, body);
     if (!updatedUser) {
-        throw AppErrors(`Fail to update user`, 404);
+        throw AppErrors(`Fail to update user`, 400);
 
     }
     return updatedUser;

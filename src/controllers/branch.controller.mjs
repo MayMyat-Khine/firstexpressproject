@@ -1,75 +1,58 @@
 import { matchedData } from 'express-validator';
 import { Branch } from '../mongoose/schemas/branch.mjs';
-import { createBranch, deleteBranch, updateBranch } from '../services/branch.service.mjs';
+import { createBranch, deleteBranch, updateBranch, getAllBranches, getBranch } from '../services/branch.service.mjs';
 
-export async function branchCreateController(req, res) {
+export async function branchCreateController(req, res, next) {
     try {
-
         const validData = matchedData(req);
         const savedBranch = await createBranch(validData);
         return res.status(200).send({ success: true, body: savedBranch });
 
     } catch (error) {
-        return res.status(400).send(error);
+        next(error);
     }
 };
 
-export async function branchGetAllController(req, res) {
+export async function branchGetAllController(req, res, next) {
     try {
-        const branches = await Branch.find();
-        res.json({ success: true, body: branches });
+        const branches = await getAllBranches();
+        return res.json({ success: true, body: branches });
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        })
+        next(error);
     }
 };
 
-export async function branchGetByIdController(req, res) {
+export async function branchGetByIdController(req, res, next) {
     try {
-        const { foundBranch } = req;
+        const { params: { id } } = req;
+        const foundBranch = await getBranch(id);
         return res.status(200).send({ success: true, body: foundBranch });
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        });
+        next(error);
     }
 }
 
-export async function branchUpdatedByIdController(req, res) {
+export async function branchUpdatedController(req, res, next) {
     const { body, params: { id } } = req;
     try {
         const updatedBranch = await updateBranch(id, body);
-        if (!updatedBranch) return res.status(400).json({
-            message: `Branch with id ${id} not found`
-        });
         return res.status(200).send({ message: "Successfully Updated", data: updatedBranch });
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        });
+        next(error);
     }
 }
 
 
 
-export async function branchDeleteByIdController(req, res) {
+export async function branchDeleteController(req, res, next) {
     try {
         const { id } = req.params;
-        const deletedBranch = await deleteBranch(id);
-        if (!deleteBranch) return res.status(400).json({
-            success: false,
-            message: `Branch with id ${id} not found`
-        });
-
+        await deleteBranch(id);
         return res.status(200).json({
             success: false,
             message: `Branch with id ${id} is successfully deleted with all data`
         });
-
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        })
+        next(error);
     }
 }

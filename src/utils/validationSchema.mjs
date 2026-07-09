@@ -1,4 +1,4 @@
-import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
+// import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 
 export const createUserValidationSchema = {
     id: {
@@ -147,17 +147,17 @@ export const createProductValidationSchema = {
         notEmpty: {
             errorMessage: "Branch ID Must not be Empty"
         },
-        custom: {
-            options: async (value) => {
-                const branchIds = await getCachedBranchIdsRepo();
-                console.log('Branches Ids ', branchIds);
-                const allExist = value.every(b => branchIds.includes(b));
-                if (!allExist) {
-                    throw new Error("Branch is not valid");
-                }
-                return true;
-            }
-        }
+        // custom: {
+        //     options: async (value) => {
+        //         const branchIds = await getCachedBranchIdsRepo();
+        //         console.log('Branches Ids ', branchIds);
+        //         const allExist = value.every(b => branchIds.includes(b));
+        //         if (!allExist) {
+        //             throw new Error("Branch is not valid");
+        //         }
+        //         return true;
+        //     }
+        // }
     },
 
     description: {

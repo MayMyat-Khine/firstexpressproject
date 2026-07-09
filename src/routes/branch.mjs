@@ -2,7 +2,7 @@ import { Router } from "express";
 import { checkSchema } from "express-validator";
 import { createBranchValidationSchema, indexValidationSchema } from "../utils/validationSchema.mjs";
 import { validate } from "../utils/validate.middleware.mjs";
-import { branchCreateController, branchDeleteByIdController, branchGetAllController, branchGetByIdController, branchUpdatedByIdController } from "../controllers/branch.controller.mjs";
+import { branchCreateController, branchDeleteController, branchGetAllController, branchGetByIdController, branchUpdatedController } from "../controllers/branch.controller.mjs";
 import { findByBranchId } from "../utils/middlewares.mjs";
 
 const router = Router();
@@ -19,22 +19,19 @@ router.get("/api/branches",
 router.get('/api/branch/:id',
     checkSchema(indexValidationSchema),
     validate,
-    findByBranchId,
     branchGetByIdController
 );
 
-router.put('/api/branch/:id',
+router.patch('/api/branch/:id',
     checkSchema(indexValidationSchema),
     validate,
-    findByBranchId,
-    branchUpdatedByIdController
+    branchUpdatedController
 )
 
 router.delete('/api/branch/:id',
     checkSchema(indexValidationSchema),
     validate,
-    findByBranchId,
-    branchDeleteByIdController
+    branchDeleteController
 );
 
 export default router;
