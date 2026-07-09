@@ -17,8 +17,9 @@ const UserSchema = mongoose.Schema({
     "password": {
         type: mongoose.Schema.Types.String,
         required: true,
-
+        minlenght: 6
     },
+
 })
 
 export const User = mongoose.model('user', UserSchema);

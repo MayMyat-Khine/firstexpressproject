@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Order } from "../mongoose/schemas/order.mjs";
-import { findUserById } from "../services/user.service.mjs";
+import { findUserById } from "../repositories/user.repository.mjs";
 import { findProductsByIds } from './product.service.mjs';
 import { findStocksByProductIds, updateStock, updateStocksBulk } from './stock.service.mjs';
 

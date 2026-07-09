@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { User } from '../mongoose/schemas/user.mjs';
-import { createUserValidationSchema, indexValidationSchema } from '../utils/validationSchema.mjs';
+import { createUserValidationSchema, indexValidationSchema, updateUserValidationSchema } from '../utils/validationSchema.mjs';
 import { checkSchema, matchedData, validationResult } from 'express-validator';
 import { findByUserId } from '../utils/middlewares.mjs';
-import { validate } from '../utils/validate.middleware.mjs';
-import { userCreateController, userGetAllController, userGetByIdController, userUpdateByIdController, userPatchByIdController, userDeleteByIdController } from '../controllers/user.controller.mjs';
+import { validate, validatePatchBody } from '../utils/validate.middleware.mjs';
+import { userCreateController, userGetAllController, userGetByIdController, userUpdateByIdController, userDeleteByIdController } from '../controllers/user.controller.mjs';
 const router = Router();
 
 var name = ""
@@ -36,33 +36,36 @@ router.post('/api/user',
     userCreateController,
 );
 
-router.get('/api/user',
+router.get('/api/users',
     userGetAllController);
 
 router.get('/api/user/:id',
     checkSchema(indexValidationSchema),
-    findByUserId,
+    validate,
     userGetByIdController);
 
 
 // can validate the ID of the request body before updating
-router.put('/api/user/:id',
-    checkSchema(indexValidationSchema),
-    findByUserId,
-    userUpdateByIdController
-
-)
-
-// can validate the ID of the request body before updating
+// here - from =>  check id exist then valide id to => check id exist, go to controller(as validate id inside service)
 router.patch('/api/user/:id',
     checkSchema(indexValidationSchema),
-    findByUserId,
-    userPatchByIdController
-);
+    // findByUserId,
+    validatePatchBody,
+    checkSchema(updateUserValidationSchema),
+    validate,
+    userUpdateByIdController
+)
+
+// // can validate the ID of the request body before updating
+// router.patch('/api/user/:id',
+//     checkSchema(indexValidationSchema),
+//     findByUserId,
+//     userPatchByIdController
+// );
 
 router.delete('/api/user/:id',
     checkSchema(indexValidationSchema),
-    findByUserId,
+    validate,
     userDeleteByIdController
 );
 

@@ -37,8 +37,44 @@ export const createUserValidationSchema = {
         notEmpty: {
             errorMessage: "Password must not be Empty"
         },
-
+        isLength: {
+            options: {
+                min: 6
+            },
+            errorMessage: "Password must be at least 6 characters"
+        }
     },
+
+};
+
+export const updateUserValidationSchema = {
+
+    name: {
+        in: ["body"],
+        optional: true,
+        isString: {
+            errorMessage: "Name must be string"
+        }
+    },
+
+    display_name: {
+        in: ["body"],
+        optional: true,
+        isString: {
+            errorMessage: "Display name must be string"
+        }
+    },
+
+    password: {
+        in: ["body"],
+        optional: true,
+        isLength: {
+            options: {
+                min: 6
+            },
+            errorMessage: "Password must be at least 6 characters"
+        }
+    }
 
 };
 
