@@ -11,10 +11,7 @@ export async function userCreateController(req, res, next) {
         const savedUser = await createUser(data);
         return res.status(201).send({ success: true, body: savedUser });
     } catch (error) {
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            message: error.message
-        })
+        next(error);
     }
 };
 
@@ -23,10 +20,7 @@ export async function userGetAllController(req, res, next) {
         const users = await getAllUsers();
         res.json({ success: true, body: users });
     } catch (error) {
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            message: error.message
-        })
+        next(error);
     }
 };
 
@@ -36,10 +30,7 @@ export async function userGetByIdController(req, res, next) {
         const foundUser = await getUser(id);
         return res.status(200).send({ success: true, body: foundUser });
     } catch (error) {
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            message: error.message
-        })
+        next(error);
     }
 
 }
@@ -50,10 +41,7 @@ export async function userUpdateByIdController(req, res, next) {
         const updatedUser = await updateUser(id, body);
         return res.status(200).send({ success: true, message: "Successfully Updated User", data: updatedUser })
     } catch (error) {
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            message: error.message
-        })
+        next(error);
     }
 }
 

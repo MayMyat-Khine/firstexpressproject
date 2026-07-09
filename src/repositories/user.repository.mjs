@@ -27,3 +27,8 @@ export async function updateUserRepo(id, body) {
         { new: true, runValidators: true });
     return updatedUser;
 }
+
+export const deleteUserRepo = async (id) => {
+    const deletedUser = await User.findOneAndDelete({ id: id });
+    return deletedUser;
+}

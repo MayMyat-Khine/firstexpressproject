@@ -49,5 +49,5 @@ export const getUser = async (id) => {
 
 export const deleteUser = async (id) => {
     await findUserById(id);
-    return await User.findOneAndDelete({ id: id });
+    await userRepo.deleteUserRepo(id);
 };
