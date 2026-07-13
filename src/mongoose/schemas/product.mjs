@@ -17,6 +17,10 @@ const ProductSchema = mongoose.Schema({
     "description": {
         type: mongoose.Schema.Types.String,
     },
+    "code": {
+        type: mongoose.Schema.Types.String,
+        required: true
+    }
 
 
 })

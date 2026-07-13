@@ -1,56 +1,43 @@
 import { createStock, deleteStock, updateStock } from './stock.service.mjs';
 import mongoose from 'mongoose';
 import { Product } from '../mongoose/schemas/product.mjs';
+import { validateBranches, getBranchesData } from './branch.service.mjs';
 import { PRODUCT_NAMESPACE, STOCK_NAMESPACE } from "../config/constants.mjs";
 import { v5 as uuidv5 } from "uuid";
+import * as productRepo from "../repositories/product.repostiory.mjs";
+import AppErrors from '../utils/appErrors.mjs';
+import { application } from 'express';
 
 
 
-
-export const createProductWithStock = async (productData) => {
+export const createProductWithBranchAndStock = async (productData) => {
     const session = await mongoose.startSession();
 
 
     try {
         session.startTransaction();
-        console.log("Product data", productData);
-        const productKey = `${productData.product_name}`;
+        // =======Validatea branchIds and Get BranchObjIds for  both Product and Stock Create ==============
+        const validatedBranchIds = await validateBranches(productData.branch_id);
+
+        const productKey = `${productData.product_name}:${productData.code}`;
         const productUUID = uuidv5(productKey, PRODUCT_NAMESPACE);
-        console.log(`Product UUID ${productData.product_name} `, productUUID);
 
+        const savedProduct = await productRepo.createProduct(productUUID, validatedBranchIds, productData, session);
 
-        const foundProduct = await findProductById(productUUID);
-        console.log(`Found Product  `, foundProduct);
-        const stockKey = `${productUUID}:${productData.branch_id}`;
-        const stockUUID = uuidv5(stockKey, STOCK_NAMESPACE);
-        console.log("Stock UUID ", stockUUID);
-
-        let savedProduct = null;
-        if (foundProduct.length !== 0) {
-            console.log("id ", foundProduct[0].id);
-            console.log("branch data at index 0", productData.branch_id[0]);
-
-            await productUpdateWithBranch(foundProduct[0].id, productData.branch_id[0]);
-            savedProduct = await findProductById(foundProduct[0].id);
-        } else {
-            const newProduct = new Product({ id: productUUID, ...productData });
-            savedProduct = await newProduct.save({ session });
-        }
-        console.log("Saved products ", savedProduct);
         await createStock(
-            stockUUID,
+            validatedBranchIds,
             productUUID,
-            productData.branch_id,
-            productData.stock,
-            productData.low_stock,
+            productData,
             session
         );
+        // Replace BranchObjId with BranchId(Name)
+
+        const branchesNames = await getBranchesData(validatedBranchIds);
         await session.commitTransaction();
-        return savedProduct;
+        return { ...savedProduct._doc, branch_id: branchesNames };;
 
     } catch (error) {
         await session.abortTransaction();
-        console.error("Error creating product with stock:", error);
         throw error;
     } finally {
         session.endSession();
@@ -58,18 +45,7 @@ export const createProductWithStock = async (productData) => {
 };
 
 export const productUpdateWithBranch = async (productId, branchData) => {
-
-    try {
-        console.log("Branch Data ", branchData);
-        const updatedProduct = await Product.updateOne(
-            { id: productId },  // match product
-            { $addToSet: { branch_id: branchData } }             // add new branch
-        );
-        console.log("here is product update data", updatedProduct);
-        return updatedProduct;
-    } catch (error) {
-        throw error;
-    } finally { }
+    return productRepo.productUpdateWithBranch(productId, branchData);
 }
 
 
@@ -134,10 +110,9 @@ export const findProductsByIds = async (ids) => {
 };
 
 export const findProductById = async (id) => {
-    try {
-        const foundProduct = await Product.find({ id: id });
-        return foundProduct;
-    } catch (error) {
-        throw error;
+    const foundProduct = await productRepo.findProductByIdRepo(id);
+    if (!foundProduct) {
+        throw new AppErrors(`Product id ${id} is not found`, 404)
     }
+    return foundProduct;
 }

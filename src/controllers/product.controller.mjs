@@ -1,18 +1,16 @@
 import { Product } from "../mongoose/schemas/product.mjs";
 import { matchedData } from "express-validator";
-import { createProductWithStock, deleteProdcutWithStock, productUpdateWithStock, productPatchWithStock } from "../services/product.service.mjs";
+import { createProductWithBranchAndStock, deleteProdcutWithStock, productUpdateWithStock, productPatchWithStock } from "../services/product.service.mjs";
 
-export async function productCreateController(req, res) {
+export async function productCreateController(req, res, next) {
 
     try {
 
         const validData = matchedData(req);
-        const savedProduct = await createProductWithStock(validData);
+        const savedProduct = await createProductWithBranchAndStock(validData);
         return res.status(201).send({ success: true, body: savedProduct });
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 

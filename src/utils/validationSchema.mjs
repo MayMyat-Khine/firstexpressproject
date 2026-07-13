@@ -185,8 +185,16 @@ export const createProductValidationSchema = {
     description: {
         in: ['body'],
         isString: {
-            errorMessage: "Product Name must be a String"
+            errorMessage: "Description must be a String"
         },
+        optional: true
+    },
+    code: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Code must be a String"
+        },
+        notEmpty: { errorMessage: "Code must not be empty" }
     },
     // stock_id: {
     //     in: ["body"],
@@ -194,16 +202,16 @@ export const createProductValidationSchema = {
     //     notEmpty: { errorMessage: "Stock ID must not be Empty" }
     // },
 
-    stock: {
-        in: ["body"],
-        isNaN: { errorMessage: "Stock must be a number" },
-        notEmpty: { errorMessage: "Stock must not be Empty" }
-    },
-    low_stock: {
-        in: ["body"],
-        isNaN: { errorMessage: "Low Stock must be a number" },
-        notEmpty: { errorMessage: "Low Stock must not be Empty" }
-    },
+    // stock: {
+    //     in: ["body"],
+    //     isNaN: { errorMessage: "Stock must be a number" },
+    //     notEmpty: { errorMessage: "Stock must not be Empty" }
+    // },
+    // low_stock: {
+    //     in: ["body"],
+    //     isNaN: { errorMessage: "Low Stock must be a number" },
+    //     notEmpty: { errorMessage: "Low Stock must not be Empty" }
+    // },
 }
 
 export const createStockValidationSchema = {
@@ -212,7 +220,7 @@ export const createStockValidationSchema = {
     //     isString: { errorMessage: "ID must be string" },
     //     notEmpty: { errorMessage: "ID must not be Empty" }
     // },
-    product_id: {
+    proidduct_id: {
         in: ["body"],
         isString: { errorMessage: "Product ID must be string" },
         notEmpty: { errorMessage: "Product ID must not be Empty" }

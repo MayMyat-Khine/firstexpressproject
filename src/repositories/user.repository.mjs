@@ -13,7 +13,7 @@ export async function createUserRepo(user) {
 
 
 
-export async function findUserById(id) {
+export async function findUserByIdRepo(id) {
     const foundUser = await User.findOne({ id: id });
     return foundUser;
 }

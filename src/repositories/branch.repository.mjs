@@ -4,7 +4,7 @@ import { Branch } from '../mongoose/schemas/branch.mjs';
 let cacheBranchIds = null;
 
 // -- from validationSchema bcoz gonna check the Branches at Service Layer rather then checking here
-//-- currently only used from transferproducts , have to clear by using service 
+// -- currently only used from transferproducts , have to clear by using service 
 export const getCachedBranchIdsRepo = async () => {
     try {
         if (!cacheBranchIds) {
@@ -21,10 +21,16 @@ export const getBranchesRepo = async () => {
     return await Branch.find();
 }
 
-export const findByBranchIdRepo = async (id) => {
+export const findBranchByIdRepo = async (id) => {
     const foundBranch = await Branch.findOne({ id: id });
     return foundBranch;
 }
+
+export const findBranchesByIdsRepo = async (branchIds) => {
+    return await Branch.find({
+        _id: { $in: branchIds }
+    });
+};
 
 export const createBranchRepo = async (branchData) => {
     const newBranch = new Branch(branchData);

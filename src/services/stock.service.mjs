@@ -1,19 +1,35 @@
+import { STOCK_NAMESPACE } from "../config/constants.mjs";
 import { Stock } from "../mongoose/schemas/stock.mjs";
-export const createStock = async (id, productId, branchId, stock = 0, lowStock = 0, session) => {
+import * as stockRepo from "../repositories/stock.repository.mjs";
+import { v5 as uuidv5 } from "uuid";
+
+export const createStock = async (branchIds, productId, productData, session) => {
     // FORCE ERROR FOR TEST
-    if (stock < 0) {
-        throw new Error("Stock cannot be negative");
-    }
-    console.log("Here is stock data to create at service ", id);
-    console.log("Here is stock data to create at service prodcut id ", productId);
-    console.log("Here is stock data to create at service branch id ", branchId);
-    return await Stock.create([{
-        id: id,
+    // if (stock < 0) {
+    //     throw new Error("Stock cannot be negative");
+    // }
+    // return await Stock.create([{
+    //     id: id,
+    //     product_id: productId,
+    //     branch_id: branchId,
+    //     stock: stock,
+    //     low_stock: lowStock,
+    // }], { session });
+
+    // const stockKey = `${productData.code}:${productData.branch_id}`;
+    // const stockUUID = uuidv5(stockKey, STOCK_NAMESPACE);
+    // console.log("Stock UUID ", stockUUID);
+
+
+    const stocks = branchIds.map(branchId => ({
+        id: uuidv5(`${productData.code}:${branchId}`, STOCK_NAMESPACE),
         product_id: productId,
-        stock: stock,
         branch_id: branchId,
-        low_stock: lowStock,
-    }], { session });
+        stock: 0,
+        low_stock: 0
+    }));
+
+    return await stockRepo.updateStock(stocks, session);
 };
 
 export const updateStock = async (id, stockData) => {

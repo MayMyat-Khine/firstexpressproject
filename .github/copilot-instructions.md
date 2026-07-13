@@ -34,7 +34,7 @@ Short, actionable guidance to help an AI contributor be productive in this Expre
 
 - **When editing code, follow these specifics:**
   - Preserve the service -> controller response contract: controllers expect services to throw on errors; services should set `error.statusCode`/`error.details` when useful.
-  - For multi-document changes (product + stock), use Mongoose sessions exactly as shown to ensure atomicity (see `createProductWithStock` in `src/services/product.service.mjs`).
+  - For multi-document changes (product + stock), use Mongoose sessions exactly as shown to ensure atomicity (see `createProductWithBranchAndStock` in `src/services/product.service.mjs`).
   - Keep validation schemas centralized in `src/utils/validationSchema.mjs`; update routes to call `checkSchema(...)` and `validate` whenever adding new endpoints.
 
 - **Examples to copy from:**

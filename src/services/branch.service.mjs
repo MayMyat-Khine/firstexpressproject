@@ -8,11 +8,24 @@ export const createBranch = async (branchData) => {
 };
 
 export const findByBranchId = async (id) => {
-    const foundBranch = await branchRepo.findByBranchIdRepo(id);
+    const foundBranch = await branchRepo.findBranchByIdRepo(id);
     if (!foundBranch) {
         throw new AppErrors(`Branch ${id} is not found`, 404)
     }
     return foundBranch;
+}
+
+export const validateBranches = async (branchIds) => {
+    const validBranches = await branchRepo.findBranchesByIdsRepo(branchIds);
+    if (branchIds.length != validBranches.length) {
+        throw new AppErrors("One or more invalid branch id", 400)
+    }
+    return branchIds;
+}
+
+export const getBranchesData = async (branchIds) => {
+    const branches = await branchRepo.findBranchesByIdsRepo(branchIds);
+    return branches.map(branch => branch.id);
 }
 
 export const getAllBranches = async () => {
@@ -23,6 +36,7 @@ export const getBranch = async (id) => {
     const foundBranch = await findByBranchId(id);
     return foundBranch;
 }
+
 export const updateBranch = async (id, body) => {
 
     await findByBranchId(id);

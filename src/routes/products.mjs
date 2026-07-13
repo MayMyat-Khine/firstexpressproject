@@ -10,7 +10,7 @@ const router = Router();
 router.post('/api/product',
     checkSchema(createProductValidationSchema),
     validate,
-    productCreateController,)
+    productCreateController)
 
 router.get("/api/products", productGetAllController)
 

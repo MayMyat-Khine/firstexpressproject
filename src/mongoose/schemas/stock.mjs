@@ -11,7 +11,7 @@ const StockSchema = mongoose.Schema({
         required: true,
     },
     "branch_id": {
-        type: mongoose.Schema.Types.Array,
+        type: mongoose.Schema.Types.String,
         required: true,
     },
     "stock": {

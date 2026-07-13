@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Order } from "../mongoose/schemas/order.mjs";
-import { findUserById } from "../repositories/user.repository.mjs";
+import { findUserByIdRepo } from "../repositories/user.repository.mjs";
 import { findProductsByIds } from './product.service.mjs';
 import { findStocksByProductIds, updateStock, updateStocksBulk } from './stock.service.mjs';
 
@@ -17,7 +17,7 @@ export const createOrderService = async (orderData) => {
         session.startTransaction();
 
         // === Validate Customer === //
-        const customer = await findUserById(orderData['customer_id']);
+        const customer = await findUserByIdRepo(orderData['customer_id']);
         if (!customer) {
             const error = Error("Invalid customer id");
             error.statusCode = 400;
