@@ -28,3 +28,25 @@ export async function productUpdateWithBranch(productId, branchData) {
     return updatedProduct;
 
 }
+
+export async function updateProduct(productId, productData) {
+    const update = {}
+
+    if (productData.branch_id?.length > 0) {
+        update.$addToSet = {
+            branch_id: {
+                $each: productData.branch_id
+            }
+        }
+    }
+
+    const { branch_id, ...otherFields } = productData;
+
+    if (Object.keys(otherFields).length > 0) {
+        update.$set = otherFields;
+    }
+    return Product.findOneAndUpdate(
+        { id: productId },
+        update,
+        { new: true, runValidators: true });
+}

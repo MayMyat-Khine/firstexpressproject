@@ -89,11 +89,9 @@ export const indexValidationSchema = {
 
             errorMessage: "ID must be a String"
         },
-
-
     }
-
 };
+
 export const createBranchValidationSchema = {
     id: {
         in: ['body'],
@@ -195,26 +193,90 @@ export const createProductValidationSchema = {
             errorMessage: "Code must be a String"
         },
         notEmpty: { errorMessage: "Code must not be empty" }
-    },
-    // stock_id: {
-    //     in: ["body"],
-    //     isString: { errorMessage: "Stock ID must be string" },
-    //     notEmpty: { errorMessage: "Stock ID must not be Empty" }
-    // },
-
-    // stock: {
-    //     in: ["body"],
-    //     isNaN: { errorMessage: "Stock must be a number" },
-    //     notEmpty: { errorMessage: "Stock must not be Empty" }
-    // },
-    // low_stock: {
-    //     in: ["body"],
-    //     isNaN: { errorMessage: "Low Stock must be a number" },
-    //     notEmpty: { errorMessage: "Low Stock must not be Empty" }
-    // },
+    }
 }
 
-export const createStockValidationSchema = {
+
+export const updateProductValidationSchema = {
+    // id: {
+    //     in: ['body'],
+    //     isString: {
+    //         errorMessage: "ID must be a String"
+    //     },
+    //     notEmpty: {
+    //         errorMessage: "ID Must not be Empty"
+    //     }
+    // },
+    product_name: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Product Name must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Product Name Must not be Empty"
+        },
+        optional: true
+    },
+    branch_id: {
+        in: ['body'],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Branch ID must be an array "
+
+        },
+        notEmpty: {
+            errorMessage: "Branch ID Must not be Empty"
+        },
+        optional: true
+    },
+
+    description: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Description must be a String"
+        },
+        optional: true
+    },
+    code: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Code must be a String"
+        },
+        notEmpty: { errorMessage: "Code must not be empty" },
+        optional: true
+    }
+}
+
+// export const createStockValidationSchema = {
+//     // id: {
+//     //     in: ["body"],
+//     //     isString: { errorMessage: "ID must be string" },
+//     //     notEmpty: { errorMessage: "ID must not be Empty" }
+//     // },
+//     proidduct_id: {
+//         in: ["body"],
+//         isString: { errorMessage: "Product ID must be string" },
+//         notEmpty: { errorMessage: "Product ID must not be Empty" }
+//     },
+//     branch_id: {
+//         in: ["body"],
+//         isString: { errorMessage: "branch id must be string" },
+//         notEmpty: { errorMessage: "branch id must not be Empty" }
+//     },
+//     stock: {
+//         in: ["body"],
+//         isNaN: { errorMessage: "Stock must be a number" },
+//         notEmpty: { errorMessage: "Stock must not be Empty" }
+//     },
+//     low_stock: {
+//         in: ["body"],
+//         isNaN: { errorMessage: "Low Stock must be a number" },
+//         notEmpty: { errorMessage: "Low Stock must not be Empty" }
+//     },
+
+// }
+
+export const updateStockValidationSchema = {
     // id: {
     //     in: ["body"],
     //     isString: { errorMessage: "ID must be string" },

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createStockValidationSchema, indexValidationSchema } from '../utils/validationSchema.mjs';
+import { indexValidationSchema } from '../utils/validationSchema.mjs';
 import { checkSchema, matchedData, validationResult } from 'express-validator';
 import { findByProductId, findStockByProductId } from '../utils/middlewares.mjs';
 import { Stock } from '../mongoose/schemas/stock.mjs';

@@ -32,7 +32,7 @@ export async function branchGetByIdController(req, res, next) {
     }
 }
 
-export async function branchUpdatedController(req, res, next) {
+export async function branchUpdateByIdController(req, res, next) {
     const { body, params: { id } } = req;
     try {
         const updatedBranch = await updateBranch(id, body);

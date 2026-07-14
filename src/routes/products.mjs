@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { createProductValidationSchema, indexValidationSchema } from "../utils/validationSchema.mjs";
+import { createProductValidationSchema, indexValidationSchema, updateProductValidationSchema } from "../utils/validationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { findByProductId, } from "../utils/middlewares.mjs";
-import { validate } from "../utils/validate.middleware.mjs";
-import { productCreateController, productGetAllController, productDeleteByIdController, productGetByIdController, productPatchByIdController, productUpdateByIdController } from "../controllers/product.controller.mjs";
+import { validate, validatePatchBody } from "../utils/validate.middleware.mjs";
+import { productCreateController, productGetAllController, productDeleteByIdController, productGetByIdController, productUpdateByIdController } from "../controllers/product.controller.mjs";
 
 const router = Router();
 
@@ -20,16 +20,18 @@ router.get("/api/product/:id",
     productGetByIdController)
 
 // actually the indexValidation is not working well here
-router.put("/api/product/:id",
-    checkSchema(indexValidationSchema),
-    findByProductId,
-    productUpdateByIdController
-)
+// router.put("/api/product/:id",
+//     checkSchema(indexValidationSchema),
+//     findByProductId,
+//     productUpdateByIdController
+// )
 
 router.patch("/api/product/:id",
     checkSchema(indexValidationSchema),
-    findByProductId,
-    productPatchByIdController)
+    validatePatchBody,
+    checkSchema(updateProductValidationSchema),
+    validate,
+    productUpdateByIdController)
 
 router.delete("/api/product/:id",
     checkSchema(indexValidationSchema),

@@ -10,6 +10,7 @@ import { application } from 'express';
 
 
 
+
 export const createProductWithBranchAndStock = async (productData) => {
     const session = await mongoose.startSession();
 
@@ -27,7 +28,7 @@ export const createProductWithBranchAndStock = async (productData) => {
         await createStock(
             validatedBranchIds,
             productUUID,
-            productData,
+            productData.code,
             session
         );
         // Replace BranchObjId with BranchId(Name)
@@ -50,40 +51,63 @@ export const productUpdateWithBranch = async (productId, branchData) => {
 
 
 export const productUpdateWithStock = async (productId, productData) => {
-
+    const session = await mongoose.startSession();
     try {
+        session.startTransaction();
         console.log("here is product update data", productData);
-        const updatedProduct = await Product.findOneAndUpdate({ id: productId }, productData, { new: true, runValidators: true });
-        await updateStock({
-            id: productId, stockData: {
-                stock: productData.stock,
-                low_stock: productData.low_stock
+
+        // - update stock should be moved to StockUpdateController with product id at param
+
+        const oldProduct = await findProductById(productId);
+        console.log(`Branch `, productData.branch_id)
+        if (productData.branch_id && productData.branch_id.length > 0)// has Branch new add? 
+        {
+            // valid all branches exist and non-added before update
+            const validatedBranchIds = await validateBranches(productData.branch_id);
+            const existingBranchIds = validatedBranchIds.filter(id =>
+                oldProduct.branch_id.includes(id)
+            );
+            if (existingBranchIds.length > 0) {
+                throw new AppErrors('One or more branches are already added', 400)
             }
-        });
+            await createStock(
+                validatedBranchIds,
+                productId,
+                oldProduct.code,
+                session
+            );
+        }
+
+
+        const updatedProduct = await productRepo.updateProduct(productId, productData);
+        await session.commitTransaction();
         return updatedProduct;
     } catch (error) {
+        await session.abortTransaction();
         throw error;
-    } finally { }
+    } finally {
+        await session.endSession();
+    }
 }
 
-export const productPatchWithStock = async (productId, productData) => {
-    try {
-        const updatedProduct = await Product.updateOne(
-            { id: productId },
-            { $set: productData }
-        );
-        await updateStock({
-            id: productId, stockData: {
-                stock: productData.stock,
-                low_stock: productData.low_stock
-            }
-        });
+// export const productPatchWithStock = async (productId, productData) => {
+//     try {
+//         const updatedProduct = await Product.updateOne(
+//             { id: productId },
+//             { $set: productData }
+//         );
+//         await updateStock({
+//             id: productId, stockData: {
+//                 stock: productData.stock,
+//                 low_stock: productData.low_stock
+//             }
+//         });
 
-        return updatedProduct;
-    } catch (error) {
-        throw error;
-    } finally { }
-};
+//         return updatedProduct;
+//     } catch (error) {
+//         throw error;
+//     } finally { }
+// };
 
 export const deleteProdcutWithStock = async (productId) => {
     console.log("Here is product id for delete in service", productId);
