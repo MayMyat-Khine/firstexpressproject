@@ -40,7 +40,7 @@ router.patch("/api/product/:id",
 
 router.delete("/api/product/:id",
     checkSchema(indexValidationSchema),
-    findByProductId,
+    validate,
     productDeleteByIdController
 );
 

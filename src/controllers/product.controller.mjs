@@ -73,13 +73,13 @@ export async function productUpdateByIdController(req, res, next) {
     }
 }
 
-export async function productDeleteByIdController(req, res) {
+export async function productDeleteByIdController(req, res, next) {
     try {
         const { id } = req.params;
         await deleteProdcutWithStock(id);
         return res.status(200).send({ message: "Successfully Deleted" })
     } catch (error) {
-        return res.status(400).send(error.message);
+        next(error);
     }
 };
 

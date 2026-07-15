@@ -31,7 +31,7 @@ export async function productUpdateWithBranch(productId, branchData) {
 
 }
 
-export async function updateProduct(productId, productData) {
+export async function updateProduct(productId, productData, session) {
     const update = {}
 
     if (productData.branch_id?.length > 0) {
@@ -50,5 +50,9 @@ export async function updateProduct(productId, productData) {
     return Product.findOneAndUpdate(
         { id: productId },
         update,
-        { new: true, runValidators: true });
+        { new: true, runValidators: true, session });
+}
+
+export async function deleteProduct(productId, session) {
+    return await Product.findOneAndDelete({ id: productId }, { session });
 }

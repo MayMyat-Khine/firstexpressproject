@@ -1,4 +1,4 @@
-import { createStock, deleteStock, updateStock } from './stock.service.mjs';
+import { createStock, deleteStock, updateStock, getAvailableStockByProductId } from './stock.service.mjs';
 import mongoose from 'mongoose';
 import { Product } from '../mongoose/schemas/product.mjs';
 import { validateBranches, getBranchesData } from './branch.service.mjs';
@@ -76,7 +76,7 @@ export const productUpdateWithStock = async (productId, productData) => {
             );
         }
 
-        const updatedProduct = await productRepo.updateProduct(productId, productData);
+        const updatedProduct = await productRepo.updateProduct(productId, productData, session);
         await session.commitTransaction();
         return updatedProduct;
     } catch (error) {
@@ -107,19 +107,33 @@ export const productUpdateWithStock = async (productId, productData) => {
 // };
 
 export const deleteProdcutWithStock = async (productId) => {
+    const session = await mongoose.startSession();
     try {
-        const deletedProduct = await Product.findOneAndDelete({ id: productId });
-        const deletedStock = await deleteStock({ id: productId });
+        session.startTransaction();
+        // - Check this product stock is 0 at all it's branches 
+        // - if stock > 0 ? alert to transfer the Product or Sell  : delete at product and stock dbs
+        const branches = await getAvailableStockByProductId(productId);
+        if (branches?.length > 0) {
+            const errorMessage = branches
+                .map(item => `${item.branch_name} : (${item.stock})`)
+                .join(", ");
+            throw new AppErrors(`Can't delete this products as some branches have stocks : ${errorMessage}`, 400)
+        }
+        const deletedProduct = await productRepo.deleteProduct(productId, session)
+        const deletedStock = await deleteStock(productId, session);
+        await session.commitTransaction();
         return deletedProduct;
     } catch (error) {
+        await session.abortTransaction();
         throw error;
     } finally {
-
+        await session.endSession();
     }
 };
 
 export const findProductsByIds = async (ids) => {
     try {
+
 
         const foundProduct = await Product.find({ id: { $in: ids } });
 

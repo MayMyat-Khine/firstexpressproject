@@ -15,3 +15,13 @@ export const updateStock = async (stocks, session) => {
     // }], { session });
     await Stock.insertMany(stocks, { session });
 }
+
+export const getAvailableStockByProductIdRepo = async (productId) => {
+    return await Stock.find({
+        product_id: productId,
+        stock: {
+            $gt: 0
+        }
+    }).select("branch_id stock")
+        .populate("branch_id", "name")
+}

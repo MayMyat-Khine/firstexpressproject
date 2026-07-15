@@ -85,8 +85,8 @@ export const updatePatchStock = async (id, stockData) => {
 
 };
 
-export const deleteStock = async (id) => {
-    return await Stock.findOneAndDelete({ product_id: id });
+export const deleteStock = async (id, session) => {
+    return await Stock.deleteMany({ product_id: id }, { session });
 };
 
 export const findStocksByProductIds = async (ids) => {
@@ -96,4 +96,12 @@ export const findStocksByProductIds = async (ids) => {
         throw error;
     }
 };
+
+export const getAvailableStockByProductId = async (id) => {
+    const stocks = await stockRepo.getAvailableStockByProductIdRepo(id);
+    return stocks.map(item => ({
+        branch_name: item.branch_id.name,
+        stock: item.stock
+    }));
+}
 
