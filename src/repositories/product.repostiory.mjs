@@ -1,9 +1,12 @@
 import { Product } from '../mongoose/schemas/product.mjs';
+import mongoose from "mongoose";
 
 export const getProductsOnBranchRepo = async (branchId) => {
-    console.log("branchID ", branchId);
-    return await Product.find({ "branch_id": branchId });
+    return await Product.find({ "branch_id": new mongoose.Types.ObjectId(branchId) }).populate("branch_id").populate("stocks");
+}
 
+export const getProductsRepo = async () => {
+    return await Product.find().populate("stocks");
 }
 
 export async function createProduct(id, branches, productData, session) {
@@ -14,17 +17,16 @@ export async function createProduct(id, branches, productData, session) {
 }
 
 export async function findProductByIdRepo(id) {
-    const foundProduct = await Product.findOne({ id: id });
+    const foundProduct = await Product.findOne({ id: id }).populate("stocks");
     return foundProduct;
 }
 
 export async function productUpdateWithBranch(productId, branchData) {
-    console.log("Branch Data ", branchData);
+
     const updatedProduct = await Product.updateOne(
         { id: productId },  // match product
         { $addToSet: { branch_id: branchData } }             // add new branch
     );
-    console.log("here is product update data", updatedProduct);
     return updatedProduct;
 
 }

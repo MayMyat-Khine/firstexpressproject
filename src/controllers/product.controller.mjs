@@ -1,6 +1,6 @@
 import { Product } from "../mongoose/schemas/product.mjs";
 import { matchedData } from "express-validator";
-import { createProductWithBranchAndStock, deleteProdcutWithStock, productUpdateWithStock } from "../services/product.service.mjs";
+import { getProducts, findProductById, getProductsByBranch, createProductWithBranchAndStock, deleteProdcutWithStock, productUpdateWithStock } from "../services/product.service.mjs";
 
 export async function productCreateController(req, res, next) {
 
@@ -14,30 +14,34 @@ export async function productCreateController(req, res, next) {
     }
 };
 
-export async function productGetAllController(req, res) {
+export async function productGetAllController(req, res, next) {
     try {
-        console.log("here is get product api");
-        const products = await Product.find();
-        res.json({ success: true, body: products });
+        const products = await getProducts();
+        res.json({ success: true, body: products, count: products.length });
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        });
+        next(error);
     }
 };
 
-export function productGetByIdController(req, res) {
+export async function productGetByIdController(req, res, next) {
     try {
-        const { foundProduct } = req;
+        const foundProduct = await findProductById(req.params.id);
         return res.status(200).send({ success: true, body: foundProduct });
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        });
+        next(error);
     }
 
 };
 
+
+export async function productsGetByBranchController(req, res, next) {
+    try {
+        const products = await getProductsByBranch(req.params.id);
+        return res.status(200).send({ success: true, body: products, count: products.length });
+    } catch (error) {
+        next(error);
+    }
+}
 // export async function productUpdateByIdController(req, res) {
 //     const { body, params: { id } } = req;
 //     try {

@@ -45,21 +45,19 @@ export const createProductWithBranchAndStock = async (productData) => {
     }
 };
 
-export const productUpdateWithBranch = async (productId, branchData) => {
-    return productRepo.productUpdateWithBranch(productId, branchData);
-}
+// export const productUpdateWithBranch = async (productId, branchData) => {
+//     return productRepo.productUpdateWithBranch(productId, branchData);
+// }
 
 
 export const productUpdateWithStock = async (productId, productData) => {
     const session = await mongoose.startSession();
     try {
         session.startTransaction();
-        console.log("here is product update data", productData);
 
         // - update stock should be moved to StockUpdateController with product id at param
 
         const oldProduct = await findProductById(productId);
-        console.log(`Branch `, productData.branch_id)
         if (productData.branch_id && productData.branch_id.length > 0)// has Branch new add? 
         {
             // valid all branches exist and non-added before update
@@ -77,7 +75,6 @@ export const productUpdateWithStock = async (productId, productData) => {
                 session
             );
         }
-
 
         const updatedProduct = await productRepo.updateProduct(productId, productData);
         await session.commitTransaction();
@@ -110,7 +107,6 @@ export const productUpdateWithStock = async (productId, productData) => {
 // };
 
 export const deleteProdcutWithStock = async (productId) => {
-    console.log("Here is product id for delete in service", productId);
     try {
         const deletedProduct = await Product.findOneAndDelete({ id: productId });
         const deletedStock = await deleteStock({ id: productId });
@@ -140,3 +136,12 @@ export const findProductById = async (id) => {
     }
     return foundProduct;
 }
+
+export const getProducts = async () => {
+    return productRepo.getProductsRepo();
+}
+
+export const getProductsByBranch = async (branchId) => {
+    return productRepo.getProductsOnBranchRepo(branchId);
+}
+

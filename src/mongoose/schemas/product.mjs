@@ -10,19 +10,27 @@ const ProductSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
-    "branch_id": {
-        type: mongoose.Schema.Types.Array,
-        required: true,
-    },
+    "branch_id": [{ type: mongoose.Schema.Types.ObjectId, ref: "branch" }],
     "description": {
         type: mongoose.Schema.Types.String,
     },
     "code": {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: true,
+        unique: true
     }
 
 
 })
+
+ProductSchema.virtual("stocks", {
+    ref: "stock",
+    localField: "id",
+    foreignField: "product_id"
+});
+
+ProductSchema.set("toJSON", {
+    virtuals: true
+});
 
 export const Product = mongoose.model('product', ProductSchema);

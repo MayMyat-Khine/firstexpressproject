@@ -7,11 +7,15 @@ const StockSchema = mongoose.Schema({
         unique: true
     },
     "product_id": {
-        type: mongoose.Schema.Types.String,
+        // type: mongoose.Schema.Types.String,
+        type: String,
+        ref: "product",
         required: true,
     },
     "branch_id": {
-        type: mongoose.Schema.Types.String,
+        // type: mongoose.Schema.Types.String,
+        type: String,
+        ref: "branch",
         required: true,
     },
     "stock": {
