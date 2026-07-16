@@ -1,4 +1,4 @@
-import { createStock, deleteStock, updateStock, getAvailableStockByProductId } from './stock.service.mjs';
+import { createStock, deleteStock, getAvailableStockByProductId } from './stock.service.mjs';
 import mongoose from 'mongoose';
 import { Product } from '../mongoose/schemas/product.mjs';
 import { validateBranches, getBranchesData } from './branch.service.mjs';

@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { indexValidationSchema } from '../utils/validationSchema.mjs';
-import { checkSchema, matchedData, validationResult } from 'express-validator';
+import { indexValidationSchema, updateStockValidationSchema } from '../utils/validationSchema.mjs';
+import { checkSchema, matchedData, validationResult, } from 'express-validator';
 import { findByProductId, findStockByProductId } from '../utils/middlewares.mjs';
 import { Stock } from '../mongoose/schemas/stock.mjs';
-import { stockPatchByProductIdController, stockUpdateByProductIdController } from '../controllers/stock.controller.mjs';
+import { stockUpdateController } from '../controllers/stock.controller.mjs';
+import { validatePatchBody, validate } from "../utils/validate.middleware.mjs";
 
 const router = Router();
 
@@ -64,17 +65,21 @@ const router = Router();
 //         }
 //     })
 
-router.put("/api/stock/:id",
-    checkSchema(indexValidationSchema),
-    findStockByProductId,
-    // findByProductId, // this is not needed as the delete and create of the stock will be depended on product
-    stockUpdateByProductIdController,
-);
+// router.put("/api/stock/:id",
+//     checkSchema(indexValidationSchema),
+//     validate,
+//     // findStockByProductId,
+//     // findByProductId, // this is not needed as the delete and create of the stock will be depended on product
+//     stockUpdateByProductIdController,
+// );
 
 router.patch("/api/stock/:id",
     checkSchema(indexValidationSchema),
-    findStockByProductId,
-    stockPatchByProductIdController);
+    validatePatchBody,
+    checkSchema(updateStockValidationSchema),
+    validate,
+    // findStockByProductId,
+    stockUpdateController);
 
 // Soe MIn thein/maung aye
 

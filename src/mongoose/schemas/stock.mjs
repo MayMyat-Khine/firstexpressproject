@@ -21,10 +21,12 @@ const StockSchema = mongoose.Schema({
     "stock": {
         type: mongoose.Schema.Types.Number,
         required: true,
+        min: [0, "Stock cannot be negative"]
     },
     "low_stock": {
         type: mongoose.Schema.Types.Number,
         required: true,
+        min: [0, "Low stock cannot be negative"]
     },
 
 });

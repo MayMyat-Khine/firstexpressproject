@@ -1,7 +1,7 @@
 
 import { matchedData } from "express-validator";
 import { Stock } from "../mongoose/schemas/stock.mjs";
-import { updatePatchStock, updateStock } from "../services/stock.service.mjs";
+import { updateStock } from "../services/stock.service.mjs";
 
 // export async function stockCreateController(req, res) {
 //     const data = matchedData(req);
@@ -41,36 +41,30 @@ import { updatePatchStock, updateStock } from "../services/stock.service.mjs";
 
 // }
 
-export async function stockUpdateByProductIdController(req, res) {
+export async function stockUpdateController(req, res, next) {
     const { body, params: { id } } = req;
     try {
-        const updatedStock = await updateStock({ id: id, stockData: body });
-        if (!updatedStock) return res.status(400).json({
-            success: false,
-            message: `stock with id ${id} not found`
-        })
+        const updatedStock = await updateStock(id, body);
         return res.status(200).send({ message: "Successfully Updated", data: updatedStock })
     } catch (error) {
-        return res.status(400).json({
-            message: error.message
-        });
+        next(error)
     }
 }
 
-export async function stockPatchByProductIdController(req, res) {
-    try {
-        const { body, params: { id } } = req;
-        const updatedStock = await updatePatchStock({ id: id, stockData: body });
-        if (updatedStock.matchedCount === 0)
-            return res.status(400).json({
-                success: false,
-                message: `stock with id ${id} is  not found`
-            })
-        return res.status(200).send({ message: "Successfully Updated", data: updatedStock })
-    } catch (error) {
-        return res.status(400).send(error.message);
-    }
-}
+// export async function stockPatchByProductIdController(req, res) {
+//     try {
+//         const { body, params: { id } } = req;
+//         const updatedStock = await updatePatchStock({ id: id, stockData: body });
+//         if (updatedStock.matchedCount === 0)
+//             return res.status(400).json({
+//                 success: false,
+//                 message: `stock with id ${id} is  not found`
+//             })
+//         return res.status(200).send({ message: "Successfully Updated", data: updatedStock })
+//     } catch (error) {
+//         return res.status(400).send(error.message);
+//     }
+// }
 
 // export async function stockDeleteByIdController(req, res) {
 //     try {

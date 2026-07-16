@@ -282,25 +282,17 @@ export const updateStockValidationSchema = {
     //     isString: { errorMessage: "ID must be string" },
     //     notEmpty: { errorMessage: "ID must not be Empty" }
     // },
-    proidduct_id: {
-        in: ["body"],
-        isString: { errorMessage: "Product ID must be string" },
-        notEmpty: { errorMessage: "Product ID must not be Empty" }
-    },
-    branch_id: {
-        in: ["body"],
-        isString: { errorMessage: "branch id must be string" },
-        notEmpty: { errorMessage: "branch id must not be Empty" }
-    },
     stock: {
         in: ["body"],
         isNaN: { errorMessage: "Stock must be a number" },
-        notEmpty: { errorMessage: "Stock must not be Empty" }
+        notEmpty: { errorMessage: "Stock must not be Empty" },
+        optional: true
     },
     low_stock: {
         in: ["body"],
         isNaN: { errorMessage: "Low Stock must be a number" },
-        notEmpty: { errorMessage: "Low Stock must not be Empty" }
+        notEmpty: { errorMessage: "Low Stock must not be Empty" },
+        optional: true
     },
 
 }

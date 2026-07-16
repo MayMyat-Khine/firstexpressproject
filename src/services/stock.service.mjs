@@ -2,6 +2,7 @@ import { STOCK_NAMESPACE } from "../config/constants.mjs";
 import { Stock } from "../mongoose/schemas/stock.mjs";
 import * as stockRepo from "../repositories/stock.repository.mjs";
 import { v5 as uuidv5 } from "uuid";
+import AppErrors from "../utils/appErrors.mjs";
 
 export const createStock = async (branchIds, productId, productCode, session) => {
     // FORCE ERROR FOR TEST
@@ -30,20 +31,21 @@ export const createStock = async (branchIds, productId, productCode, session) =>
     }));
     console.log(`Create Stock with Default 0`, stocks);
 
-    return await stockRepo.updateStock(stocks, session);
+    return await stockRepo.createStock(stocks, session);
 };
 
 export const updateStock = async (id, stockData) => {
-    //  const updatedStock = await Stock.replaceOne({ product_id: id }, body);
-    return await Stock.findOneAndUpdate(
-        { product_id: id },
-        stockData,
-        { new: true, runValidators: true }
-        // runValidators: true //check the schme validation
-        //  { new: true } // give the updated obj if its false then will give the old data even the data is updated
-    );
+    await findStockById(id);
+    return await stockRepo.updateStock(id, stockData);
 };
 
+export const findStockById = async (id) => {
+    const foundStock = await stockRepo.findStockByIdRepo(id);
+    if (!foundStock) {
+        throw new AppErrors(`Stock ${id} is  not found`, 404)
+    }
+    return foundStock;
+}
 export const updateStocksBulk = async (stockUpdates, session) => {
     try {
         const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
@@ -77,13 +79,13 @@ export const updateStocksBulkWitStockId = async (stockUpdates, session) => {
     }
 }
 
-export const updatePatchStock = async (id, stockData) => {
-    return await Stock.updateOne(
-        { product_id: id },            // Filter
-        { $set: stockData } // Update operator
-    );
+// export const updatePatchStock = async (id, stockData) => {
+//     return await Stock.updateOne(
+//         { product_id: id },            // Filter
+//         { $set: stockData } // Update operator
+//     );
 
-};
+// };
 
 export const deleteStock = async (id, session) => {
     return await Stock.deleteMany({ product_id: id }, { session });

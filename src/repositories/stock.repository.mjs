@@ -5,7 +5,12 @@ export const getStocksOnBranchRepo = async (branchId, productId) => {
 
 }
 
-export const updateStock = async (stocks, session) => {
+export const findStockByIdRepo = async (id) => {
+    return await Stock.findOne({ id: id });
+
+}
+
+export const createStock = async (stocks, session) => {
     // await Stock.create([{
     //     id: id,
     //     product_id: productId,
@@ -14,6 +19,16 @@ export const updateStock = async (stocks, session) => {
     //     low_stock: lowStock,
     // }], { session });
     await Stock.insertMany(stocks, { session });
+}
+
+export const updateStock = async (id, stockData) => {
+    return await Stock.findOneAndUpdate(
+        { id: id },
+        stockData,
+        { new: true, runValidators: true }
+        // runValidators: true //check the schme validation
+        //  { new: true } // give the updated obj if its false then will give the old data even the data is updated
+    );
 }
 
 export const getAvailableStockByProductIdRepo = async (productId) => {
