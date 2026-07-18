@@ -4,7 +4,7 @@ import { findByBranchId } from "../services/branch.service.mjs";
 import { findUserById } from "../services/user.service.mjs";
 import { getProductsOnBranchRepo } from "../repositories/product.repostiory.mjs";
 import AppErrors from "../utils/appErrors.mjs";
-import { createTransferProductsRepo } from "../repositories/transfer_product.repository.mjs";
+import { createTransferProductsRepo, getAllRecordsRepo } from "../repositories/transfer_product.repository.mjs";
 import { v4 as uuidv4 } from "uuid";
 import { updateStocksBulk, updateStocksBulkWitStockId, getStockByProductIdAndBranchId } from "../services/stock.service.mjs";
 import { findProductById } from "./product.service.mjs";
@@ -171,4 +171,8 @@ export const createTransferProductsService = async (createTransferProuctsData) =
     } finally {
         await session.endSession();
     }
+}
+
+export const getAllRecords = async () => {
+    return await getAllRecordsRepo();
 }

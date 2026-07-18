@@ -6,3 +6,7 @@ export const createTransferProductsRepo = async (data, session) => {
     return savedTransferProduct;
 
 };
+
+export const getAllRecordsRepo = async () => {
+    return await TransferProduct.find();
+}
