@@ -4,7 +4,7 @@ import * as userRepo from '../repositories/user.repository.mjs';
 import AppErrors from '../utils/appErrors.mjs';
 
 
-export const findUserByIdRepo = async (id) => {
+export const findUserById = async (id) => {
 
     const existId = await userRepo.findUserByIdRepo(id);
 
@@ -18,7 +18,7 @@ export const createUser = async (userData) => {
 };
 
 export const updateUser = async (id, body) => {
-    await findUserByIdRepo(id);
+    await findUserById(id);
     const updatedUser = await userRepo.updateUserRepo(id, body);
     if (!updatedUser) {
         throw AppErrors(`Fail to update user`, 400);
@@ -32,7 +32,7 @@ export const getAllUsers = async () => {
 }
 
 export const getUser = async (id) => {
-    const user = await findUserByIdRepo(id);
+    const user = await findUserById(id);
     return user;
 }
 // export const patchUser = async (id, body) => {
@@ -48,6 +48,6 @@ export const getUser = async (id) => {
 // };
 
 export const deleteUser = async (id) => {
-    await findUserByIdRepo(id);
+    await findUserById(id);
     await userRepo.deleteUserRepo(id);
 };

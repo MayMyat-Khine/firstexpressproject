@@ -14,7 +14,9 @@ export async function createUserRepo(user) {
 
 
 export async function findUserByIdRepo(id) {
-    const foundUser = await User.findOne({ id: id });
+
+    const foundUser = await User.findOne({ _id: id });
+
     return foundUser;
 }
 

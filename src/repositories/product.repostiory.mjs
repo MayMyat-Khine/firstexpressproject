@@ -2,7 +2,8 @@ import { Product } from '../mongoose/schemas/product.mjs';
 import mongoose from "mongoose";
 
 export const getProductsOnBranchRepo = async (branchId) => {
-    return await Product.find({ "branch_id": new mongoose.Types.ObjectId(branchId) }).populate("branch_id").populate("stocks");
+
+    return await Product.find({ "branch_id": new mongoose.Types.ObjectId(branchId) }).populate("branch_id").populate("stocks"); // stocks don't come out from TransferStock calling
 }
 
 export const getProductsRepo = async () => {

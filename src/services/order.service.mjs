@@ -17,7 +17,7 @@ export const createOrderService = async (orderData) => {
         session.startTransaction();
 
         // === Validate Customer === //
-        const customer = await findUserByIdRepo(orderData['customer_id']);
+        const customer = await findUserById(orderData['customer_id']);
         if (!customer) {
             const error = Error("Invalid customer id");
             error.statusCode = 400;

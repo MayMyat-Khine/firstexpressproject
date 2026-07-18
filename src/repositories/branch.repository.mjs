@@ -22,7 +22,7 @@ export const getBranchesRepo = async () => {
 }
 
 export const findBranchByIdRepo = async (id) => {
-    const foundBranch = await Branch.findOne({ id: id });
+    const foundBranch = await Branch.findOne({ _id: id });
     return foundBranch;
 }
 

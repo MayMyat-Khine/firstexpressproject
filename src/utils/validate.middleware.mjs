@@ -20,3 +20,21 @@ export const validatePatchBody = (req, res, next) => {
 
     next();
 };
+
+export const validateAllowedFields = (allowedFields) => {
+    return (req, res, next) => {
+        const receivedFields = Object.keys(req.body);
+
+        const invalidFields = receivedFields.filter(
+            field => !allowedFields.includes(field)
+        );
+
+        if (invalidFields.length > 0) {
+            return res.status(400).json({
+                message: `Invalid field(s): ${invalidFields.join(", ")}`
+            });
+        }
+
+        next();
+    };
+};

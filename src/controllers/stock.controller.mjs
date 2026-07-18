@@ -42,9 +42,12 @@ import { updateStock } from "../services/stock.service.mjs";
 // }
 
 export async function stockUpdateController(req, res, next) {
+    const validData = matchedData(req);
     const { body, params: { id } } = req;
     try {
+
         const updatedStock = await updateStock(id, body);
+
         return res.status(200).send({ message: "Successfully Updated", data: updatedStock })
     } catch (error) {
         next(error)

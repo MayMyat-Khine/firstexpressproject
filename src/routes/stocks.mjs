@@ -4,7 +4,7 @@ import { checkSchema, matchedData, validationResult, } from 'express-validator';
 import { findByProductId, findStockByProductId } from '../utils/middlewares.mjs';
 import { Stock } from '../mongoose/schemas/stock.mjs';
 import { stockUpdateController } from '../controllers/stock.controller.mjs';
-import { validatePatchBody, validate } from "../utils/validate.middleware.mjs";
+import { validatePatchBody, validate, validateAllowedFields } from "../utils/validate.middleware.mjs";
 
 const router = Router();
 
@@ -76,12 +76,11 @@ const router = Router();
 router.patch("/api/stock/:id",
     checkSchema(indexValidationSchema),
     validatePatchBody,
+    validateAllowedFields(Object.keys(updateStockValidationSchema)),
     checkSchema(updateStockValidationSchema),
     validate,
-    // findStockByProductId,
     stockUpdateController);
 
-// Soe MIn thein/maung aye
 
 
 // router.delete("/api/stock/:id", checkSchema(indexValidationSchema),

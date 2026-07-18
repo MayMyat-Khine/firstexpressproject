@@ -107,3 +107,10 @@ export const getAvailableStockByProductId = async (id) => {
     }));
 }
 
+export const getStockByProductIdAndBranchId = async (bid, pid) => {
+    const foundStock = await stockRepo.getStocksOnBranchRepo(bid, pid);
+    if (!foundStock) {
+        throw new AppErrors(`One or more products is not found`, 404)
+    }
+    return foundStock;
+}
