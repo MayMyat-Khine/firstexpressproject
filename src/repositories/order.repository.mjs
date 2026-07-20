@@ -4,3 +4,15 @@ export const createOrder = async (orderData, session) => {
     const newOrder = new Order(orderData);
     return await newOrder.save({ session });
 }
+
+export const getOrdersRepo = async () => {
+    return await Order.find();
+}
+
+export const getOrderByIdRepo = async (id) => {
+    return await Order.findOne({ id: id }).select('-__v -_id');
+}
+
+export const getOrderByBranchRepo = async (id) => {
+    return await Order.find({ branch_id: id }).select('-__v -_id');
+}

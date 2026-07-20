@@ -215,14 +215,25 @@ export const updateOrder = async (orderId, orderData) => {
 
 }
 
-const getOrderById = async (orderId) => {
-    const order = await Order.findOne({ id: orderId }).select('-__v -_id');
+export const getOrders = async () => {
+    return await orderRepo.getOrdersRepo();
+}
+
+
+export const getOrderById = async (id) => {
+    const order = await orderRepo.getOrderByIdRepo(id);
     if (!order) {
-        const error = Error("Order not found");
-        error.statusCode = 404;
-        throw error;
+        throw new AppErrors(`Order id ${id} is not found`, 404)
     }
     return order;
+};
+
+export const getOrderByBranch = async (bid) => {
+    const orders = await orderRepo.getOrderByBranchRepo(bid);
+    if (!orders) {
+        throw new AppErrors(`Orders on Branch ${id} are not found`, 404)
+    }
+    return orders;
 };
 
 const productsValidation = async (productIds, str) => {
