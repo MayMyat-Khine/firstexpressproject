@@ -45,29 +45,37 @@ export async function orderGetByBranchController(req, res, next) {
     }
 }
 
-export async function orderUpdateByIdController(req, res) {
+// === Current only update the Status and Notes === //
+// export async function orderUpdateByIdController(req, res) {
+//     try {
+//         const { original_products, new_products, delete_products } = req.body;
+//         console.log("Req Body ", req.body);
+//         validateUniqueOfProducts(original_products, new_products, delete_products);
+//         const updatedOrder = await updateOrder(req.params.id, req.body);
+//         if (updatedOrder !== null) {
+//             return res.status(200).send({ message: "Successfully Updated", data: updatedOrder })
+//         } else {
+//             throw new Error(`Order with id ${req.params.id} not found`);
+//         }
+//     } catch (error) {
+//         return res.status(400).json({ message: error.message });
+//     }
+// };
 
+export async function orderUpdateByIdController(req, res, next) {
     try {
-        const { original_products, new_products, delete_products } = req.body;
-        console.log("Req Body ", req.body);
-        validateUniqueOfProducts(original_products, new_products, delete_products);
         const updatedOrder = await updateOrder(req.params.id, req.body);
-        if (updatedOrder !== null) {
-            return res.status(200).send({ message: "Successfully Updated", data: updatedOrder })
-        } else {
-            throw new Error(`Order with id ${req.params.id} not found`);
-        }
+        return res.status(200).send({ message: "Successfully Updated", data: updatedOrder })
     } catch (error) {
-        return res.status(400).json({ message: error.message });
+        next(error)
     }
 };
 
-function validateUniqueOfProducts(originalProducts = [], newProducts = [], deleteProducts = []) {
-
-    const allIds = [...originalProducts.map(p => p.id), ...newProducts.map(p => p.id), ...deleteProducts];
-
-    const uniqueIds = new Set(allIds);
-    if (uniqueIds.size !== allIds.length) {
-        throw new Error("Duplicate products in request payload");
-    }
-};
+// === For: Current only update the Status and Notes === //
+// function validateUniqueOfProducts(originalProducts = [], newProducts = [], deleteProducts = []) {
+//     const allIds = [...originalProducts.map(p => p.id), ...newProducts.map(p => p.id), ...deleteProducts];
+//     const uniqueIds = new Set(allIds);
+//     if (uniqueIds.size !== allIds.length) {
+//         throw new Error("Duplicate products in request payload");
+//     }
+// };

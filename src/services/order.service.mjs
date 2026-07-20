@@ -81,7 +81,7 @@ export const createOrderService = async (orderData) => {
         });
         const totalAmount = orderProducts.reduce((sum, p) => sum + p.subtotal, 0);
         const finalOrderObj = { ...orderData, id: uuidv4(), purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
-        const savedOrder = await orderRepo.createOrder(finalOrderObj, session);
+        const savedOrder = await orderRepo.createOrderRepo(finalOrderObj, session);
 
         // === Substract and Update the  Stock  DB === //
         const updatedStocks = await updateStocksBulk(purchaseProducts.map(({ id, quantity }) => ({
@@ -142,77 +142,87 @@ const checkProductUniqueness = async (orderId, orderData) => {
     }
     return { originalProducts, newProducts, deleteProductsIds };
 };
+
+// === For: Current only update the Status and Notes === //
+// export const updateOrder = async (orderId, orderData) => {
+//     // here no case for PRODUCT HAD BEEN DELETED AND STOCK ADDING AS RETURN STOCK 
+//     // but in real case need to handle that 
+//     // check product presence
+//     // check stock availability
+//     // update order {session}
+//     // update stock {session}
+
+//     // For Update Order BulkOpertion is heavy as it's for multiple documents updated , and using updateOne for each operation is not a good practice here and $set/$push/$pull in one updateOne is not valid here , so pick to replace the whole doucument by updating all relating products and stay no touch to non-updated products
+
+//     const session = await mongoose.startSession();
+//     try {
+
+//         session.startTransaction();
+//         const oldOrder = await getOrderById(orderId);
+//         const oldProductsMap = new Map();
+//         oldOrder.purchase_products.forEach(product => {
+//             oldProductsMap.set(product.id, product.quantity);
+//         });
+//         // ====Validate The Products Uniqueness and  Get Original/New Products  & Delete ProductsIds ==== //
+//         const { originalProducts, newProducts, deleteProductsIds } = await checkProductUniqueness(orderId, orderData);
+
+//         //=== Validate Product Existence and if all Valide then get Stocks of those products ==== //
+//         const allStocks = await validateProductsAndGetStocks(originalProducts, newProducts, deleteProductsIds);
+
+//         // === Stock Mapping === //
+//         const allStockMap = {};
+//         allStocks.forEach(stockData => {
+//             allStockMap[stockData.product_id] = stockData.stock;
+//         });
+
+//         // === Validate  Original/New Products Quantity with  Stock  === //
+//         validateStockMapping(allStockMap, originalProducts, newProducts);
+//         // === Check Old Prdoucts has the all delete_products(ONLY for Delete Products) ===//
+//         checkDeleteProductsInOldOrder(oldProductsMap, deleteProductsIds);
+//         // =====  Update Order After Product and Stock Validation  ===== //
+//         const mappedOriginalProducts = originalProducts.map(product => {
+//             if (product.method === "SUB" && product.quantity > oldProductsMap.get(product.id)) {
+//                 const error = Error(`Invalid substract quantity for product id ${product.id} `);
+//                 error.statusCode = 400;
+//                 throw error;
+//             }
+//             return {
+//                 id: product.id,
+//                 quantity: product.method === "ADD" ? product.quantity + oldProductsMap.get(product.id) : oldProductsMap.get(product.id) - product.quantity
+//             }
+//         });
+//         const mappedNewProducts = newProducts.map(p => ({ id: p.id, quantity: p.quantity }));
+//         const mappedProducts = prepareProductsForUpdate(oldOrder, mappedOriginalProducts, mappedNewProducts, deleteProductsIds);
+//         await Order.updateOne(
+//             { id: orderId },
+//             { $set: { purchase_products: Array.from(mappedProducts.values()) } },
+//             // { session }
+//         );
+
+//         // === Check Delete Products From Updated Order Successfully === //
+//         checkDeleteProductsSuccessful(orderId, deleteProductsIds, session);
+
+//         // === Update Stock here === // Case Only for Existing Products
+//         stockToUpdate(originalProducts, newProducts, deleteProductsIds, allStockMap, oldProductsMap, session);
+
+//         await session.commitTransaction();
+//         const updatedOrder = await getOrderById(orderId);
+//         return updatedOrder;
+//     } catch (error) {
+//         await session.abortTransaction();
+//         throw error;
+//     } finally {
+//         session.endSession();
+//     }
+
+// }
+
 export const updateOrder = async (orderId, orderData) => {
-    // here no case for PRODUCT HAD BEEN DELETED AND STOCK ADDING AS RETURN STOCK 
-    // but in real case need to handle that 
-    // check product presence
-    // check stock availability
-    // update order {session}
-    // update stock {session}
 
-    // For Update Order BulkOpertion is heavy as it's for multiple documents updated , and using updateOne for each operation is not a good practice here and $set/$push/$pull in one updateOne is not valid here , so pick to replace the whole doucument by updating all relating products and stay no touch to non-updated products
-
-    const session = await mongoose.startSession();
-    try {
-
-        session.startTransaction();
-        const oldOrder = await getOrderById(orderId);
-        const oldProductsMap = new Map();
-        oldOrder.purchase_products.forEach(product => {
-            oldProductsMap.set(product.id, product.quantity);
-        });
-        // ====Validate The Products Uniqueness and  Get Original/New Products  & Delete ProductsIds ==== //
-        const { originalProducts, newProducts, deleteProductsIds } = await checkProductUniqueness(orderId, orderData);
-
-        //=== Validate Product Existence and if all Valide then get Stocks of those products ==== //
-        const allStocks = await validateProductsAndGetStocks(originalProducts, newProducts, deleteProductsIds);
-
-        // === Stock Mapping === //
-        const allStockMap = {};
-        allStocks.forEach(stockData => {
-            allStockMap[stockData.product_id] = stockData.stock;
-        });
-
-        // === Validate  Original/New Products Quantity with  Stock  === //
-        validateStockMapping(allStockMap, originalProducts, newProducts);
-        // === Check Old Prdoucts has the all delete_products(ONLY for Delete Products) ===//
-        checkDeleteProductsInOldOrder(oldProductsMap, deleteProductsIds);
-        // =====  Update Order After Product and Stock Validation  ===== //
-        const mappedOriginalProducts = originalProducts.map(product => {
-            if (product.method === "SUB" && product.quantity > oldProductsMap.get(product.id)) {
-                const error = Error(`Invalid substract quantity for product id ${product.id} `);
-                error.statusCode = 400;
-                throw error;
-            }
-            return {
-                id: product.id,
-                quantity: product.method === "ADD" ? product.quantity + oldProductsMap.get(product.id) : oldProductsMap.get(product.id) - product.quantity
-            }
-        });
-        const mappedNewProducts = newProducts.map(p => ({ id: p.id, quantity: p.quantity }));
-        const mappedProducts = prepareProductsForUpdate(oldOrder, mappedOriginalProducts, mappedNewProducts, deleteProductsIds);
-        await Order.updateOne(
-            { id: orderId },
-            { $set: { purchase_products: Array.from(mappedProducts.values()) } },
-            // { session }
-        );
-
-        // === Check Delete Products From Updated Order Successfully === //
-        checkDeleteProductsSuccessful(orderId, deleteProductsIds, session);
-
-        // === Update Stock here === // Case Only for Existing Products
-        stockToUpdate(originalProducts, newProducts, deleteProductsIds, allStockMap, oldProductsMap, session);
-
-        await session.commitTransaction();
-        const updatedOrder = await getOrderById(orderId);
-        return updatedOrder;
-    } catch (error) {
-        await session.abortTransaction();
-        throw error;
-    } finally {
-        session.endSession();
-    }
-
+    await getOrderById(orderId);
+    const updatedOrder = await orderRepo.updateOrderRepo(orderId, orderData);
+    console.log("Order Updated ", updateOrder);
+    return updatedOrder;
 }
 
 export const getOrders = async () => {

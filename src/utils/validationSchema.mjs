@@ -354,89 +354,95 @@ export const createOrderValidationSchema = {
     },
 
 };
-
 export const updateOrderValidationSchema = {
-    original_products: {
+
+    notes: {
         in: ["body"],
-        optional: true,
-        isArray: {
-            options: { min: 1 },
-            errorMessage: "Products must be an array "
-
-        },
-
+        optional: true
     },
-    new_products: {
+    status: {
         in: ["body"],
-        optional: true,
-        isArray: {
-            options: { min: 1 },
-            errorMessage: "New Products must be an array"
-
-        },
-    },
-    delete_products: {
-        in: ["body"],
-        optional: true,
-        isArray: {
-            options: { min: 1 },
-            errorMessage: "Delete Products must be an array"
-
-        },
-    },
-    // * means every object in the array
-
-    "original_products.*.id": {
-        in: ["body"],
-        // if: (value, { req }) => Array.isArray(req.body.new_products),
-        isString: { errorMessage: "Product ID must be string" },
-        notEmpty: { errorMessage: "Product ID must not be empty" }
-    },
-
-    "original_products.*.quantity": {
-        in: ["body"],
-        // if: (value, { req }) => Array.isArray(req.body.new_products),
-        isInt: {
-            options: { gt: 0 },
-            errorMessage: "Quantity must be greater than 0"
-        }
-    },
-
-    "original_products.*.method": {
-        in: ["body"],
-        isString: { errorMessage: "Method must be a string" },
-        notEmpty: { errorMessage: "Method must not be empty" },
-        isIn: { options: [["ADD", "SUB"]], errorMessage: "Method must be either 'ADD' or 'SUB'" }
-    },
-
-    "new_products.*.id": {
-        in: ["body"],
-        // if: (value, { req }) => Array.isArray(req.body.new_products),
-        optional: { options: { nullable: true } },
-        isString: { errorMessage: "New Product ID must be string" },
-        notEmpty: { errorMessage: "New Product ID must not be empty" }
-    },
-
-    "new_products.*.quantity": {
-        in: ["body"],
-        // if: (value, { req }) => Array.isArray(req.body.new_products),
-        optional: { options: { nullable: true } },
-        isInt: {
-            options: { gt: 0 },
-            errorMessage: "Quantity must be greater than 0",
-        },
-    },
-
-    // "delete_products.*.id": {
-    //     in: ["body"],
-    //     // if: (value, { req }) => Array.isArray(req.body.new_products),
-    //     optional: { options: { nullable: true } },
-    //     isString: { errorMessage: "Delete Product ID must be string" },
-    //     notEmpty: { errorMessage: "Delete Product ID must not be empty" }
-    // },
-
-
+        isString: { errorMessage: "Status must be string" },
+        notEmpty: { errorMessage: "Status must not be Empty" },
+        optional: true
+    }
 };
+
+// === Current only update the Status and Notes === //
+// export const updateOrderValidationSchema = {
+//     original_products: {
+//         in: ["body"],
+//         optional: true,
+//         isArray: {
+//             options: { min: 1 },
+//             errorMessage: "Products must be an array "
+
+//         },
+
+//     },
+//     new_products: {
+//         in: ["body"],
+//         optional: true,
+//         isArray: {
+//             options: { min: 1 },
+//             errorMessage: "New Products must be an array"
+
+//         },
+//     },
+//     delete_products: {
+//         in: ["body"],
+//         optional: true,
+//         isArray: {
+//             options: { min: 1 },
+//             errorMessage: "Delete Products must be an array"
+
+//         },
+//     },
+//     // * means every object in the array
+//     "original_products.*.id": {
+//         in: ["body"],
+//         // if: (value, { req }) => Array.isArray(req.body.new_products),
+//         isString: { errorMessage: "Product ID must be string" },
+//         notEmpty: { errorMessage: "Product ID must not be empty" }
+//     },
+//     "original_products.*.quantity": {
+//         in: ["body"],
+//         // if: (value, { req }) => Array.isArray(req.body.new_products),
+//         isInt: {
+//             options: { gt: 0 },
+//             errorMessage: "Quantity must be greater than 0"
+//         }
+//     },
+//     "original_products.*.method": {
+//         in: ["body"],
+//         isString: { errorMessage: "Method must be a string" },
+//         notEmpty: { errorMessage: "Method must not be empty" },
+//         isIn: { options: [["ADD", "SUB"]], errorMessage: "Method must be either 'ADD' or 'SUB'" }
+//     },
+//     "new_products.*.id": {
+//         in: ["body"],
+//         // if: (value, { req }) => Array.isArray(req.body.new_products),
+//         optional: { options: { nullable: true } },
+//         isString: { errorMessage: "New Product ID must be string" },
+//         notEmpty: { errorMessage: "New Product ID must not be empty" }
+//     },
+//     "new_products.*.quantity": {
+//         in: ["body"],
+//         // if: (value, { req }) => Array.isArray(req.body.new_products),
+//         optional: { options: { nullable: true } },
+//         isInt: {
+//             options: { gt: 0 },
+//             errorMessage: "Quantity must be greater than 0",
+//         },
+//     },
+//     // "delete_products.*.id": {
+//     //     in: ["body"],
+//     //     // if: (value, { req }) => Array.isArray(req.body.new_products),
+//     //     optional: { options: { nullable: true } },
+//     //     isString: { errorMessage: "Delete Product ID must be string" },
+//     //     notEmpty: { errorMessage: "Delete Product ID must not be empty" }
+//     // },
+// };
 
 export const transferProductsBToBValidationSchema = {
     sender_branch_id: {
