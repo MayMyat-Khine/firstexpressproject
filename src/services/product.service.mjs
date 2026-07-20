@@ -156,6 +156,10 @@ export const getProducts = async () => {
 }
 
 export const getProductsByBranch = async (branchId) => {
-    return productRepo.getProductsOnBranchRepo(branchId);
+    return await productRepo.getProductsOnBranchRepo(branchId);
+}
+
+export const getProductsByProductIdAndBranch = async (branchId, productIds) => {
+    return productRepo.getProductsOnBranchByProductIdRepo(branchId, productIds);
 }
 

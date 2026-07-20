@@ -2,20 +2,15 @@ import { matchedData } from "express-validator";
 import { createOrderService, updateOrder } from "../services/order.service.mjs";
 import { Order } from "../mongoose/schemas/order.mjs";
 
-export async function orderCreateController(req, res) {
+export async function orderCreateController(req, res, next) {
     try {
 
         const validDate = matchedData(req);
 
         const savedOrder = await createOrderService(validDate);
-
-        return res.status(200).send({ message: "Successfully Created Order" })
+        return res.status(200).send({ message: "Successfully Created Order", body: savedOrder })
     } catch (error) {
-        return res.status(400).json({
-            message: error.message,
-            details: error.details || []
-
-        });
+        next(error)
     }
 }
 

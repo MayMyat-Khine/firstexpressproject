@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 import { findByBranchId } from "../services/branch.service.mjs";
 import { findUserById } from "../services/user.service.mjs";
-import { getProductsOnBranchRepo } from "../repositories/product.repostiory.mjs";
+import { getProductsByBranch } from "./product.service.mjs";
 import AppErrors from "../utils/appErrors.mjs";
 import { createTransferProductsRepo, getAllRecordsRepo } from "../repositories/transfer_product.repository.mjs";
 import { v4 as uuidv4 } from "uuid";
@@ -17,7 +17,7 @@ const validateBranches = async (branchIds) => {
 
 const validateProductsOnReceiverBranch = async (branchId, transferProducts) => {
     try {
-        const products = await getProductsOnBranchRepo(branchId);
+        const products = await getProductsByBranch(branchId);
 
         if (products.length === 0) {
             throw new AppErrors("PRODUCTS NOT FOUND", 404);
@@ -56,8 +56,8 @@ const validateProductsOnSenderBranchAndGetStocks = async (branchId, transferProd
             tpMap.set(tp.id, tp.quantity);
         });
 
-        const productsOnBranch = await getProductsOnBranchRepo(branchId);
-
+        const productsOnBranch = await getProductsByBranch(branchId);
+        console.log(JSON.stringify(productsOnBranch, null, 2)); // here can have stock directly rather than get from StockDB again
         if (productsOnBranch.length === 0) {
             throw new AppErrors("PRODUCTS NOT FOUND", 404);
         }

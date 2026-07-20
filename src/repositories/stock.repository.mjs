@@ -40,3 +40,11 @@ export const getAvailableStockByProductIdRepo = async (productId) => {
     }).select("branch_id stock")
         .populate("branch_id", "name")
 }
+
+export const findStocksByProductIdsRepo = async (bid, pids) => {
+    return Stock.find({ branch_id: bid, product_id: { $in: pids } });
+}
+
+export const bulkCreateStock = async (bulkOps, session) => {
+    return Stock.bulkWrite(bulkOps, { session });
+}

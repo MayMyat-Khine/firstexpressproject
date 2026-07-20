@@ -37,6 +37,7 @@ export async function productGetByIdController(req, res, next) {
 export async function productsGetByBranchController(req, res, next) {
     try {
         const products = await getProductsByBranch(req.params.id);
+        console.log(JSON.stringify(products, null, 2));
         return res.status(200).send({ success: true, body: products, count: products.length });
     } catch (error) {
         next(error);

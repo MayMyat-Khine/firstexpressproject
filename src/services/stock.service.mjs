@@ -47,19 +47,14 @@ export const findStockById = async (id) => {
     return foundStock;
 }
 export const updateStocksBulk = async (stockUpdates, session) => {
-    try {
-        const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
-            updateOne: {
-                filter: { product_id: product_id },
-                update: { $set: stockData }
-            }
-        }));
-        // throw new Error("FORCED_TRANSACTION_FAILURE");
-        const result = await Stock.bulkWrite(bulkOps, { session });
-        return result;
-    } catch (error) {
-        throw error;
-    }
+    const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
+        updateOne: {
+            filter: { product_id: product_id },
+            update: { $set: stockData }
+        }
+    }));
+    const result = await stockRepo.bulkCreateStock(bulkOps, session);
+    return result;
 }
 
 
@@ -91,12 +86,8 @@ export const deleteStock = async (id, session) => {
     return await Stock.deleteMany({ product_id: id }, { session });
 };
 
-export const findStocksByProductIds = async (ids) => {
-    try {
-        return await Stock.find({ product_id: { $in: ids } });
-    } catch (error) {
-        throw error;
-    }
+export const findStocksByProductIds = async (bid, pids) => {
+    return await stockRepo.findStocksByProductIdsRepo(bid, pids);
 };
 
 export const getAvailableStockByProductId = async (id) => {

@@ -18,6 +18,11 @@ const ProductSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
         unique: true
+    },
+    "price": {
+        type: mongoose.Schema.Types.Number,
+        required: true,
+        min: [0, "Price cannot be negative"]
     }
 
 

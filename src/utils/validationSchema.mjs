@@ -193,9 +193,14 @@ export const createProductValidationSchema = {
             errorMessage: "Code must be a String"
         },
         notEmpty: { errorMessage: "Code must not be empty" }
+    },
+    price: {
+        in: ["body"],
+        isNaN: { errorMessage: "Price must be a number" },
+        notEmpty: { errorMessage: "Price must not be Empty" },
+
     }
 }
-
 
 export const updateProductValidationSchema = {
     // id: {
@@ -243,6 +248,12 @@ export const updateProductValidationSchema = {
             errorMessage: "Code must be a String"
         },
         notEmpty: { errorMessage: "Code must not be empty" },
+        optional: true
+    },
+    price: {
+        in: ["body"],
+        isNaN: { errorMessage: "Price must be a number" },
+        notEmpty: { errorMessage: "Price must not be Empty" },
         optional: true
     }
 }
@@ -298,12 +309,8 @@ export const updateStockValidationSchema = {
 }
 
 export const createOrderValidationSchema = {
-    id: {
-        in: ["body"],
-        isString: { errorMessage: "Order ID must be string" },
-        notEmpty: { errorMessage: "Order ID must not be Empty" }
-    },
-    merchant_id: {
+
+    branch_id: {
         in: ["body"],
         isString: { errorMessage: "Merchant ID must be string" },
         notEmpty: { errorMessage: "Merchant ID must not be Empty" }
@@ -313,7 +320,11 @@ export const createOrderValidationSchema = {
         isString: { errorMessage: "Customer ID must be string" },
         notEmpty: { errorMessage: "Customer ID must not be Empty" }
     },
-
+    payment_method: {
+        in: ["body"],
+        isString: { errorMessage: "Payment Method must be string" },
+        notEmpty: { errorMessage: "Payment Method must not be Empty" }
+    },
     purchase_products: {
         in: ["body"],
         isArray: {
@@ -337,7 +348,10 @@ export const createOrderValidationSchema = {
             options: { gt: 0 },
             errorMessage: "Quantity must be greater than 0"
         }
-    }
+    },
+    notes: {
+        in: ["body"],
+    },
 
 };
 

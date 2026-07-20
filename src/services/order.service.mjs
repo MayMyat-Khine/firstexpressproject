@@ -1,9 +1,12 @@
 import mongoose from 'mongoose';
 import { Order } from "../mongoose/schemas/order.mjs";
-import { findUserByIdRepo } from "../repositories/user.repository.mjs";
-import { findProductsByIds } from './product.service.mjs';
+import { findUserById } from "./user.service.mjs";
+import { findProductsByIds, getProductsByProductIdAndBranch } from './product.service.mjs';
 import { findStocksByProductIds, updateStock, updateStocksBulk } from './stock.service.mjs';
-
+import { findByBranchId } from './branch.service.mjs';
+import AppErrors from '../utils/appErrors.mjs';
+import * as orderRepo from "../repositories/order.repository.mjs";
+import { v4 as uuidv4 } from "uuid";
 
 // assume merchant data is valid here
 // check merchant id and customer id are valid
@@ -18,26 +21,28 @@ export const createOrderService = async (orderData) => {
 
         // === Validate Customer === //
         const customer = await findUserById(orderData['customer_id']);
-        if (!customer) {
-            const error = Error("Invalid customer id");
-            error.statusCode = 400;
-            throw error;
-        }
 
+        // === Validate Branch ==== //
+        const branch = await findByBranchId(orderData['branch_id']);
+
+        // === Validate Products ===//
         const productIds = orderData['purchase_products'].map(product => product.id);
-
-        const validProducts = await findProductsByIds(productIds);
+        const validProducts = await getProductsByProductIdAndBranch(orderData['branch_id'], productIds);
+        // console.log(JSON.stringify(validProducts, null, 2));
         if (validProducts.length !== productIds.length) {
-            const error = Error("Invalid product id");
-            error.statusCode = 400;
-            throw error;
+            throw new AppErrors('One or more invalid products.', 400);
         }
 
         const validProductsIds = validProducts.map(product => product.id);
+        const productsWithPrice = new Map(
+            validProducts.map(product => [
+                product.id,
+                product.price
+            ])
+        );
 
-        const stocks = await findStocksByProductIds(validProductsIds);
-
-        // === Stock Mapping === //
+        // === Get Stocks of Products === //
+        const stocks = await findStocksByProductIds(orderData['branch_id'], validProductsIds);
         const stockMap = {};
         stocks.forEach(stockData => {
             stockMap[stockData.product_id] = stockData.stock;
@@ -61,31 +66,35 @@ export const createOrderService = async (orderData) => {
 
         const hasInvalid = validateStockResultForOriginalProducts.some(result => !result.valid);
         if (hasInvalid) {
-            const invalids = validateStockResultForOriginalProducts.filter(result => !result.valid);
-            const error = Error("Failed at stock checking");
-            error.statusCode = 400;
-            error.details = invalids;
-            throw error;
+            const invalids = validateStockResultForOriginalProducts.filter(result => !result.valid).map(p => p.product_id);
+            throw new AppErrors(`[${invalids}] has insufficient stocks`, 400)
         }
 
         // === Create order after all validation === // 
-        const newOrder = new Order(orderData);
-        const savedOrder = await newOrder.save({ session });
+        const orderProducts = orderData["purchase_products"].map(item => {
+            return {
+                id: item.id,
+                quantity: item.quantity,
+                price: productsWithPrice.get(item.id),
+                subtotal: productsWithPrice.get(item.id) * item.quantity
+            }
+        });
+        const totalAmount = orderProducts.reduce((sum, p) => sum + p.subtotal, 0);
+        const finalOrderObj = { ...orderData, id: uuidv4(), purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
+        const savedOrder = await orderRepo.createOrder(finalOrderObj, session);
 
-
-        // === Substract and Update the  stock  db === //
+        // === Substract and Update the  Stock  DB === //
         const updatedStocks = await updateStocksBulk(purchaseProducts.map(({ id, quantity }) => ({
             product_id: id,
             stockData: { stock: stockMap[id] - quantity }
         })), session);
+
         if (updatedStocks.modifiedCount !== purchaseProducts.length) {
-            return Error("Failed to update all stocks after order create");
+            return new AppErrors("Failed to update all stocks after order create", 400);
         }
 
         await session.commitTransaction();
-
         return savedOrder;
-
     } catch (error) {
         await session.abortTransaction();
         console.error(error);
@@ -171,7 +180,7 @@ export const updateOrder = async (orderId, orderData) => {
         // =====  Update Order After Product and Stock Validation  ===== //
         const mappedOriginalProducts = originalProducts.map(product => {
             if (product.method === "SUB" && product.quantity > oldProductsMap.get(product.id)) {
-                const error = Error(`Invalid substract quantity for product id ${product.id}`);
+                const error = Error(`Invalid substract quantity for product id ${product.id} `);
                 error.statusCode = 400;
                 throw error;
             }
