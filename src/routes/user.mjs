@@ -2,8 +2,7 @@ import { Router } from 'express';
 import { User } from '../mongoose/schemas/user.mjs';
 import { createUserValidationSchema, indexValidationSchema, updateUserValidationSchema } from '../utils/validationSchema.mjs';
 import { checkSchema, matchedData, validationResult } from 'express-validator';
-import { findByUserId } from '../utils/middlewares.mjs';
-import { validate, validatePatchBody } from '../utils/validate.middleware.mjs';
+import { validate, validatePatchBody } from '../middlewares/validate.middleware.mjs';
 import { userCreateController, userGetAllController, userGetByIdController, userUpdateByIdController, userDeleteByIdController } from '../controllers/user.controller.mjs';
 const router = Router();
 
@@ -44,9 +43,6 @@ router.get('/api/user/:id',
     validate,
     userGetByIdController);
 
-
-// can validate the ID of the request body before updating
-// here - from =>  check id exist then valide id to => check id exist, go to controller(as validate id inside service)
 router.patch('/api/user/:id',
     checkSchema(indexValidationSchema),
     // findByUserId,

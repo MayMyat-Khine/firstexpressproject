@@ -1,9 +1,8 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 import { createBranchValidationSchema, indexValidationSchema, updateBranchValidationSchema } from "../utils/validationSchema.mjs";
-import { validate, validatePatchBody } from "../utils/validate.middleware.mjs";
+import { validate, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { branchCreateController, branchDeleteController, branchGetAllController, branchGetByIdController, branchUpdateByIdController } from "../controllers/branch.controller.mjs";
-import { findByBranchId } from "../utils/middlewares.mjs";
 import { updateBranch } from "../services/branch.service.mjs";
 
 const router = Router();

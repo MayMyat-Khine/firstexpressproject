@@ -1,9 +1,8 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 import { createOrderValidationSchema, indexValidationSchema, updateOrderValidationSchema } from "../utils/validationSchema.mjs";
-import { validate, validatePatchBody, validateAllowedFields } from "../utils/validate.middleware.mjs";
+import { validate, validatePatchBody, validateAllowedFields } from "../middlewares/validate.middleware.mjs";
 import { orderCreateController, orderGetAllController, orderGetByIdController, orderUpdateByIdController, orderGetByBranchController } from "../controllers/order.controller.mjs";
-import { findByOrderId } from "../utils/middlewares.mjs";
 
 const router = Router();
 

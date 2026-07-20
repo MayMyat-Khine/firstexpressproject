@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import { indexValidationSchema, updateStockValidationSchema } from '../utils/validationSchema.mjs';
 import { checkSchema, matchedData, validationResult, } from 'express-validator';
-import { findByProductId, findStockByProductId } from '../utils/middlewares.mjs';
 import { Stock } from '../mongoose/schemas/stock.mjs';
 import { stockUpdateController } from '../controllers/stock.controller.mjs';
-import { validatePatchBody, validate, validateAllowedFields } from "../utils/validate.middleware.mjs";
+import { validatePatchBody, validate, validateAllowedFields } from "../middlewares/validate.middleware.mjs";
 
 const router = Router();
 

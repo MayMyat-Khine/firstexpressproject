@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { createProductValidationSchema, indexValidationSchema, updateProductValidationSchema } from "../utils/validationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
-import { findByProductId, } from "../utils/middlewares.mjs";
-import { validate, validatePatchBody } from "../utils/validate.middleware.mjs";
+import { validate, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { productCreateController, productGetAllController, productDeleteByIdController, productGetByIdController, productUpdateByIdController, productsGetByBranchController } from "../controllers/product.controller.mjs";
 
 const router = Router();
