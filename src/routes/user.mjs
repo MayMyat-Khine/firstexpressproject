@@ -8,12 +8,7 @@ const router = Router();
 
 var name = ""
 var password = ""
-router.post("/api/register", (req, res) => {
-    name = req.body.username;
-    password = req.body.password;
 
-    return res.status(200).send({ success: true, body: { name: name, password: password } });
-})
 
 
 router.post("/api/login", (req, res) => {

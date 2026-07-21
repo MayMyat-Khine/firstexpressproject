@@ -20,6 +20,8 @@ const UserSchema = mongoose.Schema({
         minlenght: 6
     },
 
+
+
 })
 
 export const User = mongoose.model('user', UserSchema);

@@ -1,5 +1,55 @@
 // import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 
+export const registerValidationSchema = {
+    name: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Name Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Name Must not be Empty"
+        },
+
+    },
+    display_name: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Display Name Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Display Name Must not be Empty"
+        },
+
+    },
+    phone_number: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Phone Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Phone not be Empty"
+        },
+
+    },
+    password: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Password Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Password not be Empty"
+        },
+        isLength: {
+            options: {
+                min: 6
+            },
+            errorMessage: "Password must be at least 6 characters"
+        }
+
+    },
+}
+
+
 export const createUserValidationSchema = {
     id: {
         in: ["body"],
@@ -27,7 +77,7 @@ export const createUserValidationSchema = {
             errorMessage: "Name Must be String"
         },
         notEmpty: {
-            errorMessage: "Must not be Empty"
+            errorMessage: "Name Must not be Empty"
         },
 
     },
