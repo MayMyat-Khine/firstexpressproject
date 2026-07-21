@@ -2,6 +2,7 @@ import * as customerRepo from "../repositories/customer.repostiory.mjs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+
 export const createCustomer = async (registerData) => {
     try {
         const hashedPassword = await bcrypt.hash(registerData.password, 10);
@@ -24,3 +25,7 @@ export const createCustomer = async (registerData) => {
         throw error;
     }
 };
+
+export const getCustomerById = async (id) => {
+    return await customerRepo.getCustomerByIdRepo(id);
+}

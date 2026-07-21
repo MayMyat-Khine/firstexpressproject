@@ -3,12 +3,14 @@ import { checkSchema } from "express-validator";
 import { createOrderValidationSchema, indexValidationSchema, updateOrderValidationSchema } from "../utils/validationSchema.mjs";
 import { validate, validatePatchBody, validateAllowedFields } from "../middlewares/validate.middleware.mjs";
 import { orderCreateController, orderGetAllController, orderGetByIdController, orderUpdateByIdController, orderGetByBranchController } from "../controllers/order.controller.mjs";
+import { authMiddleware } from "../middlewares/auth.middleware.mjs";
 
 const router = Router();
 
 router.post("/api/order",
     checkSchema(createOrderValidationSchema),
     validate,
+    authMiddleware,
     orderCreateController
 );
 

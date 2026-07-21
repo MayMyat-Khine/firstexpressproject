@@ -11,17 +11,17 @@ var password = ""
 
 
 
-router.post("/api/login", (req, res) => {
-    const n = req.body.username;
-    const p = req.body.password;
-    console.log("Name ", n)
-    console.log("password", p)
-    if (n === name && p === password) {
-        return res.status(200).send({ success: true, body: { name: name, password: password } });
-    }
-    return res.status(404).send({ success: false, message: "User Not Found" });
+// router.post("/api/login", (req, res) => {
+//     const n = req.body.username;
+//     const p = req.body.password;
+//     console.log("Name ", n)
+//     console.log("password", p)
+//     if (n === name && p === password) {
+//         return res.status(200).send({ success: true, body: { name: name, password: password } });
+//     }
+//     return res.status(404).send({ success: false, message: "User Not Found" });
 
-})
+// })
 
 
 router.post('/api/user',

@@ -7,6 +7,7 @@ import { findByBranchId } from './branch.service.mjs';
 import AppErrors from '../utils/appErrors.mjs';
 import * as orderRepo from "../repositories/order.repository.mjs";
 import { v4 as uuidv4 } from "uuid";
+import { getCustomerById } from './customer.service.mjs';
 
 // assume merchant data is valid here
 // check merchant id and customer id are valid
@@ -20,7 +21,7 @@ export const createOrderService = async (orderData) => {
         session.startTransaction();
 
         // === Validate Customer === //
-        const customer = await findUserById(orderData['customer_id']);
+        const customer = await getCustomerById(orderData['customer_id']);
 
         // === Validate Branch ==== //
         const branch = await findByBranchId(orderData['branch_id']);

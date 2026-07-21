@@ -1,6 +1,27 @@
 // import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 
-export const registerValidationSchema = {
+export const registerValidaionSchema = {
+    phone_number: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Phone Number Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Phone Number Must not be Empty"
+        },
+    },
+    password: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Password Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Password not be Empty"
+        },
+    }
+}
+
+export const createCustomerValidationScheme = {
     name: {
         in: ["body"],
         isString: {

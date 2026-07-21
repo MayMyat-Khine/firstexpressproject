@@ -6,6 +6,7 @@ import orderRouter from "./order.mjs";
 import branchRouter from "./branch.mjs";
 import stockTransferRouter from './transfer_stock.mjs';
 import customer from "./customers.mjs";
+import auth from "./auth.mjs";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use(orderRouter);
 router.use(branchRouter);
 router.use(stockTransferRouter);
 router.use(customer);
+router.use(auth);
 
 export default router;
