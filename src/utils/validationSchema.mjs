@@ -70,6 +70,40 @@ export const createCustomerValidationScheme = {
     },
 }
 
+export const createRoleValidationSchema = {
+
+    name: {
+        notEmpty: {
+            errorMessage: "Role name is required."
+        },
+        isString: {
+            errorMessage: "Role name must be a string."
+        },
+        trim: true
+    },
+
+    permissions: {
+        notEmpty: {
+            errorMessage: "Permission list is required."
+        },
+        isArray: {
+            errorMessage: "Permission must be an array."
+        }
+    },
+};
+
+
+export const updateRoleValidationSchema = {
+
+    permissions: {
+        notEmpty: {
+            errorMessage: "Permission list is required."
+        },
+        isArray: {
+            errorMessage: "Permission must be an array."
+        }
+    },
+};
 
 export const createUserValidationSchema = {
     id: {
@@ -115,6 +149,15 @@ export const createUserValidationSchema = {
             errorMessage: "Password must be at least 6 characters"
         }
     },
+    role: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Role Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Role Must not be Empty"
+        },
+    }
 
 };
 

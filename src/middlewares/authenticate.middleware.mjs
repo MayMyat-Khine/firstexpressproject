@@ -4,7 +4,7 @@ import { Customer } from "../mongoose/schemas/customer.mjs";
 import { getCustomerById } from "../services/customer.service.mjs";
 
 
-export async function authMiddleware(req, res, next) {
+export async function authenticateMiddleware(req, res, next) {
 
     try {
 

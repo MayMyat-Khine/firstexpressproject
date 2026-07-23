@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { UserRole } from "../../enums/user_roles.enum.mjs";
 
 const UserSchema = mongoose.Schema({
     "id": {
@@ -19,9 +20,12 @@ const UserSchema = mongoose.Schema({
         required: true,
         minlenght: 6
     },
-
-
-
+    "role":
+    {
+        type: String,
+        enum: Object.values(UserRole),
+        required: true
+    }
 })
 
 export const User = mongoose.model('user', UserSchema);
