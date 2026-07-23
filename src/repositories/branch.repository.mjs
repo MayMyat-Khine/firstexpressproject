@@ -40,7 +40,7 @@ export const createBranchRepo = async (branchData) => {
 
 export const updateBranchRepo = async (id, branchData) => {
     const updatedBranch = await Branch.findOneAndUpdate(
-        { id: id },
+        { _id: id },
         branchData, { new: true, runValidators: true });
     return updatedBranch;
 }

@@ -48,7 +48,11 @@ enums/
 
 ## Features
 
-### User
+### Auth
+
+- Login
+
+### User(For Employee)
 
 - Create User
 - Read all Users
@@ -56,6 +60,9 @@ enums/
 - Update User
 - Delete User
 
+### Customer 
+
+- Create
 
 ### Branch
 

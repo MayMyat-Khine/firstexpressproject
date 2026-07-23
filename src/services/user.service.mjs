@@ -21,7 +21,7 @@ export const updateUser = async (id, body) => {
     await findUserById(id);
     const updatedUser = await userRepo.updateUserRepo(id, body);
     if (!updatedUser) {
-        throw AppErrors(`Fail to update user`, 400);
+        throw new AppErrors(`Fail to update user`, 400);
 
     }
     return updatedUser;
