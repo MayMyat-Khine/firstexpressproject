@@ -3,22 +3,32 @@ import { createProductValidationSchema, indexValidationSchema, updateProductVali
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { validate, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { productCreateController, productGetAllController, productDeleteByIdController, productGetByIdController, productUpdateByIdController, productsGetByBranchController } from "../controllers/product.controller.mjs";
+import { authenticateUserMiddleware } from "../middlewares/authenticate.middleware.mjs";
+import { authorizeMiddleware } from "../middlewares/authorize.middleware.mjs";
+import { PERMISSIONS } from "../constants/permission.constant.mjs";
 
 const router = Router();
 
 router.post('/api/product',
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
     checkSchema(createProductValidationSchema),
     validate,
     productCreateController)
 
-router.get("/api/products", productGetAllController)
+router.get("/api/products", authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]), productGetAllController)
 
 router.get("/api/product/:id",
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
     checkSchema(indexValidationSchema),
     validate,
     productGetByIdController)
 
 router.get("/api/branch/:id/products",
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
     checkSchema(indexValidationSchema),
     validate,
     productsGetByBranchController)
@@ -31,6 +41,8 @@ router.get("/api/branch/:id/products",
 // )
 
 router.patch("/api/product/:id",
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_UPDATE]),
     checkSchema(indexValidationSchema),
     validatePatchBody,
     checkSchema(updateProductValidationSchema),
@@ -38,6 +50,8 @@ router.patch("/api/product/:id",
     productUpdateByIdController)
 
 router.delete("/api/product/:id",
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_DELETE]),
     checkSchema(indexValidationSchema),
     validate,
     productDeleteByIdController

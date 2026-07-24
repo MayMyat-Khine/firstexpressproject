@@ -22,4 +22,8 @@ export const updateRoleRepo = async (roleId, roleData) => {
     return updatedRole;
 }
 
-
+export const findRoleByIdRepo = async (roleId) => {
+    return await Role.findOne({
+        _id: roleId
+    })
+}

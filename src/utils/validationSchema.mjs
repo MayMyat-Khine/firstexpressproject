@@ -1,7 +1,28 @@
 // import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 
-export const registerValidaionSchema = {
+export const loginCustomerValidaionSchema = {
     phone_number: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Phone Number Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Phone Number Must not be Empty"
+        },
+    },
+    password: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Password Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Password not be Empty"
+        },
+    }
+}
+
+export const loginUserValidaionSchema = {
+    name: {
         in: ["body"],
         isString: {
             errorMessage: "Phone Number Must be String"
@@ -187,6 +208,13 @@ export const updateUserValidationSchema = {
                 min: 6
             },
             errorMessage: "Password must be at least 6 characters"
+        }
+    },
+    role: {
+        in: ["body"],
+        optional: true,
+        isString: {
+            errorMessage: "Role must be string"
         }
     }
 

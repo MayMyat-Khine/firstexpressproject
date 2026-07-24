@@ -10,6 +10,7 @@ const UserSchema = mongoose.Schema({
     "name": {
         type: mongoose.Schema.Types.String,
         required: true,
+        unique: true
     },
     "display_name": {
         type: mongoose.Schema.Types.String,
@@ -23,8 +24,7 @@ const UserSchema = mongoose.Schema({
     "role":
     {
         type: String,
-        enum: Object.values(UserRole),
-        required: true
+        ref: 'role'
     }
 })
 
