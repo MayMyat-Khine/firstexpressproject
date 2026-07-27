@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { OrderStatus } from "../../enums/order_status.enum.mjs";
 import { PaymentMethod } from "../../enums/payment_method.enum.mjs";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const OrderScheme = mongoose.Schema({
     "id": ({
@@ -77,5 +78,7 @@ const OrderScheme = mongoose.Schema({
 }, {
     timestamps: true
 });
+
+OrderScheme.set("toJSON", schemaTransform);
 
 export const Order = mongoose.model('order', OrderScheme);

@@ -48,7 +48,7 @@ export async function stockUpdateController(req, res, next) {
 
         const updatedStock = await updateStock(id, body);
 
-        return res.status(200).send({ message: "Successfully Updated", data: updatedStock })
+        return res.status(200).send({ success: true, body: updatedStock })
     } catch (error) {
         next(error)
     }

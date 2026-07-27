@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { UserRole } from "../../enums/user_roles.enum.mjs";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const UserSchema = mongoose.Schema({
     "id": {
@@ -27,6 +28,8 @@ const UserSchema = mongoose.Schema({
         ref: 'role'
     }
 })
+
+UserSchema.set("toJSON", schemaTransform);
 
 export const User = mongoose.model('user', UserSchema);
 

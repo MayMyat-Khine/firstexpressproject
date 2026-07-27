@@ -68,7 +68,7 @@ export async function productUpdateByIdController(req, res, next) {
         const { body, params: { id } } = req;
         const updatedProduct = await productUpdateWithStock(id, body);
 
-        return res.status(200).send({ message: "Successfully Updated", data: updatedProduct })
+        return res.status(200).send({ success: true, body: updatedProduct })
     } catch (error) {
         next(error);
     }
@@ -78,7 +78,7 @@ export async function productDeleteByIdController(req, res, next) {
     try {
         const { id } = req.params;
         await deleteProdcutWithStock(id);
-        return res.status(200).send({ message: "Successfully Deleted" })
+        return res.status(200).send({ success: true, message: "Successfully Deleted" })
     } catch (error) {
         next(error);
     }

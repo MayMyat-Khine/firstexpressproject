@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const RoleSchema = new mongoose.Schema({
 
@@ -12,6 +13,8 @@ const RoleSchema = new mongoose.Schema({
         ref: 'permission'
     }]
 });
+
+RoleSchema.set("toJSON", schemaTransform);
 
 export const Role = mongoose.model('role', RoleSchema);
 

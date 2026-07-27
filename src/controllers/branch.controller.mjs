@@ -36,7 +36,7 @@ export async function branchUpdateByIdController(req, res, next) {
     const { body, params: { id } } = req;
     try {
         const updatedBranch = await updateBranch(id, body);
-        return res.status(200).send({ message: "Successfully Updated", data: updatedBranch });
+        return res.status(200).send({ success: true, body: updatedBranch });
     } catch (error) {
         next(error);
     }

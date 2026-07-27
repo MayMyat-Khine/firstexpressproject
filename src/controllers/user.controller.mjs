@@ -39,7 +39,7 @@ export async function userUpdateByIdController(req, res, next) {
     const { body, params: { id } } = req;
     try {
         const updatedUser = await updateUser(id, body);
-        return res.status(200).send({ success: true, message: "Successfully Updated User", data: updatedUser })
+        return res.status(200).send({ success: true, message: "Successfully Updated User", body: updatedUser })
     } catch (error) {
         next(error);
     }

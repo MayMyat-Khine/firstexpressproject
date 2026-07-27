@@ -10,11 +10,11 @@ export const getOrdersRepo = async () => {
 }
 
 export const getOrderByIdRepo = async (id) => {
-    return await Order.findOne({ id: id }).select('-__v -_id');
+    return await Order.findOne({ id: id });
 }
 
 export const getOrderByBranchRepo = async (id) => {
-    return await Order.find({ branch_id: id }).select('-__v -_id');
+    return await Order.find({ branch_id: id });
 }
 
 export async function updateOrderRepo(id, body) {

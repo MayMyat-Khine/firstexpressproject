@@ -8,7 +8,7 @@ export async function orderCreateController(req, res, next) {
         const validDate = matchedData(req);
 
         const savedOrder = await createOrderService(validDate);
-        return res.status(200).send({ message: "Successfully Created Order", body: savedOrder })
+        return res.status(200).send({ success: true, body: savedOrder })
     } catch (error) {
         next(error)
     }
@@ -65,7 +65,7 @@ export async function orderGetByBranchController(req, res, next) {
 export async function orderUpdateByIdController(req, res, next) {
     try {
         const updatedOrder = await updateOrder(req.params.id, req.body);
-        return res.status(200).send({ message: "Successfully Updated", data: updatedOrder })
+        return res.status(200).send({ success: true, body: updatedOrder })
     } catch (error) {
         next(error)
     }

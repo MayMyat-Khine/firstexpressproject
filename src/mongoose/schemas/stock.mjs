@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const StockSchema = mongoose.Schema({
     "id": {
@@ -30,5 +31,7 @@ const StockSchema = mongoose.Schema({
     },
 
 });
+
+StockSchema.set("toJSON", schemaTransform);
 
 export const Stock = mongoose.model('stock', StockSchema)

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const TransferProductSchema = mongoose.Schema({
     "id": {
@@ -24,6 +25,8 @@ const TransferProductSchema = mongoose.Schema({
     },
 
 });
+
+TransferProductSchema.set("toJSON", schemaTransform);
 
 
 export const TransferProduct = mongoose.model('transfer product', TransferProductSchema);

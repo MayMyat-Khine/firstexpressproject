@@ -114,5 +114,5 @@ export async function createPermissionController(req, res) {
     ]);
 
     console.log("After Create Permission");
-    return res.status(200).send({ message: "Successfully Created Permission" })
+    return res.status(200).send({ success: true, message: "Successfully Created Permission" })
 }

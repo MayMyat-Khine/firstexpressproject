@@ -18,7 +18,7 @@ export async function findUserByIdRepo(id) {
     const foundUser = await User.findOne({ _id: id }).populate({
         path: "role", populate: {
             path: "permissions",
-            select: "code -_id"
+            select: "code"
         }
     });
 
@@ -30,7 +30,7 @@ export async function findUserByNameRepo(name) {
     const foundUser = await User.findOne({ name: name }).populate({
         path: "role", populate: {
             path: "permissions",
-            select: "code -_id"
+            select: "code"
         }
     });
 

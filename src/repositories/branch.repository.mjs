@@ -5,17 +5,17 @@ let cacheBranchIds = null;
 
 // -- from validationSchema bcoz gonna check the Branches at Service Layer rather then checking here
 // -- currently only used from transferproducts , have to clear by using service 
-export const getCachedBranchIdsRepo = async () => {
-    try {
-        if (!cacheBranchIds) {
-            const branches = await Branch.find().select('id -_id');
-            cacheBranchIds = branches.map(b => b.id);
-        }
-        return cacheBranchIds;
-    } catch (error) {
-        throw error;
-    }
-}
+// export const getCachedBranchIdsRepo = async () => {
+//     try {
+//         if (!cacheBranchIds) {
+//             const branches = await Branch.find().select('id -_id');
+//             cacheBranchIds = branches.map(b => b.id);
+//         }
+//         return cacheBranchIds;
+//     } catch (error) {
+//         throw error;
+//     }
+// }
 
 export const getBranchesRepo = async () => {
     return await Branch.find();

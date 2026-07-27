@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const PermissionSchema = new mongoose.Schema({
     code: {
@@ -9,6 +10,8 @@ const PermissionSchema = new mongoose.Schema({
     name: String,
     description: String
 });
+
+PermissionSchema.set("toJSON", schemaTransform);
 
 export const Permission = mongoose.model('permission', PermissionSchema);
 // [

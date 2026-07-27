@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const ProductSchema = mongoose.Schema({
     "id": {
@@ -34,8 +35,7 @@ ProductSchema.virtual("stocks", {
     foreignField: "product_id"
 });
 
-ProductSchema.set("toJSON", {
-    virtuals: true
-});
+
+ProductSchema.set("toJSON", schemaTransform);
 
 export const Product = mongoose.model('product', ProductSchema);

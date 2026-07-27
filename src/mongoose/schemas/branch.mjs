@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { schemaTransform } from "../../utils/schemaTransform.mjs";
 
 const BranchSchema = mongoose.Schema({
     "id": {
@@ -18,5 +19,7 @@ const BranchSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
     }
 });
+
+BranchSchema.set("toJSON", schemaTransform);
 
 export const Branch = mongoose.model('branch', BranchSchema);
