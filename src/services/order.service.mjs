@@ -15,13 +15,14 @@ import { getCustomerById } from './customer.service.mjs';
 // check the purchase stock is lower than the stock of the product-stock
 // save the order create
 // substract stock and update stock-db
-export const createOrderService = async (orderData) => {
+export const createOrderService = async (orderData, customerId) => {
+    console.log("cust id", customerId);
     const session = await mongoose.startSession();
     try {
         session.startTransaction();
 
         // === Validate Customer === //
-        const customer = await getCustomerById(orderData['customer_id']);
+        const customer = await getCustomerById(customerId);
 
         // === Validate Branch ==== //
         const branch = await findByBranchId(orderData['branch_id']);
@@ -81,7 +82,7 @@ export const createOrderService = async (orderData) => {
             }
         });
         const totalAmount = orderProducts.reduce((sum, p) => sum + p.subtotal, 0);
-        const finalOrderObj = { ...orderData, id: uuidv4(), purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
+        const finalOrderObj = { ...orderData, id: uuidv4(), customer_id: customerId, purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
         const savedOrder = await orderRepo.createOrderRepo(finalOrderObj, session);
 
         // === Substract and Update the  Stock  DB === //
@@ -222,7 +223,7 @@ export const updateOrder = async (orderId, orderData) => {
 
     await getOrderById(orderId);
     const updatedOrder = await orderRepo.updateOrderRepo(orderId, orderData);
-    console.log("Order Updated ", updateOrder);
+
     return updatedOrder;
 }
 
@@ -230,12 +231,26 @@ export const getOrders = async () => {
     return await orderRepo.getOrdersRepo();
 }
 
+export const getOrdersByCustomer = async (customerId) => {
+    return await orderRepo.getOrdersByCustomerRepo(customerId);
+}
+
+
 
 export const getOrderById = async (id) => {
     const order = await orderRepo.getOrderByIdRepo(id);
     if (!order) {
         throw new AppErrors(`Order id ${id} is not found`, 404)
     }
+    return order;
+};
+
+export const getMyOrderById = async (customerId, id) => {
+    const order = await orderRepo.getMyOrderByIdRepo(id, customerId);
+    if (!order) {
+        throw new AppErrors(`Order id ${id} is not found`, 404)
+    }
+
     return order;
 };
 

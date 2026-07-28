@@ -9,8 +9,16 @@ export const getOrdersRepo = async () => {
     return await Order.find();
 }
 
+export const getOrdersByCustomerRepo = async (customerId) => {
+    return await Order.find({ customer_id: customerId });
+}
+
 export const getOrderByIdRepo = async (id) => {
     return await Order.findOne({ id: id });
+}
+
+export const getMyOrderByIdRepo = async (id, customerId) => {
+    return await Order.findOne({ id: id, customer_id: customerId });
 }
 
 export const getOrderByBranchRepo = async (id) => {

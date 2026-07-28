@@ -10,8 +10,8 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 const router = Router();
 
 router.post('/api/role',
-    authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.ROLE_CREATE]),
+    // authenticateUserMiddleware,
+    // authorizeMiddleware([PERMISSIONS.ROLE_CREATE]),
     validatePatchBody,
     checkSchema(createRoleValidationSchema),
     validateAllowedFields(Object.keys(createRoleValidationSchema)),

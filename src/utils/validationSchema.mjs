@@ -457,11 +457,7 @@ export const createOrderValidationSchema = {
         isString: { errorMessage: "Merchant ID must be string" },
         notEmpty: { errorMessage: "Merchant ID must not be Empty" }
     },
-    customer_id: {
-        in: ["body"],
-        isString: { errorMessage: "Customer ID must be string" },
-        notEmpty: { errorMessage: "Customer ID must not be Empty" }
-    },
+
     payment_method: {
         in: ["body"],
         isString: { errorMessage: "Payment Method must be string" },

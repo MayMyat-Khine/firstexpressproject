@@ -1,13 +1,12 @@
 import { matchedData } from "express-validator";
-import { createOrderService, updateOrder, getOrders, getOrderById, getOrderByBranch } from "../services/order.service.mjs";
+import { createOrderService, updateOrder, getOrders, getOrderById, getOrderByBranch, getOrdersByCustomer, getMyOrderById } from "../services/order.service.mjs";
 import { Order } from "../mongoose/schemas/order.mjs";
 
 export async function orderCreateController(req, res, next) {
     try {
 
-        const validDate = matchedData(req);
-
-        const savedOrder = await createOrderService(validDate);
+        const validData = matchedData(req);
+        const savedOrder = await createOrderService(validData, req.customer.id);
         return res.status(200).send({ success: true, body: savedOrder })
     } catch (error) {
         next(error)
@@ -24,6 +23,27 @@ export async function orderGetAllController(req, res, next) {
         next(error)
     }
 };
+
+export async function orderGetMyOrdersController(req, res, next) {
+    try {
+        const customerId = req.customer.id;
+        const orders = await getOrdersByCustomer(customerId);
+        res.json({ success: true, body: orders, count: orders.length });
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+export async function orderGetMyOrderByIdController(req, res, next) {
+
+    try {
+        const foundOrder = await getMyOrderById(req.customer.id, req.params.id);
+        return res.status(200).send({ success: true, body: foundOrder });
+    } catch (error) {
+        next(error)
+    }
+}
 
 export async function orderGetByIdController(req, res, next) {
 

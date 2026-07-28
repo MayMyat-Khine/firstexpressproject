@@ -8,8 +8,8 @@ export async function userCreateController(req, res, next) {
     const data = matchedData(req);
 
     try {
-        const savedUser = await createUser(data);
-        return res.status(201).send({ success: true, body: savedUser });
+        const { token, body } = await createUser(data);
+        return res.status(201).send({ success: true, body: body, token: token });
     } catch (error) {
         next(error);
     }
