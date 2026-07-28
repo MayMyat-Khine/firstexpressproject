@@ -227,12 +227,14 @@ export const updateOrder = async (orderId, orderData) => {
     return updatedOrder;
 }
 
-export const getOrders = async () => {
-    return await orderRepo.getOrdersRepo();
+export const getOrders = async ({ page, limit, search }) => {
+    const safeLimit = Math.min(limit, 100);
+    return await orderRepo.getOrdersRepo({ page, limit, search });
 }
 
-export const getOrdersByCustomer = async (customerId) => {
-    return await orderRepo.getOrdersByCustomerRepo(customerId);
+export const getOrdersByCustomer = async (customerId, { page, limit, search }) => {
+    const safeLimit = Math.min(limit, 100);
+    return await orderRepo.getOrdersByCustomerRepo(customerId, { page, limit: safeLimit, search });
 }
 
 

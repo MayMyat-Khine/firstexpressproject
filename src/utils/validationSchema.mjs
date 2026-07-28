@@ -280,6 +280,29 @@ export const updateBranchValidationSchema = {
     }
 }
 
+
+export const getPaginationValidationSchema = {
+    page: {
+        optional: true,
+        isInt: {
+            options: { min: 1 }
+        },
+        toInt: true
+    },
+    limit: {
+        optional: true,
+        isInt: {
+            options: { min: 1, max: 100 }
+        },
+        toInt: true
+    },
+    search: {
+        optional: true,
+        isString: true,
+        trim: true
+    }
+};
+
 export const createProductValidationSchema = {
     // id: {
     //     in: ['body'],

@@ -15,9 +15,9 @@ export async function orderCreateController(req, res, next) {
 
 export async function orderGetAllController(req, res, next) {
     try {
-
-        const orders = await getOrders();
-        res.json({ success: true, body: orders, count: orders.length });
+        var validateData = matchedData(req);
+        const { orders, total } = await getOrders(validateData);
+        res.json({ success: true, body: orders, total: total });
 
     } catch (error) {
         next(error)
@@ -27,8 +27,9 @@ export async function orderGetAllController(req, res, next) {
 export async function orderGetMyOrdersController(req, res, next) {
     try {
         const customerId = req.customer.id;
-        const orders = await getOrdersByCustomer(customerId);
-        res.json({ success: true, body: orders, count: orders.length });
+        var validateData = matchedData(req);
+        const { orders, total } = await getOrdersByCustomer(customerId, validateData);
+        res.json({ success: true, body: orders, total: total });
 
     } catch (error) {
         next(error)

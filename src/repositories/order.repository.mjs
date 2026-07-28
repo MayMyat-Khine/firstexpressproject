@@ -5,12 +5,63 @@ export const createOrderRepo = async (orderData, session) => {
     return await newOrder.save({ session });
 }
 
-export const getOrdersRepo = async () => {
-    return await Order.find();
+export const getOrdersRepo = async ({ page, limit, search }) => {
+    const filter = {};
+
+    if (search) {
+        filter.id = {
+            $regex: search, // pattern matching string
+            $options: "i" // ignore case
+        };
+    }
+
+    const total = await Order.countDocuments(filter);
+
+    let query = Order.find(filter); //  .populate("stocks");
+    if (page && limit) {
+
+        query = query
+            .skip((page - 1) * limit)
+            .limit(limit);
+    }
+    const orders = await query;
+    return {
+        orders, total
+    }
 }
 
-export const getOrdersByCustomerRepo = async (customerId) => {
-    return await Order.find({ customer_id: customerId });
+export const getOrdersByCustomerRepo = async (customerId, { page,
+    limit,
+    search }) => {
+
+    const filter = {};
+
+    if (search) {
+        filter.id = {
+            $regex: search, // pattern matching string
+            $options: "i" // ignore case
+        };
+    }
+
+    filter.customer_id = customerId;
+
+    const total = await Order.countDocuments(filter);
+
+    let query = Order.find(filter); //  .populate("stocks");
+    if (page && limit) {
+
+        query = query
+            .skip((page - 1) * limit)
+            .limit(limit);
+    }
+    const orders = await query;
+    return {
+        orders, total
+    }
+
+
+
+    // return await Order.find({ customer_id: customerId });
 }
 
 export const getOrderByIdRepo = async (id) => {

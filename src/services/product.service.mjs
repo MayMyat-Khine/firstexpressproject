@@ -151,8 +151,15 @@ export const findProductById = async (id) => {
     return foundProduct;
 }
 
-export const getProducts = async () => {
-    return productRepo.getProductsRepo();
+export const getProducts = async ({ page, limit, search }) => {
+
+    // const page = Math.max(Number(query.page) || 1, 1);
+    const safeLimit = Math.min(limit, 100);
+    return productRepo.getProductsRepo({
+        page,
+        limit: safeLimit,
+        search,
+    });
 }
 
 export const getProductsByBranch = async (branchId) => {

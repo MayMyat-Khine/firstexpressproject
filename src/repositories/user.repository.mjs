@@ -15,7 +15,7 @@ export async function createUserRepo(user) {
 
 export async function findUserByIdRepo(id) {
 
-    const foundUser = await User.findOne({ _id: id }).populate({
+    const foundUser = await User.findOne({ id: id }).populate({
         path: "role", populate: {
             path: "permissions",
             select: "code"

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProductValidationSchema, indexValidationSchema, updateProductValidationSchema } from "../utils/validationSchema.mjs";
+import { createProductValidationSchema, getPaginationValidationSchema, indexValidationSchema, updateProductValidationSchema } from "../utils/validationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { validate, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { productCreateController, productGetAllController, productDeleteByIdController, productGetByIdController, productUpdateByIdController, productsGetByBranchController } from "../controllers/product.controller.mjs";
@@ -10,14 +10,18 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 const router = Router();
 
 router.post('/api/product',
-    authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
+    // authenticateUserMiddleware,
+    // authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
     checkSchema(createProductValidationSchema),
     validate,
     productCreateController)
 
-router.get("/api/products", authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]), productGetAllController)
+router.get("/api/products",
+    //  authenticateUserMiddleware,
+    // authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
+    checkSchema(getPaginationValidationSchema),
+    validate,
+    productGetAllController)
 
 router.get("/api/product/:id",
     authenticateUserMiddleware,

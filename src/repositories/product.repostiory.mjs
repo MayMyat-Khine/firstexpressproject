@@ -12,8 +12,33 @@ export const getProductsOnBranchByProductIdRepo = async (branchId, productIds) =
 }
 
 
-export const getProductsRepo = async () => {
-    return await Product.find().populate("stocks");
+export const getProductsRepo = async ({ page,
+    limit,
+    search }) => {
+
+    const filter = {};
+
+    if (search) {
+        filter.product_name = {
+            $regex: search, // pattern matching string
+            $options: "i" // ignore case
+        };
+    }
+
+    const total = await Product.countDocuments(filter);
+
+    let query = Product.find(filter); //  .populate("stocks");
+    if (page && limit) {
+
+        query = query
+            .skip((page - 1) * limit)
+            .limit(limit);
+    }
+    const products = await query;
+    return {
+        products, total
+    }
+
 }
 
 export async function createProduct(id, branches, productData, session) {

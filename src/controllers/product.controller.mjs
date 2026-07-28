@@ -16,8 +16,9 @@ export async function productCreateController(req, res, next) {
 
 export async function productGetAllController(req, res, next) {
     try {
-        const products = await getProducts();
-        res.json({ success: true, body: products, count: products.length });
+        var validateData = matchedData(req);
+        const { products, total } = await getProducts(validateData);
+        res.json({ success: true, body: products, total: total });
     } catch (error) {
         next(error);
     }

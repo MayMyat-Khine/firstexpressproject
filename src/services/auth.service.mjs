@@ -74,7 +74,7 @@ export const loginUser = async (data) => {
         );
     }
 
-    const token = generateToken({ id: user._id })
+    const token = generateToken({ id: user.id })
     const userResponse = {
         id: user.id,
         name: user.name,
@@ -83,7 +83,7 @@ export const loginUser = async (data) => {
 
     return {
         token,
-        customer: userResponse
+        user: userResponse
     };
 
 
