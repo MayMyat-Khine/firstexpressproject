@@ -36,7 +36,7 @@ export async function authenticateMiddleware(req, res, next) {
         // Verify JWT
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.ACCESS_TOKEN_SECRET
         );
 
 
@@ -106,7 +106,7 @@ export async function authenticateUserMiddleware(req, res, next) {
         // Verify JWT
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.ACCESS_TOKEN_SECRET
         );
 
 
@@ -131,7 +131,7 @@ export async function authenticateUserMiddleware(req, res, next) {
         // Attach user information
         req.user = user;
 
-        console.log("User at Authenticate Middleware", user)
+
         next();
 
 

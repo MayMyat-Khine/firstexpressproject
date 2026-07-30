@@ -1,9 +1,9 @@
 import { Router } from "express"
 import { loginCustomer } from "../services/auth.service.mjs";
 import { validate, validateAllowedFields, validatePatchBody } from "../middlewares/validate.middleware.mjs";
-import { loginCustomerValidaionSchema, loginUserValidaionSchema } from "../utils/validationSchema.mjs";
+import { loginCustomerValidaionSchema, loginUserValidaionSchema, refreshTokenValidaionSchema } from "../utils/validationSchema.mjs";
 import { checkSchema } from "express-validator";
-import { loginCustomerController, loginUserController } from "../controllers/auth.controller.mjs";
+import { loginCustomerController, loginUserController, refreshTokenController } from "../controllers/auth.controller.mjs";
 
 const router = Router();
 
@@ -22,5 +22,10 @@ router.post("/api/loginUser",
     validate,
     loginUserController)
 
+router.post("/api/refreshToken",
+    checkSchema(refreshTokenValidaionSchema),
+    validate,
+    refreshTokenController
 
+)
 export default router;

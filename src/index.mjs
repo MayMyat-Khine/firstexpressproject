@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(router);
 app.use(errorHandler);
 
-console.log("JWT", process.env.JWT_SECRET);
 mongoose.connect(process.env.MONGO_URI).then(() => console.log(`Connect db`)).catch((error) => console.log(`Error ${error}`));
 
 const port = process.env.PORT;

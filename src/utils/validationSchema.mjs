@@ -42,6 +42,18 @@ export const loginUserValidaionSchema = {
     }
 }
 
+export const refreshTokenValidaionSchema = {
+    refresh_token: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Refresh Token Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Refresh Token must not be empty"
+        },
+    }
+}
+
 export const createCustomerValidationScheme = {
     name: {
         in: ["body"],

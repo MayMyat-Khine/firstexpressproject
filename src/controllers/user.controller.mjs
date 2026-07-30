@@ -8,8 +8,8 @@ export async function userCreateController(req, res, next) {
     const data = matchedData(req);
 
     try {
-        const { token, body } = await createUser(data);
-        return res.status(201).send({ success: true, body: body, token: token });
+        const { token, refreshToken, body } = await createUser(data);
+        return res.status(201).send({ success: true, body: body, token: token, refresh_token: refreshToken });
     } catch (error) {
         next(error);
     }
@@ -26,7 +26,9 @@ export async function userGetAllController(req, res, next) {
 
 export async function userGetByIdController(req, res, next) {
     try {
+
         const { params: { id } } = req;
+        console.log("User id", id)
         const foundUser = await getUser(id);
         return res.status(200).send({ success: true, body: foundUser });
     } catch (error) {

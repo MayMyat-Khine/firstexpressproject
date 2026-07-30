@@ -11,8 +11,8 @@ export async function customerCreateController(req, res, next) {
 
     try {
 
-        const { token, customer } = await createCustomer(data);
-        return res.status(201).send({ success: true, body: customer, token: token });
+        const { token, refreshToken, customer } = await createCustomer(data);
+        return res.status(201).send({ success: true, body: customer, token: token, refresh_token: refreshToken });
     } catch (error) {
         next(error);
     }

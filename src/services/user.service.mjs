@@ -2,8 +2,9 @@
 import { User } from '../mongoose/schemas/user.mjs';
 import * as userRepo from '../repositories/user.repository.mjs';
 import AppErrors from '../utils/appErrors.mjs';
-import { generateToken } from '../utils/jwt.util.mjs';
+import { generateRefreshToken, generateToken } from '../utils/jwt.util.mjs';
 import { hashPassword } from '../utils/password.util.mjs';
+import { saveRefreshToken } from './auth.service.mjs';
 import { findRoleById } from './role.service.mjs';
 
 
@@ -34,9 +35,12 @@ export const createUser = async (userData) => {
     const password = await hashPassword(userData.password);
     const savedUser = await userRepo.createUserRepo({ ...userData, password: password });
     console.log("Saved User", savedUser);
-    const token = generateToken({ id: savedUser._id })
+    const token = generateToken({ id: savedUser.id })
+    const refreshToken = generateRefreshToken({ id: savedUser.id, type: "USER" })
+    await saveRefreshToken({ accountId: savedUser.id, accountType: "USER", refreshToken: refreshToken });
     return {
         token: token,
+        refreshToken: refreshToken,
         body: {
             id: savedUser._id,
             name: savedUser.name,
