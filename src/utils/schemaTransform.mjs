@@ -1,5 +1,5 @@
 export const schemaTransform = {
-    visual: true,
+    virtuals: true,
     versionKey: false,
     transform(doc, ret) {
 

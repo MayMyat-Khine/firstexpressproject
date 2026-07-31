@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { createPermissionController } from "../controllers/permission.controller.mjs";
+import { createPermissionController, getAllPermissionsController } from "../controllers/permission.controller.mjs";
 
 const router = Router();
 
-router.post('/api/permission',
+router.get('/api/permissions', getAllPermissionsController);
 
-    createPermissionController)
+router.post('/api/permission', createPermissionController);
 
 export default router;

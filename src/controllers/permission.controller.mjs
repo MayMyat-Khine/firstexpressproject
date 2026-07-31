@@ -1,5 +1,14 @@
 import { Permission } from "../mongoose/schemas/permission.mjs";
+import { getAllPermissionsService } from "../services/permission.service.mjs";
 
+export async function getAllPermissionsController(req, res, next) {
+    try {
+        const permissions = await getAllPermissionsService();
+        return res.status(200).send({ success: true, body: permissions });
+    } catch (error) {
+        next(error);
+    }
+}
 
 export async function createPermissionController(req, res) {
     console.log("Create Permission ")

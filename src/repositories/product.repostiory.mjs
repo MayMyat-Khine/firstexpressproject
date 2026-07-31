@@ -27,7 +27,7 @@ export const getProductsRepo = async ({ page,
 
     const total = await Product.countDocuments(filter);
 
-    let query = Product.find(filter); //  .populate("stocks");
+    let query = Product.find(filter).populate("stocks");
     if (page && limit) {
 
         query = query
@@ -44,7 +44,11 @@ export const getProductsRepo = async ({ page,
 export async function createProduct(id, branches, productData, session) {
     const newProduct = new Product({ ...productData, id: id, branch_id: branches });
     const savedProduct = await newProduct.save({ session });
-    return savedProduct;
+    console.log("Saved Products", savedProduct)
+    return savedProduct.populate({
+        path: "branch_id",
+        select: "id name"
+    });
 
 }
 

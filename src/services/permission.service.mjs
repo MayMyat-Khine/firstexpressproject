@@ -1,6 +1,10 @@
 import * as permissionRepo from '../repositories/permission.repository.mjs';
 import AppErrors from '../utils/appErrors.mjs';
 
+export async function getAllPermissionsService() {
+    return await permissionRepo.getAllPermissionsRepo();
+}
+
 export async function checkPermissions(permissions) {
     const foundPermissions = await permissionRepo.getPermissionRepo(permissions);
 

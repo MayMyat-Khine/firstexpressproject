@@ -31,11 +31,11 @@ export const createProductWithBranchAndStock = async (productData) => {
             productData.code,
             session
         );
-        // Replace BranchObjId with BranchId(Name)
 
-        const branchesNames = await getBranchesData(validatedBranchIds);
         await session.commitTransaction();
-        return { ...savedProduct._doc, branch_id: branchesNames };;
+
+
+        return savedProduct;//{ ...savedProduct.toObject(), branch_id: branchesNames };
 
     } catch (error) {
         await session.abortTransaction();

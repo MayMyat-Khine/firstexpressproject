@@ -59,7 +59,8 @@ router.get("/api/branch/:id/orders",
 );
 
 router.put("/api/order/:id",
-    authenticateMiddleware,
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.ORDER_UPDATE]),
     checkSchema(indexValidationSchema),
     validatePatchBody,
     checkSchema(updateOrderValidationSchema),

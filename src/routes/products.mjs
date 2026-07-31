@@ -10,12 +10,21 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 const router = Router();
 
 router.post('/api/product',
-    // authenticateUserMiddleware,
-    // authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
     checkSchema(createProductValidationSchema),
     validate,
     productCreateController)
 
+// /**
+// * @openapi
+// * /api/products:
+// *   get:
+// *     summary: Get all products
+// *     tags:
+// *       - Products
+// *     responses:
+// *       200:
+// *         description: Product list
+// */
 router.get("/api/products",
     //  authenticateUserMiddleware,
     // authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),

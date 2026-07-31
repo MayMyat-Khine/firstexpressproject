@@ -35,6 +35,7 @@ export const findBranchesByIdsRepo = async (branchIds) => {
 export const createBranchRepo = async (branchData) => {
     const newBranch = new Branch(branchData);
     const savedBranch = await newBranch.save();
+    console.log("Saved Branch", savedBranch)
     return savedBranch;
 }
 
