@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
+import { env } from "../config/env.mjs";
 
 export function generateToken(payload) {
 
     return jwt.sign(
         payload,
-        process.env.ACCESS_TOKEN_SECRET,
+        env.ACCESS_TOKEN_SECRET,
         {
-            expiresIn: process.env.ACCESS_TOKEN_EXPIRES
+            expiresIn: env.ACCESS_TOKEN_EXPIRES
         }
     );
 
@@ -16,9 +17,9 @@ export function generateRefreshToken(payload) {
 
     return jwt.sign(
         payload,
-        process.env.REFRESH_TOKEN_SECRET,
+        env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: process.env.REFRESH_TOKEN_EXPIRES
+            expiresIn: env.REFRESH_TOKEN_EXPIRES
         }
     );
 
@@ -27,7 +28,7 @@ export function generateRefreshToken(payload) {
 export function varifyRefreshToken(token) {
     return jwt.verify(
         token,
-        process.env.REFRESH_TOKEN_SECRET
+        env.REFRESH_TOKEN_SECRET
     );
 
 }

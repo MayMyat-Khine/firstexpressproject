@@ -13,6 +13,27 @@ export function errorHandler(error, req, res, next) {
         });
     }
 
+
+
+    if (error.name === "TokenExpiredError") {
+
+        return res.status(401).json({
+            success: false,
+            message: "Access token expired"
+        });
+
+    }
+
+
+    if (error.name === "JsonWebTokenError") {
+
+        return res.status(401).json({
+            success: false,
+            message: "Invalid access token"
+        });
+
+    }
+
     if (error.name === "ValidationError") {
 
         const errors = Object.values(error.errors).map(
@@ -21,7 +42,7 @@ export function errorHandler(error, req, res, next) {
 
         return res.status(400).send({
             success: false,
-            errors
+            errors: errors
         });
     }
     return res.status(error.statusCode || 500).json({

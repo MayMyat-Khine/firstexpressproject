@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import AppErrors from "../utils/appErrors.mjs";
 import { Customer } from "../mongoose/schemas/customer.mjs";
 import { getCustomerById } from "../services/customer.service.mjs";
+import { env } from "../config/env.mjs";
 
 
 export async function authenticateMiddleware(req, res, next) {
@@ -32,15 +33,11 @@ export async function authenticateMiddleware(req, res, next) {
             );
         }
 
-
         // Verify JWT
         const decoded = jwt.verify(
             token,
-            process.env.ACCESS_TOKEN_SECRET
+            env.ACCESS_TOKEN_SECRET
         );
-
-
-
 
         // Find customer from DB
         const customer = await getCustomerById(decoded.id);
@@ -106,7 +103,7 @@ export async function authenticateUserMiddleware(req, res, next) {
         // Verify JWT
         const decoded = jwt.verify(
             token,
-            process.env.ACCESS_TOKEN_SECRET
+            env.ACCESS_TOKEN_SECRET
         );
 
 
@@ -118,7 +115,7 @@ export async function authenticateUserMiddleware(req, res, next) {
         //     id: decoded.customerId
         // });
 
-        console.log("User ", user)
+
 
         if (!user) {
             throw new AppErrors(

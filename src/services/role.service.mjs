@@ -16,6 +16,7 @@ export async function updateRole(roleId, roleData) {
 
 export async function findRoleById(roleId) {
     const foundRole = await roleRepo.findRoleByIdRepo(roleId);
+    console.log("Found Role", foundRole);
     if (!foundRole) {
         throw new AppErrors(`Role ${roleId} is not found`, 404)
     }
