@@ -6,10 +6,15 @@ import { productCreateController, productGetAllController, productDeleteByIdCont
 import { authenticateUserMiddleware } from "../middlewares/authenticate.middleware.mjs";
 import { authorizeMiddleware } from "../middlewares/authorize.middleware.mjs";
 import { PERMISSIONS } from "../constants/permission.constant.mjs";
+import { uploadProductImage } from "../middlewares/upload.image.middleware.mjs";
+import { parseProductFormData } from "../middlewares/parseProductFormData.middleware.mjs";
 
 const router = Router();
 
 router.post('/api/product',
+    // authenticateUserMiddleware,
+    uploadProductImage.array("images", 10),
+    parseProductFormData,
     checkSchema(createProductValidationSchema),
     validate,
     productCreateController)

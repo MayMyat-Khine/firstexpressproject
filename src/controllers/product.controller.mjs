@@ -7,7 +7,14 @@ export async function productCreateController(req, res, next) {
     try {
 
         const validData = matchedData(req);
-        const savedProduct = await createProductWithBranchAndStock(validData);
+
+
+        const data = {
+            ...validData,
+            images: req.files?.map(file => file?.path) || []
+        }
+
+        const savedProduct = await createProductWithBranchAndStock(data);
         return res.status(201).send({ success: true, body: savedProduct });
     } catch (error) {
         next(error);

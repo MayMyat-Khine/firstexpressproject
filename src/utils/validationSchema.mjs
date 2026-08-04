@@ -373,10 +373,22 @@ export const createProductValidationSchema = {
     },
     price: {
         in: ["body"],
-        isNaN: { errorMessage: "Price must be a number" },
+        isNumeric: { errorMessage: "Price must be a number" },
         notEmpty: { errorMessage: "Price must not be Empty" },
 
-    }
+    },
+    images: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'images is required'
+        },
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Image must be an array "
+
+        }
+    },
+
 }
 
 export const updateProductValidationSchema = {

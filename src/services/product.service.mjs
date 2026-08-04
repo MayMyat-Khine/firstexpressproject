@@ -12,6 +12,7 @@ import { application } from 'express';
 
 
 export const createProductWithBranchAndStock = async (productData) => {
+
     const session = await mongoose.startSession();
 
 

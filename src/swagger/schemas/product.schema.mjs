@@ -35,7 +35,7 @@ export const ProductSchema = {
 
 export const ProductCreateRequestSchema = {
     type: "object",
-    required: ["product_name", "branch_id", "code", "price"],
+    required: ["product_name", "branch_id", "code", "price", "images"],
     properties: {
         product_name: {
             type: "string",
@@ -60,6 +60,15 @@ export const ProductCreateRequestSchema = {
         price: {
             type: "number",
             example: 5000
+        },
+        images: {
+            type: "array",
+            items: {
+                type: "string",
+                format: "binary"
+            },
+            minItems: 1,
+            maxItems: 10
         }
     }
 };

@@ -11,8 +11,8 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 const router = Router();
 
 router.post("/api/branch",
-    authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.BRANCH_CREATE]),
+    // authenticateUserMiddleware,
+    // authorizeMiddleware([PERMISSIONS.BRANCH_CREATE]),
     checkSchema(createBranchValidationSchema),
     validate,
     branchCreateController);
