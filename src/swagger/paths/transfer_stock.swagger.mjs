@@ -1,5 +1,5 @@
 export const transferStockPaths = {
-    "/api/stock-transfer": {
+    "/api/v1/stock-transfer": {
         post: {
             summary: "Create a stock transfer",
             tags: ["Stock Transfer"],

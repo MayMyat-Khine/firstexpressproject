@@ -10,20 +10,20 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 
 const router = Router();
 
-router.post("/api/branch",
+router.post("/branch",
     // authenticateUserMiddleware,
     // authorizeMiddleware([PERMISSIONS.BRANCH_CREATE]),
     checkSchema(createBranchValidationSchema),
     validate,
     branchCreateController);
 
-router.get("/api/branches",
+router.get("/branches",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.BRANCH_VIEW]),
     branchGetAllController
 );
 
-router.get('/api/branch/:id',
+router.get('/branch/:id',
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.BRANCH_VIEW]),
     checkSchema(indexValidationSchema),
@@ -31,7 +31,7 @@ router.get('/api/branch/:id',
     branchGetByIdController
 );
 
-router.patch('/api/branch/:id',
+router.patch('/branch/:id',
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.BRANCH_UPDATE]),
     checkSchema(indexValidationSchema),
@@ -41,7 +41,7 @@ router.patch('/api/branch/:id',
     branchUpdateByIdController
 )
 
-router.delete('/api/branch/:id',
+router.delete('/branch/:id',
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.BRANCH_DELETE]),
     checkSchema(indexValidationSchema),

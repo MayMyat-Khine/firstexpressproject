@@ -1,5 +1,5 @@
 export const userPaths = {
-    "/api/user": {
+    "/api/v1/user": {
         post: {
             summary: "Create a user",
             tags: ["Users"],
@@ -47,7 +47,7 @@ export const userPaths = {
             }
         }
     },
-    "/api/users": {
+    "/api/v1/users": {
         get: {
             summary: "Get all users",
             tags: ["Users"],
@@ -77,7 +77,7 @@ export const userPaths = {
             }
         }
     },
-    "/api/user/{id}": {
+    "/api/v1/user/{id}": {
         get: {
             summary: "Get user by ID",
             tags: ["Users"],

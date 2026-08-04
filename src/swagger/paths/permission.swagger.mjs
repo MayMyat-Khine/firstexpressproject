@@ -1,5 +1,5 @@
 export const permissionPaths = {
-    "/api/permissions": {
+    "/api/v1/permissions": {
         get: {
             summary: "Get all permissions",
             tags: ["Permissions"],
@@ -30,7 +30,7 @@ export const permissionPaths = {
             }
         }
     },
-    "/api/permission": {
+    "/api/v1/permission": {
         post: {
             summary: "Seed permissions",
             tags: ["Permissions"],

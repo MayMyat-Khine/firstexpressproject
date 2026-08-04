@@ -1,5 +1,5 @@
 export const branchPaths = {
-    "/api/branch": {
+    "/api/v1/branch": {
         post: {
             summary: "Create a branch",
             tags: ["Branches"],
@@ -40,7 +40,7 @@ export const branchPaths = {
             }
         }
     },
-    "/api/branches": {
+    "/api/v1/branches": {
         get: {
             summary: "Get all branches",
             tags: ["Branches"],
@@ -71,7 +71,7 @@ export const branchPaths = {
             }
         }
     },
-    "/api/branch/{id}": {
+    "/api/v1/branch/{id}": {
         get: {
             summary: "Get branch by ID",
             tags: ["Branches"],

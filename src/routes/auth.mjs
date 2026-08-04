@@ -7,7 +7,7 @@ import { loginCustomerController, loginUserController, refreshTokenController } 
 
 const router = Router();
 
-router.post("/api/loginCustomer",
+router.post("/loginCustomer",
     validatePatchBody,
     checkSchema(loginCustomerValidaionSchema),
     validateAllowedFields(Object.keys(loginCustomerValidaionSchema)),
@@ -15,14 +15,14 @@ router.post("/api/loginCustomer",
     loginCustomerController)
 
 
-router.post("/api/loginUser",
+router.post("/loginUser",
     validatePatchBody,
     checkSchema(loginUserValidaionSchema),
     validateAllowedFields(Object.keys(loginUserValidaionSchema)),
     validate,
     loginUserController)
 
-router.post("/api/refreshToken",
+router.post("/refreshToken",
     checkSchema(refreshTokenValidaionSchema),
     validate,
     refreshTokenController

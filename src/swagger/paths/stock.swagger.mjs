@@ -1,5 +1,5 @@
 export const stockPaths = {
-    "/api/stock/{id}": {
+    "/api/v1/stock/{id}": {
         patch: {
             summary: "Update stock",
             tags: ["Stocks"],

@@ -1,5 +1,5 @@
 export const authPaths = {
-    "/api/loginCustomer": {
+    "/api/v1/loginCustomer": {
         post: {
             summary: "Login customer",
             tags: ["Auth"],
@@ -48,7 +48,7 @@ export const authPaths = {
             }
         }
     },
-    "/api/loginUser": {
+    "/api/v1/loginUser": {
         post: {
             summary: "Login user",
             tags: ["Auth"],
@@ -97,7 +97,7 @@ export const authPaths = {
             }
         }
     },
-    "/api/refreshToken": {
+    "/api/v1/refreshToken": {
         post: {
             summary: "Refresh access token",
             tags: ["Auth"],

@@ -1,5 +1,5 @@
 export const productPaths = {
-    "/api/product": {
+    "/api/v1/product": {
         post: {
             summary: "Create a product",
             tags: ["Products"],
@@ -39,7 +39,7 @@ export const productPaths = {
             }
         }
     },
-    "/api/products": {
+    "/api/v1/products": {
         get: {
             summary: "Get all products",
             tags: ["Products"],
@@ -102,7 +102,7 @@ export const productPaths = {
             }
         }
     },
-    "/api/product/{id}": {
+    "/api/v1/product/{id}": {
         get: {
             summary: "Get a product by ID",
             tags: ["Products"],
@@ -229,7 +229,7 @@ export const productPaths = {
             }
         }
     },
-    "/api/branch/{id}/products": {
+    "/api/v1/branch/{id}/products": {
         get: {
             summary: "Get products by branch",
             tags: ["Products"],

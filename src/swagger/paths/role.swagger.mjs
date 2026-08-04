@@ -1,5 +1,5 @@
 export const rolePaths = {
-    "/api/role": {
+    "/api/v1/role": {
         post: {
             summary: "Create a role",
             tags: ["Roles"],
@@ -39,7 +39,7 @@ export const rolePaths = {
             }
         }
     },
-    "/api/role/{id}": {
+    "/api/v1/role/{id}": {
         patch: {
             summary: "Update a role",
             tags: ["Roles"],

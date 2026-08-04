@@ -10,7 +10,7 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 const router = Router();
 
 
-router.post("/api/stock-transfer",
+router.post("/stock-transfer",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.TRANSFER_CREATE]),
     checkSchema(transferProductsBToBValidationSchema),
@@ -18,7 +18,7 @@ router.post("/api/stock-transfer",
     createTransferProductsController
 );
 
-router.get("/api/stock-transfer",
+router.get("/stock-transfer",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.TRANSFER_VIEW]),
     getTransferProductsController

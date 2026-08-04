@@ -9,7 +9,7 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 
 const router = Router();
 
-router.post("/api/order",
+router.post("/order",
     authenticateMiddleware,
     checkSchema(createOrderValidationSchema),
     validate,
@@ -17,14 +17,14 @@ router.post("/api/order",
 );
 
 // == Customer == //
-router.get("/api/orders/me",
+router.get("/orders/me",
     authenticateMiddleware,
     checkSchema(getPaginationValidationSchema),
     validate,
     orderGetMyOrdersController);
 
 // == User == //
-router.get("/api/orders",
+router.get("/orders",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.ORDER_VIEW]),
     checkSchema(getPaginationValidationSchema),
@@ -32,7 +32,7 @@ router.get("/api/orders",
     orderGetAllController);
 
 // == Customer == //
-router.get("/api/order/me/:id",
+router.get("/order/me/:id",
     authenticateMiddleware,
     checkSchema(indexValidationSchema),
     validate,
@@ -40,7 +40,7 @@ router.get("/api/order/me/:id",
 );
 
 // == User == //
-router.get("/api/order/:id",
+router.get("/order/:id",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.ORDER_VIEW]),
     checkSchema(indexValidationSchema),
@@ -50,7 +50,7 @@ router.get("/api/order/:id",
 
 
 
-router.get("/api/branch/:id/orders",
+router.get("/branch/:id/orders",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.ORDER_VIEW]),
     checkSchema(indexValidationSchema),
@@ -58,7 +58,7 @@ router.get("/api/branch/:id/orders",
     orderGetByBranchController
 );
 
-router.put("/api/order/:id",
+router.put("/order/:id",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.ORDER_UPDATE]),
     checkSchema(indexValidationSchema),

@@ -1,5 +1,5 @@
 export const orderPaths = {
-    "/api/order": {
+    "/api/v1/order": {
         post: {
             summary: "Create an order",
             tags: ["Orders"],
@@ -40,7 +40,7 @@ export const orderPaths = {
             }
         }
     },
-    "/api/orders/me": {
+    "/api/v1/orders/me": {
         get: {
             summary: "Get my orders",
             tags: ["Orders"],
@@ -104,7 +104,7 @@ export const orderPaths = {
             }
         }
     },
-    "/api/orders": {
+    "/api/v1/orders": {
         get: {
             summary: "Get all orders",
             tags: ["Orders"],
@@ -168,7 +168,7 @@ export const orderPaths = {
             }
         }
     },
-    "/api/order/me/{id}": {
+    "/api/v1/order/me/{id}": {
         get: {
             summary: "Get my order by ID",
             tags: ["Orders"],
@@ -209,7 +209,7 @@ export const orderPaths = {
             }
         }
     },
-    "/api/order/{id}": {
+    "/api/v1/order/{id}": {
         get: {
             summary: "Get order by ID",
             tags: ["Orders"],
@@ -299,7 +299,7 @@ export const orderPaths = {
             }
         }
     },
-    "/api/branch/{id}/orders": {
+    "/api/v1/branch/{id}/orders": {
         get: {
             summary: "Get orders by branch",
             tags: ["Orders"],

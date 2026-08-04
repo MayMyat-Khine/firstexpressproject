@@ -3,8 +3,8 @@ import { createPermissionController, getAllPermissionsController } from "../cont
 
 const router = Router();
 
-router.get('/api/permissions', getAllPermissionsController);
+router.get('/permissions', getAllPermissionsController);
 
-router.post('/api/permission', createPermissionController);
+router.post('/permission', createPermissionController);
 
 export default router;

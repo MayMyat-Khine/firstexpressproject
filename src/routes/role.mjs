@@ -9,7 +9,7 @@ import { PERMISSIONS } from "../constants/permission.constant.mjs";
 
 const router = Router();
 
-router.post('/api/role',
+router.post('/role',
     // authenticateUserMiddleware,
     // authorizeMiddleware([PERMISSIONS.ROLE_CREATE]),
     validatePatchBody,
@@ -18,7 +18,7 @@ router.post('/api/role',
     validate,
     createRoleController)
 
-router.patch('/api/role/:id',
+router.patch('/role/:id',
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.ROLE_UPDATE]),
     validatePatchBody,

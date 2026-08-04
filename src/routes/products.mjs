@@ -11,7 +11,7 @@ import { parseProductFormData } from "../middlewares/parseProductFormData.middle
 
 const router = Router();
 
-router.post('/api/product',
+router.post('/product',
     // authenticateUserMiddleware,
     uploadProductImage.array("images", 10),
     parseProductFormData,
@@ -21,7 +21,7 @@ router.post('/api/product',
 
 // /**
 // * @openapi
-// * /api/products:
+// * /products:
 // *   get:
 // *     summary: Get all products
 // *     tags:
@@ -30,21 +30,21 @@ router.post('/api/product',
 // *       200:
 // *         description: Product list
 // */
-router.get("/api/products",
+router.get("/products",
     //  authenticateUserMiddleware,
     // authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
     checkSchema(getPaginationValidationSchema),
     validate,
     productGetAllController)
 
-router.get("/api/product/:id",
+router.get("/product/:id",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
     checkSchema(indexValidationSchema),
     validate,
     productGetByIdController)
 
-router.get("/api/branch/:id/products",
+router.get("/branch/:id/products",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
     checkSchema(indexValidationSchema),
@@ -52,13 +52,13 @@ router.get("/api/branch/:id/products",
     productsGetByBranchController)
 
 // actually the indexValidation is not working well here
-// router.put("/api/product/:id",
+// router.put("/product/:id",
 //     checkSchema(indexValidationSchema),
 //     findByProductId,
 //     productUpdateByIdController
 // )
 
-router.patch("/api/product/:id",
+router.patch("/product/:id",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.PRODUCT_UPDATE]),
     checkSchema(indexValidationSchema),
@@ -67,7 +67,7 @@ router.patch("/api/product/:id",
     validate,
     productUpdateByIdController)
 
-router.delete("/api/product/:id",
+router.delete("/product/:id",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.PRODUCT_DELETE]),
     checkSchema(indexValidationSchema),

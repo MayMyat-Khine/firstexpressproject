@@ -8,7 +8,7 @@ import { customerCreateController } from "../controllers/customer.controller.mjs
 const router = Router();
 
 
-router.post("/api/customer",
+router.post("/customer",
     validatePatchBody,
     checkSchema(createCustomerValidationScheme),
     validateAllowedFields(Object.keys(createCustomerValidationScheme)),

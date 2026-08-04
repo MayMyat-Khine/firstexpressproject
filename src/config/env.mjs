@@ -48,7 +48,8 @@ const envSchema = z.object({
         .min(32),
 
     ACCESS_TOKEN_EXPIRES: z.string(),
-    REFRESH_TOKEN_EXPIRES: z.string()
+    REFRESH_TOKEN_EXPIRES: z.string(),
+    API_VERSION: z.string()
 
 });
 

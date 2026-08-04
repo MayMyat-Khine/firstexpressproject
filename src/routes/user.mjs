@@ -11,7 +11,7 @@ var password = ""
 
 
 
-// router.post("/api/login", (req, res) => {
+// router.post("/login", (req, res) => {
 //     const n = req.body.username;
 //     const p = req.body.password;
 //     console.log("Name ", n)
@@ -24,21 +24,21 @@ var password = ""
 // })
 
 
-router.post('/api/user',
+router.post('/user',
     checkSchema(createUserValidationSchema),
     validate,
     userCreateController,
 );
 
-router.get('/api/users',
+router.get('/users',
     userGetAllController);
 
-router.get('/api/user/:id',
+router.get('/user/:id',
     checkSchema(indexValidationSchema),
     validate,
     userGetByIdController);
 
-router.patch('/api/user/:id',
+router.patch('/user/:id',
     checkSchema(indexValidationSchema),
     // findByUserId,
     validatePatchBody,
@@ -48,13 +48,13 @@ router.patch('/api/user/:id',
 )
 
 // // can validate the ID of the request body before updating
-// router.patch('/api/user/:id',
+// router.patch('/user/:id',
 //     checkSchema(indexValidationSchema),
 //     findByUserId,
 //     userPatchByIdController
 // );
 
-router.delete('/api/user/:id',
+router.delete('/user/:id',
     checkSchema(indexValidationSchema),
     validate,
     userDeleteByIdController

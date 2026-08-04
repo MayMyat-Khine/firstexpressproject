@@ -11,7 +11,7 @@ import { PERMISSIONS } from '../constants/permission.constant.mjs';
 const router = Router();
 
 // this is called From Product Create Post API
-// router.post("/api/stock/:id",
+// router.post("/stock/:id",
 //     checkSchema(createStockValidationSchema),
 //     findByProductId,
 //     async (req, res) => {
@@ -32,7 +32,7 @@ const router = Router();
 //         }
 //     })
 
-// router.get("/api/stocks",
+// router.get("/stocks",
 //     async (req, res) => {
 //         console.log("Here is Stock Get API");
 //         try {
@@ -44,7 +44,7 @@ const router = Router();
 //         }
 //     })
 
-// router.get("/api/stock/:id",
+// router.get("/stock/:id",
 //     checkSchema(indexValidationSchema),
 //     findStockByProductId,
 //     findByProductId, async (req, res) => {
@@ -67,7 +67,7 @@ const router = Router();
 //         }
 //     })
 
-// router.put("/api/stock/:id",
+// router.put("/stock/:id",
 //     checkSchema(indexValidationSchema),
 //     validate,
 //     // findStockByProductId,
@@ -75,7 +75,7 @@ const router = Router();
 //     stockUpdateByProductIdController,
 // );
 
-router.patch("/api/stock/:id",
+router.patch("/stock/:id",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.STOCK_UPDATE]),
     checkSchema(indexValidationSchema),
@@ -87,7 +87,7 @@ router.patch("/api/stock/:id",
 
 
 
-// router.delete("/api/stock/:id", checkSchema(indexValidationSchema),
+// router.delete("/stock/:id", checkSchema(indexValidationSchema),
 //     (req, res) => { })
 
 
