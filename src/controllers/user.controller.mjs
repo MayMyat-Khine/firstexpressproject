@@ -28,7 +28,7 @@ export async function userGetByIdController(req, res, next) {
     try {
 
         const { params: { id } } = req;
-        console.log("User id", id)
+
         const foundUser = await getUser(id);
         return res.status(200).send({ success: true, body: foundUser });
     } catch (error) {

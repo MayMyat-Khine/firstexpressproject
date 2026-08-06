@@ -41,7 +41,6 @@ export async function productGetByIdController(req, res, next) {
 
 };
 
-
 export async function productsGetByBranchController(req, res, next) {
     try {
         const products = await getProductsByBranch(req.params.id);
@@ -74,7 +73,11 @@ export async function productsGetByBranchController(req, res, next) {
 export async function productUpdateByIdController(req, res, next) {
     try {
         const { body, params: { id } } = req;
-        const updatedProduct = await productUpdateWithStock(id, body);
+        const data = {
+            ...body,
+            images: req.files?.map(file => file?.path) || []
+        }
+        const updatedProduct = await productUpdateWithStock(id, data);
 
         return res.status(200).send({ success: true, body: updatedProduct })
     } catch (error) {

@@ -423,6 +423,30 @@ export const updateProductValidationSchema = {
         },
         optional: true
     },
+    delete_image: {
+        in: ['body'],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Delete Images must be an array "
+
+        },
+        notEmpty: {
+            errorMessage: "Delete Images Must not be Empty"
+        },
+        optional: true
+    },
+    images: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'images is required'
+        },
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Image must be an array "
+
+        },
+        optional: true
+    },
 
     description: {
         in: ['body'],

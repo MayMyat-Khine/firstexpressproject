@@ -99,6 +99,23 @@ export const ProductUpdateRequestSchema = {
         price: {
             type: "number",
             example: 5500
-        }
+        },
+        images: {
+            type: "array",
+            items: {
+                type: "string",
+                format: "binary"
+            },
+            minItems: 1,
+            maxItems: 10
+        },
+        delete_image: {
+            type: "array",
+            items: {
+                type: "string",
+                example: "abc.jpg"
+            },
+            example: ["abc.jpg"]
+        },
     }
 };

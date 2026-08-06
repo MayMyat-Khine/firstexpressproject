@@ -19,6 +19,16 @@ export const parseProductFormData = (req, res, next) => {
         }
 
     }
+    if (typeof req.body.delete_image === "string") {
+        console.log("here is delete_image", req.body.delete_image)
+        try {
+            req.body.delete_image = req.body.delete_image.split(",");// JSON.parse(req.body.branch_id);
+            console.log("here is delete_image", req.body.delete_image)
+        } catch (error) {
+            throw new AppErrors("Invalid delete_image format", 400);
+        }
+
+    }
 
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
         if (!req.body.images) {

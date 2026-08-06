@@ -12,12 +12,24 @@ import { parseProductFormData } from "../middlewares/parseProductFormData.middle
 const router = Router();
 
 router.post('/product',
-    // authenticateUserMiddleware,
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
     uploadProductImage.array("images", 10),
     parseProductFormData,
     checkSchema(createProductValidationSchema),
     validate,
     productCreateController)
+
+router.patch("/product/:id",
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.PRODUCT_UPDATE]),
+    uploadProductImage.array("images", 10),
+    parseProductFormData,
+    checkSchema(indexValidationSchema),
+    validatePatchBody,
+    checkSchema(updateProductValidationSchema),
+    validate,
+    productUpdateByIdController)
 
 // /**
 // * @openapi
@@ -58,14 +70,7 @@ router.get("/branch/:id/products",
 //     productUpdateByIdController
 // )
 
-router.patch("/product/:id",
-    authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_UPDATE]),
-    checkSchema(indexValidationSchema),
-    validatePatchBody,
-    checkSchema(updateProductValidationSchema),
-    validate,
-    productUpdateByIdController)
+
 
 router.delete("/product/:id",
     authenticateUserMiddleware,

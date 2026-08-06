@@ -7,6 +7,7 @@ import { v5 as uuidv5 } from "uuid";
 import * as productRepo from "../repositories/product.repostiory.mjs";
 import AppErrors from '../utils/appErrors.mjs';
 import { application } from 'express';
+import { deleteFile } from '../utils/file.util.mjs';
 
 
 
@@ -78,6 +79,12 @@ export const productUpdateWithStock = async (productId, productData) => {
         }
 
         const updatedProduct = await productRepo.updateProduct(productId, productData, session);
+
+        // Delete uploads/imges 
+        for (const deleteImg of productData.delete_image) {
+            await deleteFile(deleteImg);
+        }
+
         await session.commitTransaction();
         return updatedProduct;
     } catch (error) {

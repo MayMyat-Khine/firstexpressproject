@@ -68,17 +68,34 @@ export async function productUpdateWithBranch(productId, branchData) {
 }
 
 export async function updateProduct(productId, productData, session) {
-    const update = {}
+    const update = {
+        $addToSet: {},
+        $pull: {},
+        $set: {}
+    };
 
-    if (productData.branch_id?.length > 0) {
-        update.$addToSet = {
-            branch_id: {
-                $each: productData.branch_id
-            }
-        }
+
+    if (productData.branch_id?.length) {
+        update.$addToSet.branch_id = {
+            $each: productData.branch_id
+        };
+
+    }
+    if (productData.images?.length > 0) {
+        update.$addToSet.images = {
+            $each: productData.images
+        };
     }
 
-    const { branch_id, ...otherFields } = productData;
+
+
+    if (productData.delete_image?.length > 0) {
+        update.$pull.images = {
+            $in: productData.delete_image
+        };
+    }
+
+    const { branch_id, images, delete_image, ...otherFields } = productData;
 
     if (Object.keys(otherFields).length > 0) {
         update.$set = otherFields;
