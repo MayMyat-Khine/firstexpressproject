@@ -9,6 +9,7 @@ import { stockPaths } from "./paths/stock.swagger.mjs";
 import { transferStockPaths } from "./paths/transfer_stock.swagger.mjs";
 import { userPaths } from "./paths/user.swagger.mjs";
 import { permissionPaths } from "./paths/permission.swagger.mjs";
+import { cartPaths } from "./paths/cart.swagger.mjs";
 import { ProductCreateRequestSchema, ProductSchema, ProductUpdateRequestSchema } from "./schemas/product.schema.mjs";
 import { CustomerAuthResponseSchema, CustomerLoginRequestSchema, RefreshTokenRequestSchema, UserAuthResponseSchema, UserLoginRequestSchema } from "./schemas/auth.schema.mjs";
 import { BranchCreateRequestSchema, BranchSchema, BranchUpdateRequestSchema } from "./schemas/branch.schema.mjs";
@@ -19,6 +20,7 @@ import { StockSchema, StockUpdateRequestSchema } from "./schemas/stock.schema.mj
 import { TransferStockCreateRequestSchema, TransferStockSchema } from "./schemas/transfer_stock.schema.mjs";
 import { UserCreateRequestSchema, UserSchema, UserUpdateRequestSchema } from "./schemas/user.schema.mjs";
 import { PermissionSchema } from "./schemas/permission.schema.mjs";
+import { CartCreateRequestSchema, CartItemSchema, CartSchema } from "./schemas/cart.schema.mjs";
 
 const options = {
     definition: {
@@ -43,7 +45,8 @@ const options = {
             ...stockPaths,
             ...transferStockPaths,
             ...userPaths,
-            ...permissionPaths
+            ...permissionPaths,
+            ...cartPaths
         },
         components: {
             securitySchemes: {
@@ -80,7 +83,10 @@ const options = {
                 User: UserSchema,
                 UserCreateRequest: UserCreateRequestSchema,
                 UserUpdateRequest: UserUpdateRequestSchema,
-                Permission: PermissionSchema
+                Permission: PermissionSchema,
+                CartItem: CartItemSchema,
+                Cart: CartSchema,
+                CartCreateRequest: CartCreateRequestSchema
             }
         },
         security: [

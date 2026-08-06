@@ -9,6 +9,7 @@ import customer from "./customers.mjs";
 import auth from "./auth.mjs";
 import permission from "./permission.mjs";
 import role from './role.mjs';
+import cart from './cart.mjs';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use(customer);
 router.use(auth);
 router.use(permission);
 router.use(role);
+router.use(cart);
 
 export default router;

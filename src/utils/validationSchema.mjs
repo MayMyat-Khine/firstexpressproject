@@ -666,3 +666,44 @@ export const transferProductsBToBValidationSchema = {
         }
     }
 };
+
+export const createCartValidationSchema = {
+    items: {
+        in: ["body"],
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Cart must contain at least one item"
+        },
+        notEmpty: {
+            errorMessage: "Items must not be empty"
+        }
+    },
+
+    "items.*.product_id": {
+        in: ["body"],
+        isString: {
+            errorMessage: "Product ID must be a string"
+        },
+        notEmpty: {
+            errorMessage: "Product ID is required"
+        }
+    },
+
+    "items.*.quantity": {
+        in: ["body"],
+        isInt: {
+            options: { gt: 0 },
+            errorMessage: "Quantity must be greater than 0"
+        },
+        toInt: true
+    },
+
+    "items.*.price": {
+        in: ["body"],
+        isFloat: {
+            options: { gt: 0 },
+            errorMessage: "Price must be greater than 0"
+        },
+        toFloat: true
+    }
+};
