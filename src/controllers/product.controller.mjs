@@ -6,7 +6,7 @@ import { uploadToCloudinary } from "../middlewares/cloudinary.middleware.mjs";
 export async function productCreateController(req, res, next) {
 
     try {
-
+        console.log("Product Creaet Controller")
         const validData = matchedData(req);
 
         const imageUrls = [];
