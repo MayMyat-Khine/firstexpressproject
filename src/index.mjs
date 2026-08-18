@@ -5,6 +5,7 @@ import { errorHandler } from './middlewares/error.middleware.mjs';
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger/swagger.mjs";
 import { env } from "./config/env.mjs";
+import 'dotenv/config';
 
 const app = express();
 

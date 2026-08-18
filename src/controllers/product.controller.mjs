@@ -1,6 +1,7 @@
 import { Product } from "../mongoose/schemas/product.mjs";
 import { matchedData } from "express-validator";
 import { getProducts, findProductById, getProductsByBranch, createProductWithBranchAndStock, deleteProdcutWithStock, productUpdateWithStock, getProductByProductIdAndBranch } from "../services/product.service.mjs";
+import { uploadToCloudinary } from "../middlewares/cloudinary.middleware.mjs";
 
 export async function productCreateController(req, res, next) {
 
@@ -8,10 +9,21 @@ export async function productCreateController(req, res, next) {
 
         const validData = matchedData(req);
 
+        const imageUrls = [];
+
+        for (const file of req.files ?? []) {
+            const result = await uploadToCloudinary(
+                file.buffer,
+                "retail/products"
+            );
+
+            imageUrls.push(result.secure_url);
+            console.log("Image url", result.secure_url)
+        }
 
         const data = {
             ...validData,
-            images: req.files?.map(file => file?.path) || []
+            images: imageUrls//req.files?.map(file => file?.path) || []
         }
 
         const savedProduct = await createProductWithBranchAndStock(data);
@@ -84,10 +96,22 @@ export async function productGetByBranchController(req, res, next) {
 
 export async function productUpdateByIdController(req, res, next) {
     try {
+
+        const imageUrls = [];
+
+        for (const file of req.files ?? []) {
+            const result = await uploadToCloudinary(
+                file.buffer,
+                "retail/products"
+            );
+
+            imageUrls.push(result.secure_url);
+        }
+
         const { body, params: { id } } = req;
         const data = {
             ...body,
-            images: req.files?.map(file => file?.path) || []
+            images: imageUrls//req.files?.map(file => file?.path) || []
         }
         const updatedProduct = await productUpdateWithStock(id, data);
 
