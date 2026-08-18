@@ -35,6 +35,13 @@ export async function branchGetByIdController(req, res, next) {
 export async function branchUpdateByIdController(req, res, next) {
     const { body, params: { id } } = req;
     try {
+
+        if (id == "Online-001") {
+            return res.status(400).json({
+                success: false,
+                message: `You can not update this branch at this moment`
+            });
+        }
         const updatedBranch = await updateBranch(id, body);
         return res.status(200).send({ success: true, body: updatedBranch });
     } catch (error) {
@@ -47,6 +54,12 @@ export async function branchUpdateByIdController(req, res, next) {
 export async function branchDeleteController(req, res, next) {
     try {
         const { id } = req.params;
+        if (id == "Online-001") {
+            return res.status(400).json({
+                success: false,
+                message: `You can not delete this branch at this moment`
+            });
+        }
         await deleteBranch(id);
         return res.status(200).json({
             success: false,
