@@ -1,11 +1,11 @@
 import AppErrors from "../utils/appErrors.mjs";
 
 export const parseProductFormData = (req, res, next) => {
-    console.log("here is parseproductformdata middleware", req.body)
+    console.log("here is parseproductformdata middleware", req)
     if (req.body.price) {
-
-        req.body.price = Number(req.body.price);
         console.log("here is price", req.body.price)
+        req.body.price = Number(req.body.price);
+
     }
 
 
