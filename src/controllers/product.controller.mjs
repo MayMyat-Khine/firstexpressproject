@@ -6,7 +6,7 @@ import { uploadToCloudinary } from "../middlewares/cloudinary.middleware.mjs";
 export async function productCreateController(req, res, next) {
 
     try {
-        console.log("Product Creaet Controller")
+        console.log("Product Creaet Controllerg")
         const validData = matchedData(req);
 
         const imageUrls = [];
@@ -25,6 +25,7 @@ export async function productCreateController(req, res, next) {
             ...validData,
             images: imageUrls//req.files?.map(file => file?.path) || []
         }
+        console.log("Valid Product Data", validData)
 
         const savedProduct = await createProductWithBranchAndStock(data);
         return res.status(201).send({ success: true, body: savedProduct });
