@@ -3,7 +3,7 @@ import { checkSchema } from "express-validator";
 import { createCustomerValidationScheme } from "../utils/validationSchema.mjs";
 import { validate, validateAllowedFields, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 
-import { customerCreateController } from "../controllers/customer.controller.mjs";
+import { customerCreateController, deleteCustomerController, getCustomersController } from "../controllers/customer.controller.mjs";
 
 const router = Router();
 
@@ -16,5 +16,8 @@ router.post("/customer",
     customerCreateController
 );
 
+router.get("/customer", getCustomersController);
+
+router.delete('/customer/:id', deleteCustomerController)
 
 export default router;

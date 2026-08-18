@@ -47,13 +47,15 @@ export const findStockById = async (id) => {
     return foundStock;
 }
 export const updateStocksBulk = async (stockUpdates, session) => {
-    const bulkOps = stockUpdates.map(({ product_id, stockData }) => ({
+    console.log("stocuupdate", stockUpdates)
+    const bulkOps = stockUpdates.map(({ branchId, product_id, stockData }) => ({
         updateOne: {
-            filter: { product_id: product_id },
+            filter: { product_id: product_id, branch_id: branchId },
             update: { $set: stockData }
         }
     }));
     const result = await stockRepo.bulkCreateStock(bulkOps, session);
+
     return result;
 }
 

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 // import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 import { findByBranchId } from "../services/branch.service.mjs";
 import { findUserById } from "../services/user.service.mjs";
-import { getProductsByBranch } from "./product.service.mjs";
+import { findProductsByIds, getProductsByBranch } from "./product.service.mjs";
 import AppErrors from "../utils/appErrors.mjs";
 import { createTransferProductsRepo, getAllRecordsRepo } from "../repositories/transfer_product.repository.mjs";
 import { v4 as uuidv4 } from "uuid";
@@ -26,8 +26,11 @@ const validateProductsOnReceiverBranch = async (branchId, transferProducts) => {
         const invalidTransferProducts = transferProducts.filter(tp => !productIds.has(tp.id));
         if (invalidTransferProducts.length > 0) {
 
-            const invalidIDs = invalidTransferProducts.map(p => p.id);
-            throw new AppErrors(`Some of the products [ ${invalidIDs} ] are not created at receiver branch`, 400);
+
+            const pNames = await findProductsByIds(invalidTransferProducts.map(product => product.id))
+
+            const invalidPname = pNames.map(p => p.product_name);
+            throw new AppErrors(`Some of the products [ ${invalidPname} ] are not created at receiver branch`, 400);
         }
         const stocksWithStockID = [];
 
@@ -65,7 +68,11 @@ const validateProductsOnSenderBranchAndGetStocks = async (branchId, transferProd
         // check original-P and transfer-p
         const xinvalidProducts = [...tpMap.keys()].filter(tpid => !productIds.has(tpid));
         if (xinvalidProducts.length > 0) {
-            throw new AppErrors(`Some transfer products ${xinvalidProducts} not found`, 404);
+            console.log("xinvalid", xinvalidProducts)
+            const pNames = await findProductsByIds(xinvalidProducts)
+
+            const invalidPname = pNames.map(p => p.product_name);
+            throw new AppErrors(`Some transfer products [${invalidPname}]not found`, 404);
         }
         const stocks = [];
         const stocksWithStockID = [];
@@ -94,7 +101,11 @@ const validateProductsOnSenderBranchAndGetStocks = async (branchId, transferProd
         }).map(p => p.id);
 
         if (invalidStocks.length !== 0) {
-            throw new AppErrors(`Transfer Quantity of products [ ${invalidStocks} ]  exceed than it's stock`, 400);
+
+            const pNames = await findProductsByIds(invalidStocks)
+
+            const invalidPname = pNames.map(p => p.product_name);
+            throw new AppErrors(`Transfer Quantity of products [ ${invalidPname} ]  exceed than it's stock`, 400);
         }
         return stocksWithStockID;
     } catch (error) {

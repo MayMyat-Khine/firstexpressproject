@@ -15,6 +15,7 @@ export const authorizeMiddleware = (requiredPermissions) => {
         if (!hasPermission) {
             throw new AppErrors("Permission denied.", 403)
         }
+        console.log("authorizeMiddleware")
 
         next();
     };

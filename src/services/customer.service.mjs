@@ -25,3 +25,11 @@ export const createCustomer = async (registerData) => {
 export const getCustomerById = async (id) => {
     return await customerRepo.getCustomerByIdRepo(id);
 }
+
+export const getCustomers = async () => {
+    return await customerRepo.getCustomersRepo();
+}
+
+export const deleteCustomer = async (id) => {
+    return await customerRepo.deleteCustomerRepo(id);
+}

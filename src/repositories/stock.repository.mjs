@@ -46,5 +46,6 @@ export const findStocksByProductIdsRepo = async (bid, pids) => {
 }
 
 export const bulkCreateStock = async (bulkOps, session) => {
+
     return Stock.bulkWrite(bulkOps, { session });
 }

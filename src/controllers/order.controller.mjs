@@ -7,6 +7,7 @@ export async function orderCreateController(req, res, next) {
 
         const validData = matchedData(req);
         const savedOrder = await createOrderService(validData, req.customer.id);
+        console.log("saved order", savedOrder);
         return res.status(200).send({ success: true, body: savedOrder })
     } catch (error) {
         next(error)
@@ -37,7 +38,7 @@ export async function orderGetMyOrdersController(req, res, next) {
 };
 
 export async function orderGetMyOrderByIdController(req, res, next) {
-
+    console.log(" my Order controller")
     try {
         const foundOrder = await getMyOrderById(req.customer.id, req.params.id);
         return res.status(200).send({ success: true, body: foundOrder });
@@ -47,7 +48,7 @@ export async function orderGetMyOrderByIdController(req, res, next) {
 }
 
 export async function orderGetByIdController(req, res, next) {
-
+    console.log("Order controller")
     try {
         const foundOrder = await getOrderById(req.params.id);
         return res.status(200).send({ success: true, body: foundOrder });

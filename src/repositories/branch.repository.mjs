@@ -22,13 +22,13 @@ export const getBranchesRepo = async () => {
 }
 
 export const findBranchByIdRepo = async (id) => {
-    const foundBranch = await Branch.findOne({ _id: id });
+    const foundBranch = await Branch.findOne({ id: id });
     return foundBranch;
 }
 
 export const findBranchesByIdsRepo = async (branchIds) => {
     return await Branch.find({
-        _id: { $in: branchIds }
+        id: { $in: branchIds }
     });
 };
 
@@ -41,7 +41,7 @@ export const createBranchRepo = async (branchData) => {
 
 export const updateBranchRepo = async (id, branchData) => {
     const updatedBranch = await Branch.findOneAndUpdate(
-        { _id: id },
+        { id: id },
         branchData, { new: true, runValidators: true });
     return updatedBranch;
 }

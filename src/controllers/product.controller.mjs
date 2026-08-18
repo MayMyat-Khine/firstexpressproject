@@ -1,6 +1,6 @@
 import { Product } from "../mongoose/schemas/product.mjs";
 import { matchedData } from "express-validator";
-import { getProducts, findProductById, getProductsByBranch, createProductWithBranchAndStock, deleteProdcutWithStock, productUpdateWithStock } from "../services/product.service.mjs";
+import { getProducts, findProductById, getProductsByBranch, createProductWithBranchAndStock, deleteProdcutWithStock, productUpdateWithStock, getProductByProductIdAndBranch } from "../services/product.service.mjs";
 
 export async function productCreateController(req, res, next) {
 
@@ -50,6 +50,18 @@ export async function productsGetByBranchController(req, res, next) {
         next(error);
     }
 }
+
+export async function productGetByBranchController(req, res, next) {
+    try {
+        const product = await getProductByProductIdAndBranch(req.params.bid, req.params.pid);
+        console.log("found product", product)
+        return res.status(200).send({ success: true, body: product });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 // export async function productUpdateByIdController(req, res) {
 //     const { body, params: { id } } = req;
 //     try {

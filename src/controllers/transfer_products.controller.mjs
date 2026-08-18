@@ -15,6 +15,7 @@ export async function createTransferProductsController(req, res, next) {
 export async function getTransferProductsController(req, res, next) {
     try {
         const records = await getAllRecords();
+        console.log(records);
         return res.status(200).send({ success: true, body: records });
     } catch (error) {
         next(error)

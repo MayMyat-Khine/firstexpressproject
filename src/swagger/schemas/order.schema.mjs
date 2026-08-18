@@ -115,7 +115,12 @@ export const OrderCreateRequestSchema = {
         notes: {
             type: "string",
             example: "Please pack carefully"
-        }
+        },
+        address: {
+            type: "string",
+            example: "address"
+        },
+
     }
 };
 

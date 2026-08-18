@@ -41,7 +41,7 @@ export async function updateUserRepo(id, body) {
     // runValidators: true //check the schme validation
     //  { new: true } // give the updated obj if its false then will give the old data even the data is updated
     const updatedUser = await User.findOneAndUpdate(
-        { _id: id },
+        { id: id },
         body,
         { new: true, runValidators: true });
     return updatedUser;

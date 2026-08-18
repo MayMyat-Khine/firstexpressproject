@@ -12,7 +12,7 @@ export const updateRoleRepo = async (roleId, roleData) => {
     const updatedRole = await Role.findByIdAndUpdate(
         roleId,
         {
-            permissions: roleData
+            permissions: roleDataç
         },
         {
             new: true,
@@ -26,4 +26,9 @@ export const findRoleByIdRepo = async (roleId) => {
     return await Role.findOne({
         _id: roleId
     })
+}
+
+
+export const getRolesRepo = async () => {
+    return await Role.find();
 }

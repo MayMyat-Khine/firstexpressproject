@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createRoleController, updateRoleController } from "../controllers/role.controller.mjs";
+import { createRoleController, getRolesController, updateRoleController } from "../controllers/role.controller.mjs";
 import { validate, validateAllowedFields, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { checkSchema } from "express-validator";
 import { createRoleValidationSchema, updateRoleValidationSchema } from "../utils/validationSchema.mjs";
@@ -26,5 +26,7 @@ router.patch('/role/:id',
     validateAllowedFields(Object.keys(updateRoleValidationSchema)),
     validate,
     updateRoleController)
+
+router.get('/roles', getRolesController)
 
 export default router;

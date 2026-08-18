@@ -561,6 +561,9 @@ export const createOrderValidationSchema = {
     notes: {
         in: ["body"],
     },
+    address: {
+        in: ["body"],
+    },
 
 };
 export const updateOrderValidationSchema = {

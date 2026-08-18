@@ -17,7 +17,7 @@ export const getOrdersRepo = async ({ page, limit, search }) => {
 
     const total = await Order.countDocuments(filter);
 
-    let query = Order.find(filter); //  .populate("stocks");
+    let query = Order.find(filter).sort({ updatedAt: -1 });; //  .populate("stocks");
     if (page && limit) {
 
         query = query
@@ -47,7 +47,7 @@ export const getOrdersByCustomerRepo = async (customerId, { page,
 
     const total = await Order.countDocuments(filter);
 
-    let query = Order.find(filter); //  .populate("stocks");
+    let query = Order.find(filter).sort({ updatedAt: -1 }); //  .populate("stocks");
     if (page && limit) {
 
         query = query
@@ -73,7 +73,8 @@ export const getMyOrderByIdRepo = async (id, customerId) => {
 }
 
 export const getOrderByBranchRepo = async (id) => {
-    return await Order.find({ branch_id: id });
+
+    return await Order.find({ branch_id: id }).sort({ updatedAt: -1 });;
 }
 
 export async function updateOrderRepo(id, body) {

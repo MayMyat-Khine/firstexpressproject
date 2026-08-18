@@ -81,9 +81,9 @@ export const productUpdateWithStock = async (productId, productData) => {
         const updatedProduct = await productRepo.updateProduct(productId, productData, session);
 
         // Delete uploads/imges 
-        for (const deleteImg of productData.delete_image) {
-            await deleteFile(deleteImg);
-        }
+        // for (const deleteImg of productData.delete_image) {
+        //     await deleteFile(deleteImg);
+        // }
 
         await session.commitTransaction();
         return updatedProduct;
@@ -171,10 +171,18 @@ export const getProducts = async ({ page, limit, search }) => {
 }
 
 export const getProductsByBranch = async (branchId) => {
-    return await productRepo.getProductsOnBranchRepo(branchId);
+    const result = await productRepo.getProductsOnBranchRepo(branchId);
+    console.log("brnachid", branchId)
+    console.log("Rsult", result)
+    return result;
 }
 
 export const getProductsByProductIdAndBranch = async (branchId, productIds) => {
     return productRepo.getProductsOnBranchByProductIdRepo(branchId, productIds);
+}
+
+
+export const getProductByProductIdAndBranch = async (branchId, productId) => {
+    return productRepo.getProductOnBranchByProductIdRepo(branchId, productId);
 }
 

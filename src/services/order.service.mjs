@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Order } from "../mongoose/schemas/order.mjs";
 import { findUserById } from "./user.service.mjs";
-import { findProductsByIds, getProductsByProductIdAndBranch } from './product.service.mjs';
+import { findProductById, findProductsByIds, getProductsByProductIdAndBranch } from './product.service.mjs';
 import { findStocksByProductIds, updateStock, updateStocksBulk } from './stock.service.mjs';
 import { findByBranchId } from './branch.service.mjs';
 import AppErrors from '../utils/appErrors.mjs';
@@ -74,25 +74,32 @@ export const createOrderService = async (orderData, customerId) => {
 
         // === Create order after all validation === // 
         const orderProducts = orderData["purchase_products"].map(item => {
+
             return {
                 id: item.id,
+
                 quantity: item.quantity,
                 price: productsWithPrice.get(item.id),
                 subtotal: productsWithPrice.get(item.id) * item.quantity
             }
         });
         const totalAmount = orderProducts.reduce((sum, p) => sum + p.subtotal, 0);
-        const finalOrderObj = { ...orderData, id: uuidv4(), customer_id: customerId, purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
+        const uid =
+            `OSV-${uuidv4().replace(/-/g, '').slice(0, 13)}`;
+
+        const finalOrderObj = { ...orderData, id: uid, customer_id: customerId, purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
         const savedOrder = await orderRepo.createOrderRepo(finalOrderObj, session);
 
         // === Substract and Update the  Stock  DB === //
+        console.log("Stock map", stockMap)
         const updatedStocks = await updateStocksBulk(purchaseProducts.map(({ id, quantity }) => ({
+            branchId: orderData['branch_id'],
             product_id: id,
             stockData: { stock: stockMap[id] - quantity }
         })), session);
 
         if (updatedStocks.modifiedCount !== purchaseProducts.length) {
-            return new AppErrors("Failed to update all stocks after order create", 400);
+            throw new AppErrors("Failed to update all stocks after order create", 400);
         }
 
         await session.commitTransaction();
@@ -240,6 +247,7 @@ export const getOrdersByCustomer = async (customerId, { page, limit, search }) =
 
 
 export const getOrderById = async (id) => {
+    console.log("order id", id)
     const order = await orderRepo.getOrderByIdRepo(id);
     if (!order) {
         throw new AppErrors(`Order id ${id} is not found`, 404)
@@ -348,36 +356,36 @@ const checkDeleteProductsSuccessful = async (orderId, deleteProductsIds, session
     }
 };
 
-const stockToUpdate = async (originalProducts, newProducts, deleteProductsIds, allStockMap, oldProductsMap, session) => {
-    const stockToUpdate = new Map();
+// const stockToUpdate = async (originalProducts, newProducts, deleteProductsIds, allStockMap, oldProductsMap, session) => {
+//     const stockToUpdate = new Map();
 
-    originalProducts.forEach(({ id, quantity, method }) => {
-        const updatedStock =
-            method === "ADD" ? allStockMap[id] - quantity : allStockMap[id] + quantity;
-        stockToUpdate.set(id, {
-            product_id: id,
-            stockData: { stock: updatedStock }
-        });
+//     originalProducts.forEach(({ id, quantity, method }) => {
+//         const updatedStock =
+//             method === "ADD" ? allStockMap[id] - quantity : allStockMap[id] + quantity;
+//         stockToUpdate.set(id, {
+//             product_id: id,
+//             stockData: { stock: updatedStock }
+//         });
 
-    });
+//     });
 
-    newProducts.forEach(({ id, quantity }) => {
-        stockToUpdate.set(id, {
-            product_id: id,
-            stockData: { stock: allStockMap[id] - quantity }
-        })
-    })
+//     newProducts.forEach(({ id, quantity }) => {
+//         stockToUpdate.set(id, {
+//             product_id: id,
+//             stockData: { stock: allStockMap[id] - quantity }
+//         })
+//     })
 
-    // === Return Stock for Update-Delete Products === //
-    deleteProductsIds.forEach(pid => {
-        stockToUpdate.set(pid, {
-            product_id: pid,
-            stockData: { stock: allStockMap[pid] + oldProductsMap.get(pid) }
-        })
-    });
-    const updatedStocks = await updateStocksBulk(Array.from(stockToUpdate.values()), session);
-    return updatedStocks;
-};
+//     // === Return Stock for Update-Delete Products === //
+//     deleteProductsIds.forEach(pid => {
+//         stockToUpdate.set(pid, {
+//             product_id: pid,
+//             stockData: { stock: allStockMap[pid] + oldProductsMap.get(pid) }
+//         })
+//     });
+//     const updatedStocks = await updateStocksBulk(Array.from(stockToUpdate.values()), session);
+//     return updatedStocks;
+// };
 
 const validateProductsAndGetStocks = async (originalProducts, newProducts, deleteProductsIds) => {
     //  === Validate Products Existence ==== //

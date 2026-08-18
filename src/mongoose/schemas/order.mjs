@@ -74,6 +74,9 @@ const OrderScheme = mongoose.Schema({
     },
     "notes": {
         type: String,
+    },
+    "address": {
+        type: String,
     }
 }, {
     timestamps: true

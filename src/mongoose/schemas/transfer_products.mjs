@@ -24,6 +24,8 @@ const TransferProductSchema = mongoose.Schema({
         required: true,
     },
 
+}, {
+    timestamps: true,
 });
 
 TransferProductSchema.set("toJSON", schemaTransform);

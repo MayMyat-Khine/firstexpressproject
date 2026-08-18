@@ -21,3 +21,7 @@ export async function findRoleById(roleId) {
         throw new AppErrors(`Role ${roleId} is not found`, 404)
     }
 }
+
+export async function getRoles() {
+    return await roleRepo.getRolesRepo();
+}

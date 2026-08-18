@@ -45,7 +45,7 @@ export async function stockUpdateController(req, res, next) {
     const validData = matchedData(req);
     const { body, params: { id } } = req;
     try {
-
+        console.log("stock", body)
         const updatedStock = await updateStock(id, body);
 
         return res.status(200).send({ success: true, body: updatedStock })
