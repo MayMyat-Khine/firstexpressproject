@@ -11,9 +11,13 @@ const CustomerSchema = mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true,
     },
-    "display_name": {
-        type: mongoose.Schema.Types.String,
-        required: true
+    "image": {
+        type: String,
+    },
+    "region": {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "country",
+        required: true,
     },
     "password": {
         type: mongoose.Schema.Types.String,

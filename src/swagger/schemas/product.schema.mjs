@@ -25,17 +25,22 @@ export const ProductSchema = {
             type: "string",
             example: "LT-001"
         },
+        unit: {
+            type: "string",
+            description: "Selling unit (e.g. pcs, box, kg)",
+            example: "pcs"
+        },
         price: {
             type: "number",
             example: 5000
         }
     },
-    required: ["id", "product_name", "branch_id", "code", "price"]
+    required: ["id", "product_name", "branch_id", "code", "unit", "price"]
 };
 
 export const ProductCreateRequestSchema = {
     type: "object",
-    required: ["product_name", "branch_id", "code", "price", "images"],
+    required: ["product_name", "branch_id", "code", "unit", "price", "images"],
     properties: {
         product_name: {
             type: "string",
@@ -56,6 +61,11 @@ export const ProductCreateRequestSchema = {
         code: {
             type: "string",
             example: "LT-001"
+        },
+        unit: {
+            type: "string",
+            description: "Selling unit (e.g. pcs, box, kg)",
+            example: "pcs"
         },
         price: {
             type: "number",
@@ -95,6 +105,11 @@ export const ProductUpdateRequestSchema = {
         code: {
             type: "string",
             example: "LT-002"
+        },
+        unit: {
+            type: "string",
+            description: "Selling unit (e.g. pcs, box, kg)",
+            example: "box"
         },
         price: {
             type: "number",

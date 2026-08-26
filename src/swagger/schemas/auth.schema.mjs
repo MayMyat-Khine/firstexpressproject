@@ -1,7 +1,11 @@
 export const CustomerLoginRequestSchema = {
     type: "object",
-    required: ["phone_number", "password"],
+    required: ["region", "phone_number", "password"],
     properties: {
+        region: {
+            type: "string",
+            example: "09fde343jo3j43i"
+        },
         phone_number: {
             type: "string",
             example: "09123456789"

@@ -3,7 +3,6 @@ export const branchPaths = {
         post: {
             summary: "Create a branch",
             tags: ["Branches"],
-            security: [{ bearerAuth: [] }],
             requestBody: {
                 required: true,
                 content: {

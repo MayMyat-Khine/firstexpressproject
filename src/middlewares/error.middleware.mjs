@@ -1,19 +1,18 @@
+import { success } from "zod";
+
 export function errorHandler(error, req, res, next) {
 
     console.error(error);
 
-    // Mongo duplicate key error
-    if (error.code === 11000) {
-
+    // MongoDB duplicate key error
+    if (error.code === 11000 && error.keyValue) {
         const field = Object.keys(error.keyValue)[0];
 
-        throw res.status(409).send({
+        return res.status(409).send({
             success: false,
             message: `${field} already exists`
         });
     }
-
-
 
     if (error.name === "TokenExpiredError") {
 

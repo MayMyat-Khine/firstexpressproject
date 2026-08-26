@@ -1,5 +1,4 @@
 import { Router } from "express"
-import { loginCustomer } from "../services/auth.service.mjs";
 import { validate, validateAllowedFields, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { loginCustomerValidaionSchema, loginUserValidaionSchema, refreshTokenValidaionSchema } from "../utils/validationSchema.mjs";
 import { checkSchema } from "express-validator";

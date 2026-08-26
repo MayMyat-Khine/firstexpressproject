@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Customer } from "../mongoose/schemas/customer.mjs";
 
 export async function createCustomerRepo(customer) {
@@ -21,7 +22,18 @@ export async function findCustomerByPhone(phone) {
 
 }
 
+
 export const deleteCustomerRepo = async (id) => {
     const deletedCustomer = await Customer.findOneAndDelete({ id: id });
     return deletedCustomer;
+}
+
+export const updateCustomerRepo = async (id, customerData) => {
+    console.log("ID", id)
+    console.log("Customer Data", customerData)
+    const updatedCustomer = await Customer.findOneAndUpdate(
+        { id: id },
+        { $set: customerData }, { new: true });
+
+    return updatedCustomer;
 }

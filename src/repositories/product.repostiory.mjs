@@ -1,21 +1,55 @@
 import { Product } from '../mongoose/schemas/product.mjs';
 import mongoose from "mongoose";
 
-export const getProductsOnBranchRepo = async (branchId) => {
+export const getProductsOnBranchRepo = async ({ branchId, page, limit, search }) => {
+    console.log(`Product Repo ${branchId}: ${page} : ${limit} : ${search}`)
+    const filter = {};
 
-    return await Product.find({
-        "branch_id": branchId
-        // new mongoose.Types.ObjectId(branchId) 
-    }).populate({
-        path: "branch_id",
-        match: { id: branchId }
-    })
-        .populate({
-            path: "stocks",
-            match: { branch_id: branchId }
-        });
-    // .populate("branch_id").populate("stocks");
+    if (search) {
+        filter.product_name = {
+            $regex: search, // pattern matching string
+            $options: "i" // ignore case
+        };
+    }
+
+    if (branchId) {
+        filter.branch_id = branchId
+    }
+
+    const total = await Product.countDocuments(filter);
+
+    console.log("Total in Product Repo", total)
+
+    let query = Product.find(filter).populate({
+        path: "stocks",
+        match: branchId ? { branch_id: branchId } : {},
+    });
+    console.log("Product Query", query)
+    if (page != null && limit != null) {
+
+        query = query
+            .skip((page - 1) * limit)
+            .limit(limit);
+    }
+    const products = await query;
+    console.log("Products ", products)
+    return {
+        products, total
+    }
+
 }
+// return await Product.find({
+//     "branch_id": branchId
+//     // new mongoose.Types.ObjectId(branchId) 
+// }).populate({
+//     path: "branch_id",
+//     match: { id: branchId }
+// })
+//     .populate({
+//         path: "stocks",
+//         match: { branch_id: branchId }
+//     });
+// .populate("branch_id").populate("stocks");
 
 export const getProductsOnBranchByProductIdRepo = async (branchId, productIds) => {
 
@@ -33,9 +67,10 @@ export const getProductOnBranchByProductIdRepo = async (branchId, productId) => 
 }
 
 
+
 export const getProductsRepo = async ({ page,
     limit,
-    search }) => {
+    search, branchId }) => {
 
     const filter = {};
 
@@ -45,17 +80,24 @@ export const getProductsRepo = async ({ page,
             $options: "i" // ignore case
         };
     }
+    if (branchId) {
+        filter.branch_id = branchId
+    }
 
     const total = await Product.countDocuments(filter);
 
-    let query = Product.find(filter).populate("stocks");
+    let query = Product.find(filter).populate({
+        path: "stocks",
+        match: branchId ? { branch_id: branchId } : {},
+    });//.populate("stocks");
+
     if (page && limit) {
 
         query = query
             .skip((page - 1) * limit)
             .limit(limit);
     }
-    const products = await query;
+    const products = await query;//This is where MongoDB is actually queried.
     return {
         products, total
     }
@@ -198,4 +240,15 @@ export async function updateProduct(productId, productData, session) {
 
 export async function deleteProduct(productId, session) {
     return await Product.findOneAndDelete({ id: productId }, { session });
+}
+
+export async function deleteBranchAtAllProductsRepo(branchId) {
+    return await Product.updateMany(
+        { branch_id: branchId }, // only products containing this branch
+        {
+            $pull: {
+                branch_id: branchId,
+            },
+        }
+    );
 }

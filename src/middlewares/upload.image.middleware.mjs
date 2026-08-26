@@ -26,6 +26,7 @@ export const uploadProductImage = multer({
             "image/png",
             "image/jpg"
         ];
+
         if (allowed.includes(file.mimetype)) {
             cb(null, true);
         }

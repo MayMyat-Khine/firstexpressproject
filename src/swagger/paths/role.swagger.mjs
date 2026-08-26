@@ -39,6 +39,36 @@ export const rolePaths = {
             }
         }
     },
+    "/api/v1/roles": {
+        get: {
+            summary: "Get all roles",
+            tags: ["Roles"],
+            responses: {
+                200: {
+                    description: "List of roles",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    success: {
+                                        type: "boolean",
+                                        example: true
+                                    },
+                                    body: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/Role"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     "/api/v1/role/{id}": {
         patch: {
             summary: "Update a role",
@@ -65,7 +95,7 @@ export const rolePaths = {
                 }
             },
             responses: {
-                201: {
+                200: {
                     description: "Role updated successfully",
                     content: {
                         "application/json": {
@@ -86,6 +116,12 @@ export const rolePaths = {
                 },
                 400: {
                     description: "Validation error"
+                },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
                 }
             }
         }

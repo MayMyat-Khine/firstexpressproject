@@ -36,6 +36,9 @@ export const cartPaths = {
                 },
                 400: {
                     description: "Validation error"
+                },
+                401: {
+                    description: "Unauthorized"
                 }
             }
         },
@@ -62,6 +65,9 @@ export const cartPaths = {
                             }
                         }
                     }
+                },
+                401: {
+                    description: "Unauthorized"
                 },
                 404: {
                     description: "Cart not found"

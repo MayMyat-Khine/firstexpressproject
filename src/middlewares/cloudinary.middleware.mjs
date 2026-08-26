@@ -10,6 +10,7 @@ export const uploadToCloudinary = (
         hasApiKey: !!cloudinary.config().api_key,
         hasApiSecret: !!cloudinary.config().api_secret,
     });
+    console.log("Buffer", buffer);
     return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
             {
@@ -18,6 +19,7 @@ export const uploadToCloudinary = (
             },
             (error, result) => {
                 if (error) {
+                    console.log("Cloudinary Middleware", error);
                     reject(error);
                     return;
                 }

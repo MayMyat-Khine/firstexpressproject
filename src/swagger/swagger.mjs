@@ -10,6 +10,8 @@ import { transferStockPaths } from "./paths/transfer_stock.swagger.mjs";
 import { userPaths } from "./paths/user.swagger.mjs";
 import { permissionPaths } from "./paths/permission.swagger.mjs";
 import { cartPaths } from "./paths/cart.swagger.mjs";
+import { countryPaths } from "./paths/country.swagger.mjs";
+import { currencyRatePaths } from "./paths/currency_rate.swagger.mjs";
 import { ProductCreateRequestSchema, ProductSchema, ProductUpdateRequestSchema } from "./schemas/product.schema.mjs";
 import { CustomerAuthResponseSchema, CustomerLoginRequestSchema, RefreshTokenRequestSchema, UserAuthResponseSchema, UserLoginRequestSchema } from "./schemas/auth.schema.mjs";
 import { BranchCreateRequestSchema, BranchSchema, BranchUpdateRequestSchema } from "./schemas/branch.schema.mjs";
@@ -21,6 +23,8 @@ import { TransferStockCreateRequestSchema, TransferStockSchema } from "./schemas
 import { UserCreateRequestSchema, UserSchema, UserUpdateRequestSchema } from "./schemas/user.schema.mjs";
 import { PermissionSchema } from "./schemas/permission.schema.mjs";
 import { CartCreateRequestSchema, CartItemSchema, CartSchema } from "./schemas/cart.schema.mjs";
+import { CountrySchema } from "./schemas/country.schema.mjs";
+import { CurrencyRateSchema } from "./schemas/currency_rate.schema.mjs";
 
 const options = {
     definition: {
@@ -32,7 +36,8 @@ const options = {
         },
         servers: [
             {
-                url: "https://retailexpress.onrender.com"
+                // url: "https://retailexpress.onrender.com"
+                url: "http://localhost:3000"
             }
         ],
         paths: {
@@ -46,7 +51,9 @@ const options = {
             ...transferStockPaths,
             ...userPaths,
             ...permissionPaths,
-            ...cartPaths
+            ...cartPaths,
+            ...countryPaths,
+            ...currencyRatePaths
         },
         components: {
             securitySchemes: {
@@ -86,7 +93,9 @@ const options = {
                 Permission: PermissionSchema,
                 CartItem: CartItemSchema,
                 Cart: CartSchema,
-                CartCreateRequest: CartCreateRequestSchema
+                CartCreateRequest: CartCreateRequestSchema,
+                Country: CountrySchema,
+                CurrencyRate: CurrencyRateSchema
             }
         },
         security: [

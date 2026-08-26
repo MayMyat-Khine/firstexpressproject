@@ -20,11 +20,24 @@ const ProductSchema = mongoose.Schema({
         required: true,
         unique: true
     },
-    "price": {
-        type: mongoose.Schema.Types.Number,
+    "unit": {
+        type: mongoose.Schema.Types.String,
         required: true,
-        min: [0, "Price cannot be negative"]
     },
+    "price": [
+        {
+            amount: {
+                type: Number,
+                required: true,
+                min: [0, "Price cannot be negative"],
+            },
+            currency: {
+                type: String,
+                enum: ["MMK", "THB", "USD", "SGD"],
+                required: true,
+            },
+        },
+    ],
     "images": {
         type: [String],
         default: []

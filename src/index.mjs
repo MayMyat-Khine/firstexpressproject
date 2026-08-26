@@ -6,13 +6,15 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger/swagger.mjs";
 import { env } from "./config/env.mjs";
 import 'dotenv/config';
+import { errorLogger, requestLogger } from './middlewares/errorLogger.mjs';
 
 const app = express();
 
+app.use(requestLogger);
 
 mongoose.connect(env.MONGO_URI)
     .then(() => {
-
+        console.log(env.MONGO_URI)
         app.listen(env.PORT, () => {
             console.log(`Server running on port ${env.PORT}`);
         });
@@ -31,6 +33,8 @@ app.use("/uploads", express.static("uploads"))
 app.use(errorHandler);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
+
+app.use(errorLogger);
 
 
 

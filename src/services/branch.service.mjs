@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { Branch } from "../mongoose/schemas/branch.mjs";
 import * as branchRepo from "../repositories/branch.repository.mjs";
 import AppErrors from "../utils/appErrors.mjs";
+import { deleteStocksByBranch, getProductsOnBranchWithNoStock } from "./stock.service.mjs";
+import { deleteBranchAtAllProducts } from "./product.service.mjs";
 
 export const createBranch = async (branchData) => {
     return branchRepo.createBranchRepo(branchData);
@@ -50,8 +52,19 @@ export const updateBranch = async (id, body) => {
 
 
 export const deleteBranch = async (id) => {
+    // find is there any stocks on this branch 
+    // Delete the Stock with Branchid
+    // Update to Delete the branch from Product's Branches
+    console.log("branch id", id);
+    const hasStocksPrdouctsOnBranch = await getProductsOnBranchWithNoStock(id);
 
-    await findByBranchId(id);
-    await branchRepo.deleteBranchRepo(id);
-
+    console.log("ALL stocks", hasStocksPrdouctsOnBranch)
+    if (hasStocksPrdouctsOnBranch.length === 0) {
+        await deleteBranchAtAllProducts(id); // Delete The Branch From Products' Branches List
+        await deleteStocksByBranch(id);
+        await findByBranchId(id);
+        await branchRepo.deleteBranchRepo(id);
+    } else {
+        throw new AppErrors(`Can't delete ${id} branch now , it still has products with stocks `, 400)
+    }
 }

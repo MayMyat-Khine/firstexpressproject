@@ -7,14 +7,19 @@ import { findUserById, findUserByName } from "./user.service.mjs";
 import { getRefreshToken, saveRefreshTokenRepo } from "../repositories/auth.repository.mjs";
 import jwt from "jsonwebtoken";
 import crypto from 'crypto';
+import { getDialCodeByCountryId } from "./countries.service.mjs";
 
 export const loginCustomer = async (data) => {
     const {
+
         phone_number,
-        password
+        password,
+        region
     } = data.body;
 
-    const customer = await findCustomerByPhone(phone_number);
+    const dialCode = await getDialCodeByCountryId(region);
+    const phoneWithRegionId = dialCode.dialCode + phone_number
+    const customer = await findCustomerByPhone(phoneWithRegionId);
     if (!customer) {
         throw new AppErrors(
             "Invalid phone number or password",
@@ -41,7 +46,8 @@ export const loginCustomer = async (data) => {
     const customerResponse = {
         id: customer.id,
         name: customer.name,
-        phone_number: customer.phone_number
+        phone_number: customer.phone_number,
+        image: customer.image
     };
 
     return {

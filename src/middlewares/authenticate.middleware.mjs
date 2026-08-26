@@ -57,7 +57,6 @@ export async function authenticateMiddleware(req, res, next) {
         // Attach user information
         req.customer = customer;
 
-
         next();
 
 

@@ -1,6 +1,17 @@
 // import { getCachedBranchIdsRepo } from '../repositories/branch.repository.mjs';
 
+
 export const loginCustomerValidaionSchema = {
+
+    region: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Region Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Region Must not be Empty"
+        },
+    },
     phone_number: {
         in: ["body"],
         isString: {
@@ -20,6 +31,37 @@ export const loginCustomerValidaionSchema = {
         },
     }
 }
+
+export const createCountryValidationSchema = {
+
+    name: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Country name must be a string"
+        },
+        notEmpty: {
+            errorMessage: "Country name must not be empty"
+        }
+    },
+    code: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Country code must be a string"
+        },
+        notEmpty: {
+            errorMessage: "Country code must not be empty"
+        }
+    },
+    dialCode: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Country dialCode must be a string"
+        },
+        notEmpty: {
+            errorMessage: "Country dialCode must not be empty"
+        }
+    }
+};
 
 export const loginUserValidaionSchema = {
     name: {
@@ -63,17 +105,15 @@ export const createCustomerValidationScheme = {
         notEmpty: {
             errorMessage: "Name Must not be Empty"
         },
-
     },
-    display_name: {
+    region: {
         in: ["body"],
-        isString: {
-            errorMessage: "Display Name Must be String"
+        isMongoId: {
+            errorMessage: "Region must be a valid country ID"
         },
         notEmpty: {
-            errorMessage: "Display Name Must not be Empty"
+            errorMessage: "Region must not be empty"
         },
-
     },
     phone_number: {
         in: ["body"],
@@ -83,7 +123,6 @@ export const createCustomerValidationScheme = {
         notEmpty: {
             errorMessage: "Phone not be Empty"
         },
-
     },
     password: {
         in: ["body"],
@@ -99,8 +138,55 @@ export const createCustomerValidationScheme = {
             },
             errorMessage: "Password must be at least 6 characters"
         }
-
     },
+}
+
+export const updateCustomerValidationScheme = {
+
+    images: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Name Must be String"
+        },
+        optional: true
+    },
+    name: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Name Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Name Must not be Empty"
+        },
+        optional: true
+    },
+    phone_number: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Phone Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Phone not be Empty"
+        },
+        optional: true
+    },
+    password: {
+        in: ["body"],
+        optional: true,
+        isString: {
+            errorMessage: "Password Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Password not be Empty"
+        },
+        isLength: {
+            options: {
+                min: 6
+            },
+            errorMessage: "Password must be at least 6 characters"
+        },
+    },
+
 }
 
 export const createRoleValidationSchema = {
@@ -146,6 +232,14 @@ export const createUserValidationSchema = {
         },
         notEmpty: {
             errorMessage: "Must not be Empty"
+        },
+        custom: {
+            options: (value) => {
+                if (/\s/.test(value)) {
+                    throw new Error("User ID cannot contain spaces");
+                }
+                return true;
+            },
         },
 
     },
@@ -293,7 +387,7 @@ export const updateBranchValidationSchema = {
 }
 
 
-export const getPaginationValidationSchema = {
+export const getProductsPaginationValidationSchema = {
     page: {
         optional: true,
         isInt: {
@@ -309,6 +403,11 @@ export const getPaginationValidationSchema = {
         toInt: true
     },
     search: {
+        optional: true,
+        isString: true,
+        trim: true
+    },
+    branchId: {
         optional: true,
         isString: true,
         trim: true
@@ -371,11 +470,46 @@ export const createProductValidationSchema = {
         },
         notEmpty: { errorMessage: "Code must not be empty" }
     },
+    unit: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Unit must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Unit Must not be Empty"
+        }
+    },
     price: {
         in: ["body"],
-        isNumeric: { errorMessage: "Price must be a number" },
-        notEmpty: { errorMessage: "Price must not be Empty" },
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Price must contain at least one currency.",
+        },
+        custom: {
+            options: (value) => {
+                if (!Array.isArray(value) || !value.some(item => item?.currency === "USD")) {
+                    throw new Error("USD price is needed as default");
+                }
+                return true;
+            }
+        },
+    },
 
+    "price.*.amount": {
+        in: ["body"],
+        isFloat: {
+            options: { min: 0 },
+            errorMessage: "Amount must be greater than or equal to 0.",
+        },
+        toFloat: true,
+    },
+
+    "price.*.currency": {
+        in: ["body"],
+        isIn: {
+            options: [["MMK", "THB", "USD", "SGD"]],
+            errorMessage: "Invalid currency.",
+        },
     },
     images: {
         in: ['body'],
@@ -436,16 +570,12 @@ export const updateProductValidationSchema = {
         optional: true
     },
     images: {
-        in: ['body'],
-        exists: {
-            errorMessage: 'images is required'
-        },
+        in: ["body"],
+        optional: true,
         isArray: {
             options: { min: 1 },
-            errorMessage: "Image must be an array "
-
+            errorMessage: "Image must be an array with at least one image",
         },
-        optional: true
     },
 
     description: {
@@ -463,11 +593,31 @@ export const updateProductValidationSchema = {
         notEmpty: { errorMessage: "Code must not be empty" },
         optional: true
     },
+    unit: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Unit must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Unit Must not be Empty"
+        },
+        optional: true
+    },
     price: {
         in: ["body"],
-        isNaN: { errorMessage: "Price must be a number" },
-        notEmpty: { errorMessage: "Price must not be Empty" },
-        optional: true
+        optional: true,
+        isArray: {
+            options: { min: 1 },
+            errorMessage: "Price must contain at least one currency.",
+        },
+        custom: {
+            options: (value) => {
+                if (!Array.isArray(value) || !value.some(item => item?.currency === "USD")) {
+                    throw new Error("USD price is needed as default");
+                }
+                return true;
+            }
+        }
     }
 }
 
@@ -527,6 +677,16 @@ export const createOrderValidationSchema = {
         in: ["body"],
         isString: { errorMessage: "Merchant ID must be string" },
         notEmpty: { errorMessage: "Merchant ID must not be Empty" }
+    },
+
+    currency: {
+        in: ["body"],
+        isString: { errorMessage: "Currency must be string" },
+        notEmpty: { errorMessage: "Currency must not be Empty" },
+        isIn: {
+            options: [["MMK", "THB", "USD", "SGD"]],
+            errorMessage: "Invalid currency."
+        }
     },
 
     payment_method: {

@@ -3,13 +3,14 @@ export const productPaths = {
         post: {
             summary: "Create a product",
             tags: ["Products"],
+            security: [{ bearerAuth: [] }],
             requestBody: {
                 required: true,
                 content: {
                     "multipart/form-data": {
                         schema: {
                             $ref: "#/components/schemas/ProductCreateRequest"
-                        },
+                        }
                     }
                 }
             },
@@ -35,6 +36,12 @@ export const productPaths = {
                 },
                 400: {
                     description: "Validation error"
+                },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
                 }
             }
         }
@@ -43,6 +50,7 @@ export const productPaths = {
         get: {
             summary: "Get all products",
             tags: ["Products"],
+            security: [{ bearerAuth: [] }],
             parameters: [
                 {
                     name: "page",
@@ -69,6 +77,15 @@ export const productPaths = {
                     schema: {
                         type: "string",
                         example: "tint"
+                    }
+                },
+                {
+                    name: "branchId",
+                    in: "query",
+                    required: false,
+                    schema: {
+                        type: "string",
+                        example: "64f11c2d9b2e4a5f1c0a1234"
                     }
                 }
             ],
@@ -98,6 +115,12 @@ export const productPaths = {
                             }
                         }
                     }
+                },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
                 }
             }
         }
@@ -106,6 +129,7 @@ export const productPaths = {
         get: {
             summary: "Get a product by ID",
             tags: ["Products"],
+            security: [{ bearerAuth: [] }],
             parameters: [
                 {
                     name: "id",
@@ -136,6 +160,12 @@ export const productPaths = {
                         }
                     }
                 },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
+                },
                 404: {
                     description: "Product not found"
                 }
@@ -144,6 +174,7 @@ export const productPaths = {
         patch: {
             summary: "Update a product",
             tags: ["Products"],
+            security: [{ bearerAuth: [] }],
             parameters: [
                 {
                     name: "id",
@@ -186,12 +217,19 @@ export const productPaths = {
                 },
                 400: {
                     description: "Validation error"
+                },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
                 }
             }
         },
         delete: {
             summary: "Delete a product",
             tags: ["Products"],
+            security: [{ bearerAuth: [] }],
             parameters: [
                 {
                     name: "id",
@@ -223,6 +261,12 @@ export const productPaths = {
                         }
                     }
                 },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
+                },
                 404: {
                     description: "Product not found"
                 }
@@ -233,6 +277,7 @@ export const productPaths = {
         get: {
             summary: "Get products by branch",
             tags: ["Products"],
+            security: [{ bearerAuth: [] }],
             parameters: [
                 {
                     name: "id",
@@ -269,6 +314,111 @@ export const productPaths = {
                             }
                         }
                     }
+                },
+                401: {
+                    description: "Unauthorized"
+                },
+                403: {
+                    description: "Forbidden"
+                },
+                404: {
+                    description: "Branch not found"
+                }
+            }
+        }
+    },
+    "/api/v1/customer/branch/{bid}/product/{pid}": {
+        get: {
+            summary: "Get a product by branch and product ID for a customer",
+            tags: ["Products"],
+            parameters: [
+                {
+                    name: "bid",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string"
+                    }
+                },
+                {
+                    name: "pid",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string"
+                    }
+                }
+            ],
+            responses: {
+                200: {
+                    description: "Product found for the selected branch",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    success: {
+                                        type: "boolean",
+                                        example: true
+                                    },
+                                    body: {
+                                        $ref: "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                404: {
+                    description: "Product or branch not found"
+                }
+            }
+        }
+    },
+    "/api/v1/customer/branch/{id}/products": {
+        get: {
+            summary: "Get products by branch for a customer",
+            tags: ["Products"],
+            security: [{ bearerAuth: [] }],
+            parameters: [
+                {
+                    name: "id",
+                    in: "path",
+                    required: true,
+                    schema: {
+                        type: "string"
+                    }
+                }
+            ],
+            responses: {
+                200: {
+                    description: "Products list for the branch",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    success: {
+                                        type: "boolean",
+                                        example: true
+                                    },
+                                    body: {
+                                        type: "array",
+                                        items: {
+                                            $ref: "#/components/schemas/Product"
+                                        }
+                                    },
+                                    count: {
+                                        type: "integer",
+                                        example: 3
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                401: {
+                    description: "Unauthorized"
                 },
                 404: {
                     description: "Branch not found"

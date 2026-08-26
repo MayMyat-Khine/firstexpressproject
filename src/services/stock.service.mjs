@@ -88,6 +88,11 @@ export const deleteStock = async (id, session) => {
     return await Stock.deleteMany({ product_id: id }, { session });
 };
 
+
+export const deleteStocksByBranch = async (bid) => {
+    return await Stock.deleteMany({ branch_id: bid });
+}
+
 export const findStocksByProductIds = async (bid, pids) => {
     return await stockRepo.findStocksByProductIdsRepo(bid, pids);
 };
@@ -106,4 +111,9 @@ export const getStockByProductIdAndBranchId = async (bid, pid) => {
         throw new AppErrors(`One or more products is not found`, 404)
     }
     return foundStock;
+}
+
+export const getProductsOnBranchWithNoStock = async (branchId) => {
+    const productsWithStock = await stockRepo.getProductsOnBranchWithNoStockRepo(branchId);
+    return productsWithStock ?? [];
 }

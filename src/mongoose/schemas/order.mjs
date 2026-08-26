@@ -61,6 +61,16 @@ const OrderScheme = mongoose.Schema({
         required: true
     },
 
+    "currency": {
+        type: String,
+        // enum: ["MMK", "THB", "USD", "SGD"],
+        required: true
+    },
+    "rate": {
+        type: Number,
+        required: true
+    },
+
     "payment_method": {
         type: String,
         enum: Object.values(PaymentMethod),

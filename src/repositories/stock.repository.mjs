@@ -49,3 +49,8 @@ export const bulkCreateStock = async (bulkOps, session) => {
 
     return Stock.bulkWrite(bulkOps, { session });
 }
+
+export const getProductsOnBranchWithNoStockRepo = async (branchId) => {
+
+    return Stock.find({ branch_id: branchId, stock: { $gt: 0 } })
+}

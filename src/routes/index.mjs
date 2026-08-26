@@ -10,6 +10,8 @@ import auth from "./auth.mjs";
 import permission from "./permission.mjs";
 import role from './role.mjs';
 import cart from './cart.mjs';
+import countryRouter from "./countries.mjs";
+import currencyRates from "./currency_rates.mjs";
 
 const router = Router();
 
@@ -24,5 +26,7 @@ router.use(auth);
 router.use(permission);
 router.use(role);
 router.use(cart);
+router.use(countryRouter);
+router.use(currencyRates);
 
 export default router;

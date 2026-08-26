@@ -46,6 +46,17 @@ export const OrderSchema = {
             type: "number",
             example: 10000
         },
+        currency: {
+            type: "string",
+            description: "Currency used for this order",
+            enum: ["MMK", "THB", "USD", "SGD"],
+            example: "MMK"
+        },
+        rate: {
+            type: "number",
+            description: "Exchange rate of the order currency from CurrencyRates at create time (1 for USD)",
+            example: 2100
+        },
         payment_method: {
             type: "string",
             example: "cash"
@@ -59,12 +70,12 @@ export const OrderSchema = {
             example: "Please pack carefully"
         }
     },
-    required: ["branch_id", "customer_id", "purchase_products", "subtotal", "total_amount", "payment_method"]
+    required: ["branch_id", "customer_id", "purchase_products", "subtotal", "total_amount", "currency", "rate", "payment_method"]
 };
 
 export const OrderCreateRequestSchema = {
     type: "object",
-    required: ["branch_id", "customer_id", "purchase_products", "subtotal", "total_amount", "payment_method"],
+    required: ["branch_id", "purchase_products", "currency", "payment_method"],
     properties: {
         branch_id: {
             type: "string",
@@ -73,6 +84,7 @@ export const OrderCreateRequestSchema = {
 
         purchase_products: {
             type: "array",
+            description: "Only id and quantity are required per item; price/subtotal are computed by the server",
             items: {
                 type: "object",
                 properties: {
@@ -83,30 +95,16 @@ export const OrderCreateRequestSchema = {
                     quantity: {
                         type: "integer",
                         example: 2
-                    },
-                    price: {
-                        type: "number",
-                        example: 5000
-                    },
-                    subtotal: {
-                        type: "number",
-                        example: 10000
                     }
                 },
-                required: ["id", "quantity", "price", "subtotal"]
+                required: ["id", "quantity"]
             }
         },
-        subtotal: {
-            type: "number",
-            example: 10000
-        },
-        discount: {
-            type: "number",
-            example: 0
-        },
-        total_amount: {
-            type: "number",
-            example: 10000
+        currency: {
+            type: "string",
+            description: "Currency used for this order; product prices are resolved from this",
+            enum: ["MMK", "THB", "USD", "SGD"],
+            example: "MMK"
         },
         payment_method: {
             type: "string",

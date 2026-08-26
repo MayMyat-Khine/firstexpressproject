@@ -8,6 +8,7 @@ import AppErrors from '../utils/appErrors.mjs';
 import * as orderRepo from "../repositories/order.repository.mjs";
 import { v4 as uuidv4 } from "uuid";
 import { getCustomerById } from './customer.service.mjs';
+import { getCurrencyRateByCode } from './currency_rates.service.mjs';
 
 // assume merchant data is valid here
 // check merchant id and customer id are valid
@@ -17,6 +18,7 @@ import { getCustomerById } from './customer.service.mjs';
 // substract stock and update stock-db
 export const createOrderService = async (orderData, customerId) => {
     console.log("cust id", customerId);
+    console.log("Raw Order Data", orderData);
     const session = await mongoose.startSession();
     try {
         session.startTransaction();
@@ -36,12 +38,26 @@ export const createOrderService = async (orderData, customerId) => {
         }
 
         const validProductsIds = validProducts.map(product => product.id);
-        const productsWithPrice = new Map(
-            validProducts.map(product => [
-                product.id,
-                product.price
-            ])
-        );
+
+        // === Resolve Currency Rate from CurrencyRates === //
+        const currencyRate = await getCurrencyRateByCode(orderData['currency']);
+        if (!currencyRate) {
+            throw new AppErrors(`Currency ${orderData['currency']} is not supported`, 400);
+        }
+        const rate = currencyRate.rate;
+
+        // === Get Related Price of Product by Currency , fallback : rate * USD price === //
+        const resolveProductPrice = (product, currency, currencyRate) => {
+            const relatedPrice = product.price.find(p => p.currency === currency);
+            if (relatedPrice !== undefined) {
+                return relatedPrice.amount;
+            }
+            const usdPrice = product.price.find(p => p.currency === "USD");
+            if (!usdPrice) {
+                throw new AppErrors(`No price found for product ${product.id} in ${currency}`, 400);
+            }
+            return usdPrice.amount * currencyRate;
+        };
 
         // === Get Stocks of Products === //
         const stocks = await findStocksByProductIds(orderData['branch_id'], validProductsIds);
@@ -75,19 +91,23 @@ export const createOrderService = async (orderData, customerId) => {
         // === Create order after all validation === // 
         const orderProducts = orderData["purchase_products"].map(item => {
 
+            const purchasedProduct = validProducts.find(p => p.id === item.id);
+            const unitPrice = resolveProductPrice(purchasedProduct, orderData['currency'], rate);
+
             return {
                 id: item.id,
 
                 quantity: item.quantity,
-                price: productsWithPrice.get(item.id),
-                subtotal: productsWithPrice.get(item.id) * item.quantity
+                price: unitPrice,
+                subtotal: unitPrice * item.quantity
             }
         });
         const totalAmount = orderProducts.reduce((sum, p) => sum + p.subtotal, 0);
         const uid =
             `OSV-${uuidv4().replace(/-/g, '').slice(0, 13)}`;
 
-        const finalOrderObj = { ...orderData, id: uid, customer_id: customerId, purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount };
+        const finalOrderObj = { ...orderData, id: uid, customer_id: customerId, purchase_products: orderProducts, subtotal: totalAmount, discount: 0, total_amount: totalAmount, rate };
+        console.log("Final Order Obj ", finalOrderObj)
         const savedOrder = await orderRepo.createOrderRepo(finalOrderObj, session);
 
         // === Substract and Update the  Stock  DB === //

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { createProductValidationSchema, getPaginationValidationSchema, indexValidationSchema, updateProductValidationSchema } from "../utils/validationSchema.mjs";
+import { createProductValidationSchema, getProductsPaginationValidationSchema, indexValidationSchema, updateProductValidationSchema } from "../utils/validationSchema.mjs";
 import { checkSchema, matchedData, validationResult } from "express-validator";
 import { validate, validatePatchBody } from "../middlewares/validate.middleware.mjs";
 import { productCreateController, productGetAllController, productDeleteByIdController, productGetByIdController, productUpdateByIdController, productsGetByBranchController, productGetByBranchController } from "../controllers/product.controller.mjs";
-import { authenticateUserMiddleware } from "../middlewares/authenticate.middleware.mjs";
+import { authenticateMiddleware, authenticateUserMiddleware } from "../middlewares/authenticate.middleware.mjs";
 import { authorizeMiddleware } from "../middlewares/authorize.middleware.mjs";
 import { PERMISSIONS } from "../constants/permission.constant.mjs";
 import { uploadProductImage } from "../middlewares/upload.image.middleware.mjs";
@@ -43,9 +43,9 @@ router.patch("/product/:id",
 // *         description: Product list
 // */
 router.get("/products",
-    authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
-    checkSchema(getPaginationValidationSchema),
+    // authenticateUserMiddleware,
+    // authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
+    checkSchema(getProductsPaginationValidationSchema),
     validate,
     productGetAllController)
 
@@ -68,12 +68,13 @@ router.get("/branch/:id/products",
 
 router.get("/customer/branch/:bid/product/:pid",
 
-    // checkSchema(getPaginationValidationSchema),
+    // checkSchema(getProductsPaginationValidationSchema),
     // validate,
     productGetByBranchController)
 router.get("/customer/branch/:id/products",
-
-    // checkSchema(getPaginationValidationSchema),
+    authenticateMiddleware,
+    validate,
+    // checkSchema(getProductsPaginationValidationSchema),
     // validate,
     productsGetByBranchController)
 // actually the indexValidation is not working well here

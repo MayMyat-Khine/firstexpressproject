@@ -1,29 +1,29 @@
 import AppErrors from "../utils/appErrors.mjs";
 
 export const parseProductFormData = (req, res, next) => {
-    console.log("here is parseproductformdata middleware", req)
+    console.log("here is parseproductformdata middleware", req.body)
     if (req.body.price) {
-        console.log("here is price", req.body.price)
-        req.body.price = Number(req.body.price);
-
+        try {
+            if (typeof req.body.price === "string") {
+                req.body.price = JSON.parse(req.body.price);
+                console.log("after parse for price with currency pair,", req.body.price)
+            }
+        } catch (err) {
+            throw new AppErrors("Invalid price format", 400);
+        }
     }
 
-
     if (typeof req.body.branch_id === "string") {
-        console.log("here is branch_id", req.body.branch_id)
         try {
             req.body.branch_id = req.body.branch_id.split(",");// JSON.parse(req.body.branch_id);
-            console.log("here is price", req.body.branch_id)
         } catch (error) {
             throw new AppErrors("Invalid branch_id format", 400);
         }
 
     }
     if (typeof req.body.delete_image === "string") {
-        console.log("here is delete_image", req.body.delete_image)
         try {
             req.body.delete_image = req.body.delete_image.split(",");// JSON.parse(req.body.branch_id);
-            console.log("here is delete_image", req.body.delete_image)
         } catch (error) {
             throw new AppErrors("Invalid delete_image format", 400);
         }

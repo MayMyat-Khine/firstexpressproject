@@ -3,6 +3,7 @@ export const customerPaths = {
         post: {
             summary: "Create a customer",
             tags: ["Customers"],
+            security: [],
             requestBody: {
                 required: true,
                 content: {
@@ -45,13 +46,12 @@ export const customerPaths = {
                     description: "Validation error"
                 }
             }
-        }
-        ,
+        },
         get: {
             summary: "Get all customers",
             tags: ["Customers"],
             responses: {
-                201: {
+                200: {
                     description: "Customer list",
                     content: {
                         "application/json": {
@@ -74,9 +74,50 @@ export const customerPaths = {
                     }
                 }
             }
+        },
+        patch: {
+            summary: "Update current customer",
+            tags: ["Customers"],
+            security: [{ bearerAuth: [] }],
+            requestBody: {
+                required: true,
+                content: {
+                    "multipart/form-data": {
+                        schema: {
+                            $ref: "#/components/schemas/CustomerCreateRequest"
+                        }
+                    }
+                }
+            },
+            responses: {
+                200: {
+                    description: "Customer updated successfully",
+                    content: {
+                        "application/json": {
+                            schema: {
+                                type: "object",
+                                properties: {
+                                    success: {
+                                        type: "boolean",
+                                        example: true
+                                    },
+                                    body: {
+                                        $ref: "#/components/schemas/Customer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                400: {
+                    description: "Validation error"
+                },
+                401: {
+                    description: "Unauthorized"
+                }
+            }
         }
-    }
-    ,
+    },
     "/api/v1/customer/{id}": {
         delete: {
             summary: "Delete a customer",
@@ -92,7 +133,7 @@ export const customerPaths = {
                 }
             ],
             responses: {
-                201: {
+                200: {
                     description: "Customer deleted successfully",
                     content: {
                         "application/json": {

@@ -8,3 +8,4 @@ export const OrderStatus = Object.freeze({
     COMPLETED: "Completed",
     CANCELLED: "Cancelled"
 });
+

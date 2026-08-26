@@ -3,6 +3,7 @@ import { loginCustomer, loginUser, refreshToken } from "../services/auth.service
 
 export async function loginCustomerController(req, res, next) {
     try {
+        console.log("auth controller")
         const { token, refreshToken, customer } = await loginCustomer(req);
         res.json({ success: true, body: customer, token: token, refresh_token: refreshToken });
     } catch (error) {

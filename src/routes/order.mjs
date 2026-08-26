@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
-import { createOrderValidationSchema, getPaginationValidationSchema, indexValidationSchema, updateOrderValidationSchema } from "../utils/validationSchema.mjs";
+import { createOrderValidationSchema, getProductsPaginationValidationSchema, indexValidationSchema, updateOrderValidationSchema } from "../utils/validationSchema.mjs";
 import { validate, validatePatchBody, validateAllowedFields } from "../middlewares/validate.middleware.mjs";
 import { orderCreateController, orderGetAllController, orderGetByIdController, orderUpdateByIdController, orderGetByBranchController, orderGetMyOrdersController, orderGetMyOrderByIdController } from "../controllers/order.controller.mjs";
 import { authenticateMiddleware, authenticateUserMiddleware } from "../middlewares/authenticate.middleware.mjs";
@@ -19,7 +19,7 @@ router.post("/order",
 // == Customer == //
 router.get("/orders/me",
     authenticateMiddleware,
-    checkSchema(getPaginationValidationSchema),
+    checkSchema(getProductsPaginationValidationSchema),
     validate,
     orderGetMyOrdersController);
 
@@ -27,7 +27,7 @@ router.get("/orders/me",
 router.get("/orders",
     authenticateUserMiddleware,
     authorizeMiddleware([PERMISSIONS.ORDER_VIEW]),
-    checkSchema(getPaginationValidationSchema),
+    checkSchema(getProductsPaginationValidationSchema),
     validate,
     orderGetAllController);
 

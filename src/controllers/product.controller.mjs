@@ -56,6 +56,7 @@ export async function productGetByIdController(req, res, next) {
 
 export async function productsGetByBranchController(req, res, next) {
     try {
+        console.log("Branch id", req.params.id);
         const products = await getProductsByBranch(req.params.id);
         console.log(JSON.stringify(products, null, 2));
         return res.status(200).send({ success: true, body: products, count: products.length });
@@ -66,6 +67,7 @@ export async function productsGetByBranchController(req, res, next) {
 
 export async function productGetByBranchController(req, res, next) {
     try {
+        console.log("product controller by customer called")
         const product = await getProductByProductIdAndBranch(req.params.bid, req.params.pid);
         console.log("found product", product)
         return res.status(200).send({ success: true, body: product });
@@ -98,6 +100,7 @@ export async function productGetByBranchController(req, res, next) {
 export async function productUpdateByIdController(req, res, next) {
     try {
 
+        console.log("here is product update controller")
         const imageUrls = [];
 
         for (const file of req.files ?? []) {

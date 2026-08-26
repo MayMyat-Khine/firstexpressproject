@@ -159,7 +159,7 @@ export const findProductById = async (id) => {
     return foundProduct;
 }
 
-export const getProducts = async ({ page, limit, search }) => {
+export const getProducts = async ({ page, limit, search, branchId }) => {
 
     // const page = Math.max(Number(query.page) || 1, 1);
     const safeLimit = Math.min(limit, 100);
@@ -167,13 +167,13 @@ export const getProducts = async ({ page, limit, search }) => {
         page,
         limit: safeLimit,
         search,
+        branchId
     });
 }
 
 export const getProductsByBranch = async (branchId) => {
     const result = await productRepo.getProductsOnBranchRepo(branchId);
-    console.log("brnachid", branchId)
-    console.log("Rsult", result)
+
     return result;
 }
 
@@ -186,3 +186,6 @@ export const getProductByProductIdAndBranch = async (branchId, productId) => {
     return productRepo.getProductOnBranchByProductIdRepo(branchId, productId);
 }
 
+export const deleteBranchAtAllProducts = async (branchId) => {
+    return productRepo.deleteBranchAtAllProductsRepo(branchId);
+}
