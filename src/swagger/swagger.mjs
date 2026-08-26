@@ -12,7 +12,7 @@ import { permissionPaths } from "./paths/permission.swagger.mjs";
 import { cartPaths } from "./paths/cart.swagger.mjs";
 import { countryPaths } from "./paths/country.swagger.mjs";
 import { currencyRatePaths } from "./paths/currency_rate.swagger.mjs";
-import { ProductCreateRequestSchema, ProductSchema, ProductUpdateRequestSchema } from "./schemas/product.schema.mjs";
+import { ProductCreateRequestSchema, ProductSchema, ProductUpdateRequestSchema, PricePairSchema } from "./schemas/product.schema.mjs";
 import { CustomerAuthResponseSchema, CustomerLoginRequestSchema, RefreshTokenRequestSchema, UserAuthResponseSchema, UserLoginRequestSchema } from "./schemas/auth.schema.mjs";
 import { BranchCreateRequestSchema, BranchSchema, BranchUpdateRequestSchema } from "./schemas/branch.schema.mjs";
 import { CustomerCreateRequestSchema, CustomerSchema } from "./schemas/customer.schema.mjs";
@@ -65,6 +65,7 @@ const options = {
             },
             schemas: {
                 Product: ProductSchema,
+                PricePair: PricePairSchema,
                 ProductCreateRequest: ProductCreateRequestSchema,
                 ProductUpdateRequest: ProductUpdateRequestSchema,
                 CustomerLoginRequest: CustomerLoginRequestSchema,

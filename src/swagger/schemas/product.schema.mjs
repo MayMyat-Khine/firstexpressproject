@@ -1,3 +1,34 @@
+export const PricePairSchema = {
+    type: "object",
+    properties: {
+        amount: {
+            type: "number",
+            minimum: 0,
+            example: 5000
+        },
+        currency: {
+            type: "string",
+            description: "ISO currency code of this price pair",
+            enum: ["MMK", "THB", "USD", "SGD"],
+            example: "MMK"
+        }
+    },
+    required: ["amount", "currency"]
+};
+
+const PriceListProperty = {
+    type: "array",
+    description: "List of price pairs per currency; must include a USD pair as the default",
+    minItems: 1,
+    items: {
+        $ref: "#/components/schemas/PricePair"
+    },
+    example: [
+        { amount: 5000, currency: "MMK" },
+        { amount: 2.5, currency: "USD" }
+    ]
+};
+
 export const ProductSchema = {
     type: "object",
     properties: {
@@ -30,10 +61,7 @@ export const ProductSchema = {
             description: "Selling unit (e.g. pcs, box, kg)",
             example: "pcs"
         },
-        price: {
-            type: "number",
-            example: 5000
-        }
+        price: PriceListProperty
     },
     required: ["id", "product_name", "branch_id", "code", "unit", "price"]
 };
@@ -67,10 +95,7 @@ export const ProductCreateRequestSchema = {
             description: "Selling unit (e.g. pcs, box, kg)",
             example: "pcs"
         },
-        price: {
-            type: "number",
-            example: 5000
-        },
+        price: PriceListProperty,
         images: {
             type: "array",
             items: {
@@ -111,10 +136,7 @@ export const ProductUpdateRequestSchema = {
             description: "Selling unit (e.g. pcs, box, kg)",
             example: "box"
         },
-        price: {
-            type: "number",
-            example: 5500
-        },
+        price: PriceListProperty,
         images: {
             type: "array",
             items: {

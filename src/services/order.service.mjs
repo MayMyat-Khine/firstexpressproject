@@ -246,9 +246,29 @@ const checkProductUniqueness = async (orderId, orderData) => {
 
 // }
 
+const statusFlow = {
+    Pending: ["Confirmed", "Cancelled"],
+    Confirmed: ["Preparing", "Cancelled"],
+    Preparing: ["Ready", "Cancelled"],
+    Ready: ["Completed", "Cancelled"],
+    Completed: [],
+    Cancelled: []
+};
+
+const canUpdateStatus = (currentStatus, newStatus) => {
+    return statusFlow[currentStatus]?.includes(newStatus);
+
+};
 export const updateOrder = async (orderId, orderData) => {
 
-    await getOrderById(orderId);
+    const oldOrder = await getOrderById(orderId);
+
+    if (!canUpdateStatus(oldOrder.status, orderData.status)) {
+        throw new AppErrors(
+            `Cannot change order status from ${oldOrder.status} to ${orderData.status}`,
+            400
+        );
+    }
     const updatedOrder = await orderRepo.updateOrderRepo(orderId, orderData);
 
     return updatedOrder;

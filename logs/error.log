@@ -8677,3 +8677,268 @@ ERROR:
   "statusMessage": "Bad Request"
 }
 ==================================================
+
+==================================================
+TIME: 2026-08-26T11:31:31.710Z
+METHOD: GET
+URL: /api/v1/branches
+STATUS: 401
+MESSAGE: Unknown error
+
+STACK:
+No stack trace
+
+ERROR:
+{
+  "_events": {},
+  "_eventsCount": 1,
+  "outputData": [],
+  "outputSize": 0,
+  "writable": true,
+  "destroyed": false,
+  "_last": false,
+  "chunkedEncoding": false,
+  "shouldKeepAlive": true,
+  "maxRequestsOnConnectionReached": false,
+  "_defaultKeepAlive": true,
+  "useChunkedEncodingByDefault": true,
+  "sendDate": true,
+  "_removedConnection": false,
+  "_removedContLen": false,
+  "_removedTE": false,
+  "strictContentLength": false,
+  "_contentLength": 50,
+  "_hasBody": true,
+  "_trailer": "",
+  "finished": true,
+  "_headerSent": true,
+  "_closed": false,
+  "_header": "HTTP/1.1 401 Unauthorized\r\nX-Powered-By: Express\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 50\r\nETag: W/\"32-HHf87yw4zMhkBISakmozvSX0cyA\"\r\nDate: Wed, 26 Aug 2026 11:31:31 GMT\r\nConnection: keep-alive\r\nKeep-Alive: timeout=5\r\n\r\n",
+  "_keepAliveTimeout": 5000,
+  "req": {
+    "_events": {},
+    "_eventsCount": 0,
+    "destroyed": false,
+    "statusCode": null,
+    "statusMessage": null
+  },
+  "_sent100": false,
+  "_expect_continue": false,
+  "_maxRequestsPerSocket": 0,
+  "locals": {},
+  "statusCode": 401,
+  "statusMessage": "Unauthorized"
+}
+==================================================
+
+==================================================
+TIME: 2026-08-26T11:31:42.025Z
+METHOD: GET
+URL: /api/v1/branches
+STATUS: 401
+MESSAGE: Unknown error
+
+STACK:
+No stack trace
+
+ERROR:
+{
+  "_events": {},
+  "_eventsCount": 1,
+  "outputData": [],
+  "outputSize": 0,
+  "writable": true,
+  "destroyed": false,
+  "_last": false,
+  "chunkedEncoding": false,
+  "shouldKeepAlive": true,
+  "maxRequestsOnConnectionReached": false,
+  "_defaultKeepAlive": true,
+  "useChunkedEncodingByDefault": true,
+  "sendDate": true,
+  "_removedConnection": false,
+  "_removedContLen": false,
+  "_removedTE": false,
+  "strictContentLength": false,
+  "_contentLength": 62,
+  "_hasBody": true,
+  "_trailer": "",
+  "finished": true,
+  "_headerSent": true,
+  "_closed": false,
+  "_header": "HTTP/1.1 401 Unauthorized\r\nX-Powered-By: Express\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 62\r\nETag: W/\"3e-Bg6yxSA9KqdU8Jmk9mTaqTlN96s\"\r\nDate: Wed, 26 Aug 2026 11:31:42 GMT\r\nConnection: keep-alive\r\nKeep-Alive: timeout=5\r\n\r\n",
+  "_keepAliveTimeout": 5000,
+  "req": {
+    "_events": {},
+    "_eventsCount": 0,
+    "destroyed": false,
+    "statusCode": null,
+    "statusMessage": null
+  },
+  "_sent100": false,
+  "_expect_continue": false,
+  "_maxRequestsPerSocket": 0,
+  "locals": {},
+  "statusCode": 401,
+  "statusMessage": "Unauthorized"
+}
+==================================================
+
+==================================================
+TIME: 2026-08-26T11:32:31.450Z
+METHOD: GET
+URL: /api/v1/branches
+STATUS: 401
+MESSAGE: Unknown error
+
+STACK:
+No stack trace
+
+ERROR:
+{
+  "_events": {},
+  "_eventsCount": 1,
+  "outputData": [],
+  "outputSize": 0,
+  "writable": true,
+  "destroyed": false,
+  "_last": false,
+  "chunkedEncoding": false,
+  "shouldKeepAlive": true,
+  "maxRequestsOnConnectionReached": false,
+  "_defaultKeepAlive": true,
+  "useChunkedEncodingByDefault": true,
+  "sendDate": true,
+  "_removedConnection": false,
+  "_removedContLen": false,
+  "_removedTE": false,
+  "strictContentLength": false,
+  "_contentLength": 62,
+  "_hasBody": true,
+  "_trailer": "",
+  "finished": true,
+  "_headerSent": true,
+  "_closed": false,
+  "_header": "HTTP/1.1 401 Unauthorized\r\nX-Powered-By: Express\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 62\r\nETag: W/\"3e-Bg6yxSA9KqdU8Jmk9mTaqTlN96s\"\r\nDate: Wed, 26 Aug 2026 11:32:31 GMT\r\nConnection: keep-alive\r\nKeep-Alive: timeout=5\r\n\r\n",
+  "_keepAliveTimeout": 5000,
+  "req": {
+    "_events": {},
+    "_eventsCount": 0,
+    "destroyed": false,
+    "statusCode": null,
+    "statusMessage": null
+  },
+  "_sent100": false,
+  "_expect_continue": false,
+  "_maxRequestsPerSocket": 0,
+  "locals": {},
+  "statusCode": 401,
+  "statusMessage": "Unauthorized"
+}
+==================================================
+
+==================================================
+TIME: 2026-08-26T11:35:44.108Z
+METHOD: POST
+URL: /api/v1/product
+STATUS: 500
+MESSAGE: Unknown error
+
+STACK:
+No stack trace
+
+ERROR:
+{
+  "_events": {},
+  "_eventsCount": 1,
+  "outputData": [],
+  "outputSize": 0,
+  "writable": true,
+  "destroyed": false,
+  "_last": false,
+  "chunkedEncoding": false,
+  "shouldKeepAlive": true,
+  "maxRequestsOnConnectionReached": false,
+  "_defaultKeepAlive": true,
+  "useChunkedEncodingByDefault": true,
+  "sendDate": true,
+  "_removedConnection": false,
+  "_removedContLen": false,
+  "_removedTE": false,
+  "strictContentLength": false,
+  "_contentLength": 45,
+  "_hasBody": true,
+  "_trailer": "",
+  "finished": true,
+  "_headerSent": true,
+  "_closed": false,
+  "_header": "HTTP/1.1 500 Internal Server Error\r\nX-Powered-By: Express\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 45\r\nETag: W/\"2d-ZL8zPWfjZzhOckGQjtBYg5XzI/A\"\r\nDate: Wed, 26 Aug 2026 11:35:44 GMT\r\nConnection: keep-alive\r\nKeep-Alive: timeout=5\r\n\r\n",
+  "_keepAliveTimeout": 5000,
+  "req": {
+    "_events": {},
+    "_eventsCount": 4,
+    "destroyed": true,
+    "statusCode": null,
+    "statusMessage": null
+  },
+  "_sent100": false,
+  "_expect_continue": false,
+  "_maxRequestsPerSocket": 0,
+  "locals": {},
+  "statusCode": 500,
+  "statusMessage": "Internal Server Error"
+}
+==================================================
+
+==================================================
+TIME: 2026-08-26T13:49:58.533Z
+METHOD: PATCH
+URL: /api/v1/customer
+STATUS: 500
+MESSAGE: Unknown error
+
+STACK:
+No stack trace
+
+ERROR:
+{
+  "_events": {},
+  "_eventsCount": 1,
+  "outputData": [],
+  "outputSize": 0,
+  "writable": true,
+  "destroyed": false,
+  "_last": false,
+  "chunkedEncoding": false,
+  "shouldKeepAlive": true,
+  "maxRequestsOnConnectionReached": false,
+  "_defaultKeepAlive": true,
+  "useChunkedEncodingByDefault": true,
+  "sendDate": true,
+  "_removedConnection": false,
+  "_removedContLen": false,
+  "_removedTE": false,
+  "strictContentLength": false,
+  "_contentLength": 45,
+  "_hasBody": true,
+  "_trailer": "",
+  "finished": true,
+  "_headerSent": true,
+  "_closed": false,
+  "_header": "HTTP/1.1 500 Internal Server Error\r\nX-Powered-By: Express\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: 45\r\nETag: W/\"2d-ZL8zPWfjZzhOckGQjtBYg5XzI/A\"\r\nDate: Wed, 26 Aug 2026 13:49:58 GMT\r\nConnection: keep-alive\r\nKeep-Alive: timeout=5\r\n\r\n",
+  "_keepAliveTimeout": 5000,
+  "req": {
+    "_events": {},
+    "_eventsCount": 4,
+    "destroyed": true,
+    "statusCode": null,
+    "statusMessage": null
+  },
+  "_sent100": false,
+  "_expect_continue": false,
+  "_maxRequestsPerSocket": 0,
+  "locals": {},
+  "statusCode": 500,
+  "statusMessage": "Internal Server Error"
+}
+==================================================

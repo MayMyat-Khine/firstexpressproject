@@ -11,6 +11,15 @@ export const parseProductFormData = (req, res, next) => {
         } catch (err) {
             throw new AppErrors("Invalid price format", 400);
         }
+
+        // === Normalize legacy plain-number price (e.g. 5000) to default USD pair === //
+        if (typeof req.body.price === "number") {
+            req.body.price = [{ amount: req.body.price, currency: "USD" }];
+        }
+
+        if (typeof req.body.price === "object" && !Array.isArray(req.body.price)) {
+            throw new AppErrors("Invalid price format", 400);
+        }
     }
 
     if (typeof req.body.branch_id === "string") {
