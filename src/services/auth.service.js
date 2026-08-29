@@ -1,0 +1,174 @@
+import { findCustomerByPhone } from "../repositories/customer.repostiory.js";
+import { generateRefreshToken, generateToken, varifyRefreshToken } from "../utils/jwt.util.js";
+import { getCustomerById } from "./customer.service.js";
+import AppErrors from "../utils/appErrors.js";
+import bcrypt from "bcrypt";
+import { findUserById, findUserByName } from "./user.service.js";
+import { getRefreshToken, saveRefreshTokenRepo } from "../repositories/auth.repository.js";
+import jwt from "jsonwebtoken";
+import crypto from 'crypto';
+import { getDialCodeByCountryId } from "./countries.service.js";
+
+export const loginCustomer = async (data) => {
+    const {
+
+        phone_number,
+        password,
+        region
+    } = data.body;
+
+    const dialCode = await getDialCodeByCountryId(region);
+    const phoneWithRegionId = dialCode.dialCode + phone_number
+    const customer = await findCustomerByPhone(phoneWithRegionId);
+    if (!customer) {
+        throw new AppErrors(
+            "Invalid phone number or password",
+            401
+        );
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+        password,              // plain password from request
+        customer.password      // hashed password from DB
+    );
+
+    if (!isPasswordValid) {
+        throw new AppErrors(
+            "Invalid phone number or password",
+            401
+        );
+    }
+
+    const token = generateToken({ id: customer.id })
+    const refreshToken = generateRefreshToken({ id: customer.id, type: "CUSTOMER" })
+
+    await saveRefreshToken({ accountId: customer.id, accountType: "CUSTOMER", refreshToken: refreshToken });
+    const customerResponse = {
+        id: customer.id,
+        name: customer.name,
+        phone_number: customer.phone_number,
+        image: customer.image
+    };
+
+    return {
+        token,
+        refreshToken: refreshToken,
+        customer: customerResponse
+    };
+
+
+}
+
+
+export const loginUser = async (data) => {
+    const {
+        name,
+        password
+    } = data.body;
+
+    const user = await findUserByName(name);
+    if (!user) {
+        throw new AppErrors(
+            "Invalid Name or password",
+            401
+        );
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+        password,              // plain password from request
+        user.password      // hashed password from DB
+    );
+
+    if (!isPasswordValid) {
+        throw new AppErrors(
+            "Invalid name or password",
+            401
+        );
+    }
+
+    const token = generateToken({ id: user.id })
+
+    const refreshToken = generateRefreshToken({ id: user.id, type: "USER" })
+
+
+
+    await saveRefreshToken({ accountId: user.id, accountType: "USER", refreshToken: refreshToken });
+    const userResponse = {
+        id: user.id,
+        name: user.name,
+        display_name: user.display_name,
+        role: user.role
+    };
+
+    return {
+        token,
+        refreshToken: refreshToken,
+        user: userResponse
+    };
+
+
+}
+
+
+export const refreshToken = async (token) => {
+
+    // 1. Verify JWT
+    const payload = varifyRefreshToken(token);
+
+
+    // 2. Hashing and Check token exists in DB
+    const hashToken = hashingToken(token)
+    const storedToken = await getRefreshToken(hashToken);
+    if (!storedToken) {
+        throw new AppErrors(`Refresh token not found`, 404)
+    }
+
+    // 3. Check expiry
+    if (storedToken.expiresAt < new Date()) {
+        throw new Error("Refresh token expired");
+    }
+
+    // 4. Find account
+    let account;
+
+    if (payload.type === "USER") {
+        account = await findUserById(payload.id);
+    } else {
+        account = await getCustomerById(payload.id)
+    }
+
+    if (!account) {
+        throw new Error("Account not found");
+    }
+
+    // 5. Generate new access token
+    const accessToken = generateToken({
+        id: account.id,
+    });
+
+
+
+    return {
+        accessToken
+    };
+}
+
+export const saveRefreshToken = async ({
+    accountId,
+    accountType,
+    refreshToken
+}) => {
+
+    const decoded = jwt.decode(refreshToken);
+
+    const expiresAt = new Date(decoded.exp * 1000);
+    const hashToken = hashingToken(refreshToken);
+    await saveRefreshTokenRepo(
+        { id: accountId, type: accountType, token: hashToken, expiresAt: expiresAt }
+    );
+
+};
+
+const hashingToken = (token) => {
+    return crypto.createHash("sha256").update(token).digest("hex");
+}

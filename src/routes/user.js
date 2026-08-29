@@ -1,0 +1,65 @@
+import { Router } from 'express';
+import { User } from '../mongoose/schemas/user.js';
+import { createUserValidationSchema, indexValidationSchema, updateUserValidationSchema } from '../utils/validationSchema.js';
+import { checkSchema, matchedData, validationResult } from 'express-validator';
+import { validate, validatePatchBody } from '../middlewares/validate.middleware.js';
+import { userCreateController, userGetAllController, userGetByIdController, userUpdateByIdController, userDeleteByIdController } from '../controllers/user.controller.js';
+const router = Router();
+
+var name = ""
+var password = ""
+
+
+
+// router.post("/login", (req, res) => {
+//     const n = req.body.username;
+//     const p = req.body.password;
+//     console.log("Name ", n)
+//     console.log("password", p)
+//     if (n === name && p === password) {
+//         return res.status(200).send({ success: true, body: { name: name, password: password } });
+//     }
+//     return res.status(404).send({ success: false, message: "User Not Found" });
+
+// })
+
+
+router.post('/user',
+    checkSchema(createUserValidationSchema),
+    validate,
+    userCreateController,
+);
+
+router.get('/users',
+    userGetAllController);
+
+router.get('/user/:id',
+    checkSchema(indexValidationSchema),
+    validate,
+    userGetByIdController);
+
+router.patch('/user/:id',
+    checkSchema(indexValidationSchema),
+    // findByUserId,
+    validatePatchBody,
+    checkSchema(updateUserValidationSchema),
+    validate,
+    userUpdateByIdController
+)
+
+// // can validate the ID of the request body before updating
+// router.patch('/user/:id',
+//     checkSchema(indexValidationSchema),
+//     findByUserId,
+//     userPatchByIdController
+// );
+
+router.delete('/user/:id',
+    checkSchema(indexValidationSchema),
+    validate,
+    userDeleteByIdController
+);
+
+
+
+export default router;

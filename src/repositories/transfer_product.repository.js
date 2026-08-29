@@ -1,0 +1,13 @@
+import { TransferProduct } from "../mongoose/schemas/transfer_products.js";
+
+export const createTransferProductsRepo = async (data, session) => {
+    console.log("TransferRepo", data);
+    const newTransferProduct = new TransferProduct(data);
+    const savedTransferProduct = await newTransferProduct.save({ session });
+    return savedTransferProduct;
+
+};
+
+export const getAllRecordsRepo = async () => {
+    return await TransferProduct.find();//.populate('products');
+}

@@ -1,0 +1,77 @@
+
+import { matchedData } from "express-validator";
+import { User } from "../mongoose/schemas/user.js";
+import { createUser, deleteUser, getAllUsers, getUser, updateUser } from "../services/user.service.js";
+import { errorHandler } from "../middlewares/error.middleware.js";
+
+export async function userCreateController(req, res, next) {
+    const data = matchedData(req);
+
+    try {
+        const { token, refreshToken, body } = await createUser(data);
+        return res.status(201).send({ success: true, body: body, token: token, refresh_token: refreshToken });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export async function userGetAllController(req, res, next) {
+    try {
+        const users = await getAllUsers();
+        res.json({ success: true, body: users });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export async function userGetByIdController(req, res, next) {
+    try {
+
+        const { params: { id } } = req;
+
+        const foundUser = await getUser(id);
+        return res.status(200).send({ success: true, body: foundUser });
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+export async function userUpdateByIdController(req, res, next) {
+    const { body, params: { id } } = req;
+    try {
+        const updatedUser = await updateUser(id, body);
+        return res.status(200).send({ success: true, message: "Successfully Updated User", body: updatedUser })
+    } catch (error) {
+        next(error);
+    }
+}
+
+// export async function userPatchByIdController(req, res) {
+//     try {
+//         const { body, params: { id } } = req;
+//         const updatedUser = await patchUser(id, body);
+//         console.log("Updated User at Patch", updatedUser)
+//         if (updatedUser.matchedCount === 0)
+//             return res.status(400).json({
+//                 success: false,
+//                 message: `User with id ${id} is  not found`
+//             })
+//         return res.status(200).send({ message: "Successfully Updated", data: updatedUser })
+//     } catch (error) {
+//         return res.status(400).send(error.message);
+//     }
+// }
+
+export async function userDeleteByIdController(req, res, next) {
+    try {
+        const { id } = req.params;
+        await deleteUser(id);
+        return res.status(200).json({
+            success: true,
+            message: `User with id ${id} is successfully deleted`
+        });
+    } catch (error) {
+        next(error);
+    }
+}
