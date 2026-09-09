@@ -12,6 +12,16 @@ const ProductSchema = mongoose.Schema({
         required: true,
     },
     "branch_id": [{ type: mongoose.Schema.Types.String, required: true }],
+    "category_id": {
+        type: mongoose.Schema.Types.String,
+        ref: "category",
+        required: true
+    },
+    "brand_id": {
+        type: mongoose.Schema.Types.String,
+        ref: "brand",
+        required: true
+    },
     "description": {
         type: mongoose.Schema.Types.String,
     },

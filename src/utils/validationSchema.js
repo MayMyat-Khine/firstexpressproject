@@ -519,6 +519,25 @@ export const createProductValidationSchema = {
         // }
     },
 
+    category_id: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Category ID must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Category ID Must not be Empty"
+        }
+    },
+    brand_id: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Brand ID must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Brand ID Must not be Empty"
+        }
+    },
+
     description: {
         in: ['body'],
         isString: {
@@ -617,6 +636,26 @@ export const updateProductValidationSchema = {
         },
         notEmpty: {
             errorMessage: "Branch ID Must not be Empty"
+        },
+        optional: true
+    },
+    category_id: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Category ID must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Category ID Must not be Empty"
+        },
+        optional: true
+    },
+    brand_id: {
+        in: ['body'],
+        isString: {
+            errorMessage: "Brand ID must be a String"
+        },
+        notEmpty: {
+            errorMessage: "Brand ID Must not be Empty"
         },
         optional: true
     },

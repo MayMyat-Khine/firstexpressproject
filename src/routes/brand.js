@@ -10,8 +10,8 @@ import { PERMISSIONS } from "../constants/permission.constant.js";
 const router = Router();
 
 router.post("/brand",
-    // authenticateUserMiddleware,
-    // authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.BRAND_CREATE]),
     checkSchema(createBrandValidationSchema),
     validate,
     brandCreateController);
@@ -23,14 +23,14 @@ router.get("/brands",
 
 router.get("/brand/:id",
     authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
+    authorizeMiddleware([PERMISSIONS.BRAND_VIEW]),
     checkSchema(indexValidationSchema),
     validate,
     brandGetByIdController);
 
 router.patch("/brand/:id",
-    // authenticateUserMiddleware,
-    // authorizeMiddleware([PERMISSIONS.PRODUCT_UPDATE]),
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.BRAND_UPDATE]),
     checkSchema(indexValidationSchema),
     validatePatchBody,
     checkSchema(updateBrandValidationSchema),
@@ -39,7 +39,7 @@ router.patch("/brand/:id",
 
 router.delete("/brand/:id",
     authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_DELETE]),
+    authorizeMiddleware([PERMISSIONS.BRAND_DELETE]),
     checkSchema(indexValidationSchema),
     validate,
     brandDeleteController);

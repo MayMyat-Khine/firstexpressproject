@@ -48,6 +48,16 @@ export const ProductSchema = {
             },
             example: ["64f11c2d9b2e4a5f1c0a1234"]
         },
+        category_id: {
+            type: "string",
+            description: "Category ID (ref: category)",
+            example: "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d"
+        },
+        brand_id: {
+            type: "string",
+            description: "Brand ID (ref: brand)",
+            example: "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e"
+        },
         description: {
             type: "string",
             example: "Velvety finish lip tint"
@@ -63,12 +73,12 @@ export const ProductSchema = {
         },
         price: PriceListProperty
     },
-    required: ["id", "product_name", "branch_id", "code", "unit", "price"]
+    required: ["id", "product_name", "branch_id", "category_id", "brand_id", "code", "unit", "price"]
 };
 
 export const ProductCreateRequestSchema = {
     type: "object",
-    required: ["product_name", "branch_id", "code", "unit", "price", "images"],
+    required: ["product_name", "branch_id", "category_id", "brand_id", "code", "unit", "price", "images"],
     properties: {
         product_name: {
             type: "string",
@@ -81,6 +91,16 @@ export const ProductCreateRequestSchema = {
                 example: "64f11c2d9b2e4a5f1c0a1234"
             },
             example: ["64f11c2d9b2e4a5f1c0a1234"]
+        },
+        category_id: {
+            type: "string",
+            description: "Category ID (ref: category)",
+            example: "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d"
+        },
+        brand_id: {
+            type: "string",
+            description: "Brand ID (ref: brand)",
+            example: "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e"
         },
         description: {
             type: "string",
@@ -122,6 +142,16 @@ export const ProductUpdateRequestSchema = {
                 example: "64f11c2d9b2e4a5f1c0a1234"
             },
             example: ["64f11c2d9b2e4a5f1c0a1234"]
+        },
+        category_id: {
+            type: "string",
+            description: "Category ID (ref: category)",
+            example: "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d"
+        },
+        brand_id: {
+            type: "string",
+            description: "Brand ID (ref: brand)",
+            example: "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e"
         },
         description: {
             type: "string",

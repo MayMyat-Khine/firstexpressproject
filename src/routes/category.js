@@ -10,8 +10,8 @@ import { PERMISSIONS } from "../constants/permission.constant.js";
 const router = Router();
 
 router.post("/category",
-    // authenticateUserMiddleware,
-    // authorizeMiddleware([PERMISSIONS.PRODUCT_CREATE]),
+    authenticateUserMiddleware,
+    authorizeMiddleware([PERMISSIONS.CATEGORY_CREATE]),
     checkSchema(createCategoryValidationSchema),
     validate,
     categoryCreateController);
@@ -23,14 +23,14 @@ router.get("/categories",
 
 router.get("/category/:id",
     authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_VIEW]),
+    authorizeMiddleware([PERMISSIONS.CATEGORY_VIEW]),
     checkSchema(indexValidationSchema),
     validate,
     categoryGetByIdController);
 
 router.patch("/category/:id",
     authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_UPDATE]),
+    authorizeMiddleware([PERMISSIONS.CATEGORY_UPDATE]),
     checkSchema(indexValidationSchema),
     validatePatchBody,
     checkSchema(updateCategoryValidationSchema),
@@ -39,7 +39,7 @@ router.patch("/category/:id",
 
 router.delete("/category/:id",
     authenticateUserMiddleware,
-    authorizeMiddleware([PERMISSIONS.PRODUCT_DELETE]),
+    authorizeMiddleware([PERMISSIONS.CATEGORY_DELETE]),
     checkSchema(indexValidationSchema),
     validate,
     categoryDeleteController);
