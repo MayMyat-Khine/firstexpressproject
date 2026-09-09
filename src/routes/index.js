@@ -12,6 +12,8 @@ import role from './role.js';
 import cart from './cart.js';
 import countryRouter from "./countries.js";
 import currencyRates from "./currency_rates.js";
+import categoryRouter from "./category.js";
+import brandRouter from "./brand.js";
 
 const router = Router();
 
@@ -28,5 +30,7 @@ router.use(role);
 router.use(cart);
 router.use(countryRouter);
 router.use(currencyRates);
+router.use(categoryRouter);
+router.use(brandRouter);
 
 export default router;

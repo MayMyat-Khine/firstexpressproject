@@ -12,6 +12,8 @@ import { permissionPaths } from "./paths/permission.swagger.js";
 import { cartPaths } from "./paths/cart.swagger.js";
 import { countryPaths } from "./paths/country.swagger.js";
 import { currencyRatePaths } from "./paths/currency_rate.swagger.js";
+import { categoryPaths } from "./paths/category.swagger.js";
+import { brandPaths } from "./paths/brand.swagger.js";
 import { ProductCreateRequestSchema, ProductSchema, ProductUpdateRequestSchema, PricePairSchema } from "./schemas/product.schema.js";
 import { CustomerAuthResponseSchema, CustomerLoginRequestSchema, RefreshTokenRequestSchema, UserAuthResponseSchema, UserLoginRequestSchema } from "./schemas/auth.schema.js";
 import { BranchCreateRequestSchema, BranchSchema, BranchUpdateRequestSchema } from "./schemas/branch.schema.js";
@@ -25,6 +27,8 @@ import { PermissionSchema } from "./schemas/permission.schema.js";
 import { CartCreateRequestSchema, CartItemSchema, CartSchema } from "./schemas/cart.schema.js";
 import { CountrySchema } from "./schemas/country.schema.js";
 import { CurrencyRateSchema } from "./schemas/currency_rate.schema.js";
+import { CategorySchema, CategoryCreateRequestSchema, CategoryUpdateRequestSchema } from "./schemas/category.schema.js";
+import { BrandSchema, BrandCreateRequestSchema, BrandUpdateRequestSchema } from "./schemas/brand.schema.js";
 
 const options = {
     definition: {
@@ -53,7 +57,9 @@ const options = {
             ...permissionPaths,
             ...cartPaths,
             ...countryPaths,
-            ...currencyRatePaths
+            ...currencyRatePaths,
+            ...categoryPaths,
+            ...brandPaths
         },
         components: {
             securitySchemes: {
@@ -96,7 +102,13 @@ const options = {
                 Cart: CartSchema,
                 CartCreateRequest: CartCreateRequestSchema,
                 Country: CountrySchema,
-                CurrencyRate: CurrencyRateSchema
+                CurrencyRate: CurrencyRateSchema,
+                Category: CategorySchema,
+                CategoryCreateRequest: CategoryCreateRequestSchema,
+                CategoryUpdateRequest: CategoryUpdateRequestSchema,
+                Brand: BrandSchema,
+                BrandCreateRequest: BrandCreateRequestSchema,
+                BrandUpdateRequest: BrandUpdateRequestSchema
             }
         },
         security: [

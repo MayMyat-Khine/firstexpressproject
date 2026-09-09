@@ -16,6 +16,12 @@ export const STOCK_NAMESPACE =
 export const STOCK_TRANSFER_NAMESPACE =
     "e7f6a1c2-9bfa-4d3a-bd0d-3e9f6a5b2c1d";
 
+export const CATEGORY_NAMESPACE =
+    "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d";
+
+export const BRAND_NAMESPACE =
+    "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e";
+
 export const countries =
     [
         { name: "Myanmar", code: "MM", dialCode: "+95", currencyCode: "MMK" },

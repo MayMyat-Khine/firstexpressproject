@@ -957,3 +957,97 @@ export const createCartValidationSchema = {
         toFloat: true
     }
 };
+
+export const createCategoryValidationSchema = {
+    category_name: {
+        in: ["body"],
+        isString: { errorMessage: "Category name must be a String" },
+        notEmpty: { errorMessage: "Category name must not be empty" },
+        trim: true
+    },
+    brand_ids: {
+        in: ["body"],
+        optional: true,
+        isArray: { errorMessage: "brand_ids must be an array" }
+    },
+    "brand_ids.*": {
+        in: ["body"],
+        optional: true,
+        isString: { errorMessage: "Brand ID must be a string" },
+        notEmpty: { errorMessage: "Brand ID must not be empty" }
+    }
+};
+
+export const updateCategoryValidationSchema = {
+    category_name: {
+        in: ["body"],
+        optional: true,
+        isString: { errorMessage: "Category name must be a String" },
+        notEmpty: { errorMessage: "Category name must not be empty" },
+        trim: true
+    },
+    brand_ids: {
+        in: ["body"],
+        optional: true,
+        isArray: { errorMessage: "brand_ids must be an array" }
+    },
+    "brand_ids.*": {
+        in: ["body"],
+        optional: true,
+        isString: { errorMessage: "Brand ID must be a string" },
+        notEmpty: { errorMessage: "Brand ID must not be empty" }
+    }
+};
+
+export const getCategoriesPaginationValidationSchema = {
+    page: { optional: true, isInt: { options: { min: 1 } }, toInt: true },
+    limit: { optional: true, isInt: { options: { min: 1, max: 100 } }, toInt: true },
+    search: { optional: true, isString: true, trim: true }
+};
+
+export const createBrandValidationSchema = {
+    brand_name: {
+        in: ["body"],
+        isString: { errorMessage: "Brand name must be a String" },
+        notEmpty: { errorMessage: "Brand name must not be empty" },
+        trim: true
+    },
+    category_ids: {
+        in: ["body"],
+        optional: true,
+        isArray: { errorMessage: "category_ids must be an array" }
+    },
+    "category_ids.*": {
+        in: ["body"],
+        optional: true,
+        isString: { errorMessage: "Category ID must be a string" },
+        notEmpty: { errorMessage: "Category ID must not be empty" }
+    }
+};
+
+export const updateBrandValidationSchema = {
+    brand_name: {
+        in: ["body"],
+        optional: true,
+        isString: { errorMessage: "Brand name must be a String" },
+        notEmpty: { errorMessage: "Brand name must not be empty" },
+        trim: true
+    },
+    category_ids: {
+        in: ["body"],
+        optional: true,
+        isArray: { errorMessage: "category_ids must be an array" }
+    },
+    "category_ids.*": {
+        in: ["body"],
+        optional: true,
+        isString: { errorMessage: "Category ID must be a string" },
+        notEmpty: { errorMessage: "Category ID must not be empty" }
+    }
+};
+
+export const getBrandsPaginationValidationSchema = {
+    page: { optional: true, isInt: { options: { min: 1 } }, toInt: true },
+    limit: { optional: true, isInt: { options: { min: 1, max: 100 } }, toInt: true },
+    search: { optional: true, isString: true, trim: true }
+};
