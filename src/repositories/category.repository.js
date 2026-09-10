@@ -7,7 +7,7 @@ export const createCategoryRepo = async (categoryData) => {
 };
 
 export const getCategoriesRepo = async ({ page, limit, search }) => {
-    const filter = {};
+    const filter = { isDelete: { $ne: true } };
     if (search) {
         const regex = { $regex: search, $options: "i" };
         filter.$or = [
@@ -26,17 +26,17 @@ export const getCategoriesRepo = async ({ page, limit, search }) => {
 };
 
 export const findCategoryByIdRepo = async (id) => {
-    return await Category.findOne({ id });
+    return await Category.findOne({ id, isDelete: { $ne: true } });
 };
 
 export const findCategoriesByIdsRepo = async (ids) => {
-    return await Category.find({ id: { $in: ids } });
+    return await Category.find({ id: { $in: ids }, isDelete: { $ne: true } });
 };
 
 export const updateCategoryRepo = async (id, categoryData) => {
-    return await Category.findOneAndUpdate({ id }, categoryData, { new: true, runValidators: true });
+    return await Category.findOneAndUpdate({ id, isDelete: { $ne: true } }, categoryData, { new: true, runValidators: true });
 };
 
 export const deleteCategoryRepo = async (id) => {
-    return await Category.findOneAndDelete({ id });
+    return await Category.findOneAndUpdate({ id, isDelete: { $ne: true } }, { isDelete: true }, { new: true });
 };

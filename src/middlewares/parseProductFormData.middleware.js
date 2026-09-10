@@ -4,7 +4,7 @@ export const parseProductFormData = (req, res, next) => {
     console.log("here is parseproductformdata middleware", req.body)
     if (req.body.price) {
         try {
-            console.log("Price json", req.body.price)
+
             if (typeof req.body.price === "string") {
                 req.body.price = JSON.parse(req.body.price);
                 console.log("after parse for price with currency pair,", req.body.price)

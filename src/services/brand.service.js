@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import * as brandRepo from "../repositories/brand.repository.js";
 import { Brand } from "../mongoose/schemas/brand.js";
+import { Product } from "../mongoose/schemas/product.js";
 import AppErrors from "../utils/appErrors.js";
 
 export const createBrand = async (brandData) => {
@@ -38,6 +39,10 @@ export const updateBrand = async (id, body) => {
 
 export const deleteBrand = async (id) => {
     await getBrandById(id);
+    const productCount = await Product.countDocuments({ brand_id: id });
+    if (productCount > 0) {
+        throw new AppErrors("This brand can't be deleted as there are products under this brand", 400);
+    }
     const deleted = await brandRepo.deleteBrandRepo(id);
     return deleted;
 };

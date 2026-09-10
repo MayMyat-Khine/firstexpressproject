@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import * as categoryRepo from "../repositories/category.repository.js";
 import { Category } from "../mongoose/schemas/category.js";
+import { Product } from "../mongoose/schemas/product.js";
 import AppErrors from "../utils/appErrors.js";
 
 export const createCategory = async (categoryData) => {
@@ -38,6 +39,10 @@ export const updateCategory = async (id, body) => {
 
 export const deleteCategory = async (id) => {
     await getCategoryById(id);
+    const productCount = await Product.countDocuments({ category_id: id });
+    if (productCount > 0) {
+        throw new AppErrors("This category can't be deleted as there are products under this category", 400);
+    }
     const deleted = await categoryRepo.deleteCategoryRepo(id);
     return deleted;
 };

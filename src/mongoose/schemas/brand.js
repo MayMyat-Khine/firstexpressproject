@@ -4,7 +4,7 @@ import { schemaTransform } from "../../utils/schemaTransform.js";
 const BrandSchema = mongoose.Schema({
     "id": {
         type: mongoose.Schema.Types.String,
-        require: true,
+        required: true,
         unique: true
     },
     "brand_name": {
@@ -16,7 +16,10 @@ const BrandSchema = mongoose.Schema({
         type: String,
         ref: "category",
     }],
-
+    "isDelete": {
+        type: Boolean,
+        default: false
+    }
 
 }, {
     timestamps: true,

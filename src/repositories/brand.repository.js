@@ -7,7 +7,7 @@ export const createBrandRepo = async (brandData) => {
 };
 
 export const getBrandsRepo = async ({ page, limit, search }) => {
-    const filter = {};
+    const filter = { isDelete: { $ne: true } };
     if (search) {
         const regex = { $regex: search, $options: "i" };
         filter.$or = [
@@ -26,17 +26,17 @@ export const getBrandsRepo = async ({ page, limit, search }) => {
 };
 
 export const findBrandByIdRepo = async (id) => {
-    return await Brand.findOne({ id });
+    return await Brand.findOne({ id, isDelete: { $ne: true } });
 };
 
 export const findBrandsByIdsRepo = async (ids) => {
-    return await Brand.find({ id: { $in: ids } });
+    return await Brand.find({ id: { $in: ids }, isDelete: { $ne: true } });
 };
 
 export const updateBrandRepo = async (id, brandData) => {
-    return await Brand.findOneAndUpdate({ id }, brandData, { new: true, runValidators: true });
+    return await Brand.findOneAndUpdate({ id, isDelete: { $ne: true } }, brandData, { new: true, runValidators: true });
 };
 
 export const deleteBrandRepo = async (id) => {
-    return await Brand.findOneAndDelete({ id });
+    return await Brand.findOneAndUpdate({ id, isDelete: { $ne: true } }, { isDelete: true }, { new: true });
 };

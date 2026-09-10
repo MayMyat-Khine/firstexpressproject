@@ -8,6 +8,7 @@ export const schemaTransform = {
         }
 
         delete ret._id;
+        delete ret.isDelete;
 
         return ret;
     }
