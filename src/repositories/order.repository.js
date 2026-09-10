@@ -131,10 +131,10 @@ export const getOrderByBranchRepo = async (id) => {
     return await Order.find({ branch_id: id }).sort({ updatedAt: -1 });;
 }
 
-export async function updateOrderRepo(id, body) {
+export async function updateOrderRepo(id, body, session) {
     const updatedOrder = await Order.findOneAndUpdate(
         { id: id },
         body,
-        { new: true, runValidators: true });
+        { new: true, runValidators: true, session });
     return updatedOrder;
 }

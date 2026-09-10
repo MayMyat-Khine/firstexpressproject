@@ -110,17 +110,17 @@ export const createOrderService = async (orderData, customerId) => {
         console.log("Final Order Obj ", finalOrderObj)
         const savedOrder = await orderRepo.createOrderRepo(finalOrderObj, session);
 
-        // === Substract and Update the  Stock  DB === //
-        console.log("Stock map", stockMap)
-        const updatedStocks = await updateStocksBulk(purchaseProducts.map(({ id, quantity }) => ({
-            branchId: orderData['branch_id'],
-            product_id: id,
-            stockData: { stock: stockMap[id] - quantity }
-        })), session);
-
-        if (updatedStocks.modifiedCount !== purchaseProducts.length) {
-            throw new AppErrors("Failed to update all stocks after order create", 400);
-        }
+        // this is moved to update order
+        // // === Substract and Update the  Stock  DB === //
+        // console.log("Stock map", stockMap)
+        // const updatedStocks = await updateStocksBulk(purchaseProducts.map(({ id, quantity }) => ({
+        //     branchId: orderData['branch_id'],
+        //     product_id: id,
+        //     stockData: { stock: stockMap[id] - quantity }
+        // })), session);
+        // if (updatedStocks.modifiedCount !== purchaseProducts.length) {
+        //     throw new AppErrors("Failed to update all stocks after order create", 400);
+        // }
 
         await session.commitTransaction();
         return savedOrder;
@@ -260,18 +260,64 @@ const canUpdateStatus = (currentStatus, newStatus) => {
 
 };
 export const updateOrder = async (orderId, orderData) => {
+    const session = await mongoose.startSession();
+    try {
+        session.startTransaction();
 
-    const oldOrder = await getOrderById(orderId);
 
-    if (!canUpdateStatus(oldOrder.status, orderData.status)) {
-        throw new AppErrors(
-            `Cannot change order status from ${oldOrder.status} to ${orderData.status}`,
-            400
-        );
+        const oldOrder = await getOrderById(orderId);
+
+        if (!canUpdateStatus(oldOrder.status, orderData.status)) {
+            throw new AppErrors(
+                `Cannot change order status from ${oldOrder.status} to ${orderData.status}`,
+                400
+            );
+        }
+        // if pending > stock check > enough stock ?deduct stock and return Confirmed : Cancelled
+        if (oldOrder.status === "Pending" && orderData.status === "Confirmed") {
+            // === Get Stocks of Products === //
+            const validProductsIds = oldOrder.purchase_products.map(product => product.id);
+            const stocks = await findStocksByProductIds(oldOrder.branch_id, validProductsIds);
+            const stockMap = {};
+            stocks.forEach(stockData => {
+                stockMap[stockData.product_id] = stockData.stock;
+            });
+
+            // check Stock availability
+            for (const { id, quantity } of oldOrder.purchase_products) {
+                if (!stockMap[id] || stockMap[id] < quantity) {
+                    throw new AppErrors(`Stock not available for product id ${id}`, 400);
+                }
+            }
+
+
+            // === Substract and Update the  Stock  DB === //
+
+            const updatedStocks = await updateStocksBulk(oldOrder.purchase_products.map(({ id, quantity }) => ({
+                branchId: oldOrder.branch_id,
+                product_id: id,
+                stockData: { stock: stockMap[id] - quantity }
+            })), session);
+
+            if (updatedStocks.modifiedCount !== oldOrder.purchase_products.length) {
+                throw new AppErrors("Failed to update all stocks after order create", 400);
+            }
+        }
+
+
+        const updatedOrder = await orderRepo.updateOrderRepo(orderId, orderData, session);
+
+
+        await session.commitTransaction();
+        return updatedOrder;
+    } catch (error) {
+        await session.abortTransaction();
+        console.error(error);
+        throw error;
+    } finally {
+        session.endSession();
     }
-    const updatedOrder = await orderRepo.updateOrderRepo(orderId, orderData);
 
-    return updatedOrder;
 }
 
 export const getOrders = async ({ page, limit, search, branchId, customerId, status }) => {
