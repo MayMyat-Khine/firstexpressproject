@@ -1,15 +1,14 @@
-import { v5 as uuidv5 } from "uuid";
-import { CATEGORY_NAMESPACE } from "../config/constants.js";
+import { v4 as uuidv4 } from "uuid";
 import * as categoryRepo from "../repositories/category.repository.js";
+import { Category } from "../mongoose/schemas/category.js";
 import AppErrors from "../utils/appErrors.js";
 
 export const createCategory = async (categoryData) => {
-    const categoryKey = categoryData.category_name;
-    const categoryId = uuidv5(categoryKey, CATEGORY_NAMESPACE);
-    const existing = await categoryRepo.findCategoryByIdRepo(categoryId);
+    const existing = await Category.findOne({ category_name: categoryData.category_name });
     if (existing) {
         throw new AppErrors(`Category "${categoryData.category_name}" already exists`, 400);
     }
+    const categoryId = uuidv4();
     const payload = { ...categoryData, id: categoryId };
     return await categoryRepo.createCategoryRepo(payload);
 };

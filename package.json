@@ -7,7 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "seed:headadmin": "node seed/headAdmin.seed.js"
+    "seed:branch": "node seed/branch.seed.js",
+    "seed:product": "node seed/product.seed.js",
+    "seed:categoryBrand": "node seed/categoryBrand.seed.js",
+    "seed:headadmin": "node seed/headAdmin.seed.js",
+    "seed:productdata": "node seed/categoryBrand.seed.js && node seed/branch.seed.js && node seed/product.seed.js",
+    "seed:all": "node seed/categoryBrand.seed.js && node seed/branch.seed.js && node seed/headAdmin.seed.js && node seed/product.seed.js"
   },
   "keywords": [],
   "author": "",

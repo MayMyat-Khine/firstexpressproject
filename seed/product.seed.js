@@ -5,8 +5,14 @@ import mongoose from "mongoose";
 import { STOCK_NAMESPACE } from "../src/config/constants.js";
 import { Stock } from "../src/mongoose/schemas/stock.js";
 import { v5 as uuidv5 } from "uuid";
+import { branches } from "./branch.seed.js";
+import { categories } from "./category.seed.js";
+import { brands } from "./brand.seed.js";
+import { Branch } from "../src/mongoose/schemas/branch.js";
+import { Category } from "../src/mongoose/schemas/category.js";
+import { Brand } from "../src/mongoose/schemas/brand.js";
 
-export const products = [
+const rawProducts = [
     {
         id: randomUUID(),
         product_name: "Coca Cola",
@@ -776,26 +782,17 @@ export const products = [
     }
 ];
 
+const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const getRandomBranches = () => [...branches].sort(() => 0.5 - Math.random()).slice(0, 1 + Math.floor(Math.random() * 2)).map((b) => b.id);
 
-const seedProducts = async () => {
-    try {
-        await mongoose.connect(env.MONGO_URI);
+export const products = rawProducts.map((p) => ({
+    ...p,
+    branch_id: getRandomBranches(),
+    category_id: getRandom(categories).id,
+    brand_id: getRandom(brands).id,
+}));
 
-        await Product.deleteMany({});
-        await Stock.deleteMany({});
-
-        await Product.insertMany(products);
-
-        await Stock.insertMany(stockData);
-        console.log("Products seeded successfully");
-
-        await mongoose.disconnect();
-    } catch (error) {
-        console.error("Product seeding failed:", error);
-        process.exit(1);
-    }
-};
-
+const getSeedProducts = () => products;
 
 const initialStocks = {
     "DR-001:O-001": 10,
@@ -816,17 +813,49 @@ const getInitialStock = (productCode, branchId) => {
     return initialStocks[`${productCode}:${branchId}`] ?? 0;
 };
 
-const stockData = products.flatMap((product) =>
-    product.branch_id.map((branchId) => ({
-        id: uuidv5(
-            `${product.code}:${branchId}`,
-            STOCK_NAMESPACE
-        ),
-        product_id: product.id,
-        branch_id: branchId,
-        stock: getInitialStock(product.code, branchId),
-        low_stock: 10
-    }))
-);
+const seedProducts = async () => {
+    try {
+        await mongoose.connect(env.MONGO_URI);
+
+        // Seed Branch, Category, Brand first (real data)
+        await Branch.deleteMany({});
+        await Branch.insertMany(branches);
+        console.log(`Branches seeded: ${branches.length}`);
+
+        await Category.deleteMany({});
+        await Category.insertMany(categories);
+        console.log(`Categories seeded: ${categories.length} (${categories.map((c) => c.category_name).join(", ")})`);
+
+        await Brand.deleteMany({});
+        await Brand.insertMany(brands);
+        console.log(`Brands seeded: ${brands.length} (${brands.map((b) => b.brand_name).join(", ")})`);
+
+        await Product.deleteMany({});
+        await Stock.deleteMany({});
+
+        const seedProductsList = getSeedProducts();
+        await Product.insertMany(seedProductsList);
+        console.log(`Products seeded: ${seedProductsList.length} with random brand/category/branch`);
+
+        const stockData = seedProductsList.flatMap((product) =>
+            product.branch_id.map((branchId) => ({
+                id: uuidv5(`${product.code}:${branchId}`, STOCK_NAMESPACE),
+                product_id: product.id,
+                branch_id: branchId,
+                stock: getInitialStock(product.code, branchId),
+                low_stock: 10,
+            }))
+        );
+        await Stock.insertMany(stockData);
+        console.log(`Stocks seeded: ${stockData.length}`);
+
+        console.log("All seeders completed successfully");
+
+        await mongoose.disconnect();
+    } catch (error) {
+        console.error("Seeding failed:", error);
+        process.exit(1);
+    }
+};
 
 seedProducts();

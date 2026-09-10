@@ -35,7 +35,9 @@ const ProductSchema = mongoose.Schema({
         required: true,
     },
     "price": [
+
         {
+            _id: false,
             amount: {
                 type: Number,
                 required: true,

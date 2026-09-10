@@ -1,15 +1,14 @@
-import { v5 as uuidv5 } from "uuid";
-import { BRAND_NAMESPACE } from "../config/constants.js";
+import { v4 as uuidv4 } from "uuid";
 import * as brandRepo from "../repositories/brand.repository.js";
+import { Brand } from "../mongoose/schemas/brand.js";
 import AppErrors from "../utils/appErrors.js";
 
 export const createBrand = async (brandData) => {
-    const brandKey = brandData.brand_name;
-    const brandId = uuidv5(brandKey, BRAND_NAMESPACE);
-    const existing = await brandRepo.findBrandByIdRepo(brandId);
+    const existing = await Brand.findOne({ brand_name: brandData.brand_name });
     if (existing) {
         throw new AppErrors(`Brand "${brandData.brand_name}" already exists`, 400);
     }
+    const brandId = uuidv4();
     const payload = { ...brandData, id: brandId };
     return await brandRepo.createBrandRepo(payload);
 };
