@@ -413,6 +413,16 @@ export const getProductsPaginationValidationSchema = {
         isString: true,
         trim: true
     },
+    categoryId: {
+        optional: true,
+        isString: true,
+        trim: true
+    },
+    brandId: {
+        optional: true,
+        isString: true,
+        trim: true
+    },
     customerId: {
         optional: true,
         isString: true,

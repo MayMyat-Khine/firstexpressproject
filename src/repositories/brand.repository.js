@@ -40,3 +40,14 @@ export const updateBrandRepo = async (id, brandData) => {
 export const deleteBrandRepo = async (id) => {
     return await Brand.findOneAndUpdate({ id, isDelete: { $ne: true } }, { isDelete: true }, { new: true });
 };
+
+export const searchBrandIdsRepo = async (search) => {
+    const regex = { $regex: search, $options: "i" };
+
+    const brands = await Brand.find({
+        brand_name: regex,
+        isDelete: { $ne: true },
+    }).select("id");
+
+    return brands.map(brand => brand.id);
+};

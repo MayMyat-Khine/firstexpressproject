@@ -1,8 +1,8 @@
 import { Product } from '../mongoose/schemas/product.js';
 import mongoose from "mongoose";
 
-export const getProductsOnBranchRepo = async ({ branchId, page, limit, search }) => {
-    console.log(`Product Repo ${branchId}: ${page} : ${limit} : ${search}`)
+export const getProductsOnBranchRepo = async ({ branchId, page, limit, search, categoryId, brandId }) => {
+    console.log(`Product Repo ${branchId}: ${page} : ${limit} : ${search} | category:${categoryId} brand:${brandId}`)
     const filter = {};
 
     if (search) {
@@ -14,6 +14,12 @@ export const getProductsOnBranchRepo = async ({ branchId, page, limit, search })
 
     if (branchId) {
         filter.branch_id = branchId
+    }
+    if (categoryId) {
+        filter.category_id = categoryId
+    }
+    if (brandId) {
+        filter.brand_id = brandId
     }
 
     const total = await Product.countDocuments(filter);
@@ -75,11 +81,17 @@ export const getProductOnBranchByProductIdRepo = async (branchId, productId) => 
 
 export const getProductsRepo = async ({ page,
     limit,
-    search, branchId }) => {
+    search, branchId, categoryId, brandId, categoryIds = [], brandIds = [] }) => {
 
     const filter = {};
     if (branchId) {
         filter.branch_id = branchId
+    }
+    if (categoryId) {
+        filter.category_id = categoryId
+    }
+    if (brandId) {
+        filter.brand_id = brandId
     }
     if (search) {
         const regex = { $regex: search, $options: "i" };
@@ -87,6 +99,8 @@ export const getProductsRepo = async ({ page,
         filter.$or = [
             { product_name: regex },
             { code: regex },
+            { category_id: { $in: categoryIds } },
+            { brand_id: { $in: brandIds } }
         ];
     }
 

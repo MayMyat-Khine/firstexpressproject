@@ -40,3 +40,14 @@ export const updateCategoryRepo = async (id, categoryData) => {
 export const deleteCategoryRepo = async (id) => {
     return await Category.findOneAndUpdate({ id, isDelete: { $ne: true } }, { isDelete: true }, { new: true });
 };
+
+export const searchCategoryIdsRepo = async (search) => {
+    const regex = { $regex: search, $options: "i" };
+
+    const categories = await Category.find({
+        category_name: regex,
+        isDelete: { $ne: true },
+    }).select("id");
+
+    return categories.map(cate => cate.id);
+};

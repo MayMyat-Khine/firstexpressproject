@@ -5,6 +5,8 @@ import { validateBranches, getBranchesData } from './branch.service.js';
 import { PRODUCT_NAMESPACE, STOCK_NAMESPACE } from "../config/constants.js";
 import { v5 as uuidv5 } from "uuid";
 import * as productRepo from "../repositories/product.repostiory.js";
+import * as categoryRepo from "../repositories/category.repository.js";
+import * as brandRepo from "../repositories/brand.repository.js";
 import AppErrors from '../utils/appErrors.js';
 import { application } from 'express';
 import { deleteFile } from '../utils/file.util.js';
@@ -159,7 +161,18 @@ export const findProductById = async (id) => {
     return foundProduct;
 }
 
-export const getProducts = async ({ page, limit, search, branchId }) => {
+export const getProducts = async ({ page, limit, search, branchId, categoryId, brandId }) => {
+    let categoryIds = [];
+    let brandIds = [];
+
+    if (search && !categoryId) {
+        categoryIds = await categoryRepo.searchCategoryIdsRepo(search);
+    }
+
+    if (search && !brandId) {
+        brandIds = await brandRepo.searchBrandIdsRepo(search);
+    }
+
 
     // const page = Math.max(Number(query.page) || 1, 1);
     const safeLimit = limit != null ? Math.min(Number(limit), 100) : limit;
@@ -168,23 +181,27 @@ export const getProducts = async ({ page, limit, search, branchId }) => {
         page: safePage,
         limit: safeLimit,
         search,
-        branchId
+        branchId,
+        categoryId,
+        brandId,
+        categoryIds,
+        brandIds
     });
 }
 
 export const getProductsByBranch = async (branchIdOrParams, maybeParams) => {
-    let branchId, page, limit, search;
-    if (typeof branchIdOrParams === 'object' && branchIdOrParams !== null && ('branchId' in branchIdOrParams || 'page' in branchIdOrParams || 'limit' in branchIdOrParams || 'search' in branchIdOrParams)) {
-        ({ branchId, page, limit, search } = branchIdOrParams);
+    let branchId, page, limit, search, categoryId, brandId;
+    if (typeof branchIdOrParams === 'object' && branchIdOrParams !== null && ('branchId' in branchIdOrParams || 'page' in branchIdOrParams || 'limit' in branchIdOrParams || 'search' in branchIdOrParams || 'categoryId' in branchIdOrParams || 'brandId' in branchIdOrParams)) {
+        ({ branchId, page, limit, search, categoryId, brandId } = branchIdOrParams);
     } else {
         branchId = branchIdOrParams;
         if (maybeParams && typeof maybeParams === 'object') {
-            ({ page, limit, search } = maybeParams);
+            ({ page, limit, search, categoryId, brandId } = maybeParams);
         }
     }
     const safeLimit = limit != null ? Math.min(Number(limit), 100) : limit;
     const safePage = page != null ? Number(page) : page;
-    const result = await productRepo.getProductsOnBranchRepo({ branchId, page: safePage, limit: safeLimit, search });
+    const result = await productRepo.getProductsOnBranchRepo({ branchId, page: safePage, limit: safeLimit, search, categoryId, brandId });
 
     return result;
 }

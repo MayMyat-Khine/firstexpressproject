@@ -87,6 +87,26 @@ export const productPaths = {
                         type: "string",
                         example: "64f11c2d9b2e4a5f1c0a1234"
                     }
+                },
+                {
+                    name: "categoryId",
+                    in: "query",
+                    required: false,
+                    description: "Filter by category ID",
+                    schema: {
+                        type: "string",
+                        example: "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d"
+                    }
+                },
+                {
+                    name: "brandId",
+                    in: "query",
+                    required: false,
+                    description: "Filter by brand ID",
+                    schema: {
+                        type: "string",
+                        example: "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e"
+                    }
                 }
             ],
             responses: {
@@ -326,6 +346,26 @@ export const productPaths = {
                         type: "string",
                         example: "tint"
                     }
+                },
+                {
+                    name: "categoryId",
+                    in: "query",
+                    required: false,
+                    description: "Filter by category ID",
+                    schema: {
+                        type: "string",
+                        example: "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d"
+                    }
+                },
+                {
+                    name: "brandId",
+                    in: "query",
+                    required: false,
+                    description: "Filter by brand ID",
+                    schema: {
+                        type: "string",
+                        example: "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e"
+                    }
                 }
             ],
             responses: {
@@ -467,6 +507,26 @@ export const productPaths = {
                     schema: {
                         type: "string",
                         example: "tint"
+                    }
+                },
+                {
+                    name: "categoryId",
+                    in: "query",
+                    required: false,
+                    description: "Filter by category ID",
+                    schema: {
+                        type: "string",
+                        example: "a1b2c3d4-5e6f-4a7b-8c9d-9e0f1a2b3c4d"
+                    }
+                },
+                {
+                    name: "brandId",
+                    in: "query",
+                    required: false,
+                    description: "Filter by brand ID",
+                    schema: {
+                        type: "string",
+                        example: "b2c3d4e5-6f7a-4b8c-9d0e-1f2a3b4c5d6e"
                     }
                 }
             ],

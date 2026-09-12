@@ -62,7 +62,9 @@ export async function productsGetByBranchController(req, res, next) {
         const page = validated.page ?? req.query.page;
         const limit = validated.limit ?? req.query.limit;
         const search = validated.search ?? req.query.search;
-        const { products, pagination } = await getProductsByBranch({ branchId, page, limit, search });
+        const categoryId = validated.categoryId ?? req.query.categoryId;
+        const brandId = validated.brandId ?? req.query.brandId;
+        const { products, pagination } = await getProductsByBranch({ branchId, page, limit, search, categoryId, brandId });
         console.log(JSON.stringify(products, null, 2));
         return res.status(200).send({ success: true, body: products, pagination });
     } catch (error) {
