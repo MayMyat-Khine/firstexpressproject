@@ -45,6 +45,47 @@ export const RefreshTokenRequestSchema = {
     }
 };
 
+export const SendOTPRequestSchema = {
+    type: "object",
+    required: ["email"],
+    properties: {
+        email: {
+            type: "string",
+            format: "email",
+            description: "Email to send OTP to",
+            example: "user@example.com"
+        },
+        purpose: {
+            type: "string",
+            description: "Purpose of OTP",
+            enum: ["REGISTER", "FORGOT_PASSWORD"],
+            example: "REGISTER"
+        }
+    }
+};
+
+export const VerifyOTPRequestSchema = {
+    type: "object",
+    required: ["email", "otp"],
+    properties: {
+        email: {
+            type: "string",
+            format: "email",
+            example: "user@example.com"
+        },
+        otp: {
+            type: "string",
+            description: "6-digit OTP code",
+            example: "123456"
+        },
+        purpose: {
+            type: "string",
+            enum: ["REGISTER", "FORGOT_PASSWORD"],
+            example: "REGISTER"
+        }
+    }
+};
+
 export const CustomerAuthResponseSchema = {
     type: "object",
     properties: {

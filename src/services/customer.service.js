@@ -7,13 +7,16 @@ import { saveRefreshToken } from "./auth.service.js";
 import { hashPassword } from "../utils/password.util.js";
 import AppErrors from "../utils/appErrors.js";
 import { getDialCodeByCountryId } from "./countries.service.js";
+import { otpVerify } from "./otp.service.js";
 
 export const createCustomer = async (registerData) => {
     try {
+        console.log("Customer Data", registerData)
+        await otpVerify(registerData.email, registerData.otp, registerData.purpose);
         const hashedPassword = await bcrypt.hash(registerData.password, 10);
         const dialCode = await getDialCodeByCountryId(registerData.region);
         const phoneWithRegionId = dialCode.dialCode + registerData.phone_number
-        const savedCustomer = await customerRepo.createCustomerRepo({ ...registerData, id: uuidv4(), password: hashedPassword, phone_number: phoneWithRegionId });
+        const savedCustomer = await customerRepo.createCustomerRepo({ ...registerData, id: uuidv4(), password: hashedPassword, phone_number: phoneWithRegionId, isEmailVerified: true });
         const token = generateToken({ id: savedCustomer.id })
         const refreshToken = generateRefreshToken({ id: savedCustomer.id, type: "CUSTOMER" })
         await saveRefreshToken({ accountId: savedCustomer.id, accountType: "CUSTOMER", refreshToken: refreshToken });

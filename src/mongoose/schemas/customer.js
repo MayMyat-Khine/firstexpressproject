@@ -22,15 +22,26 @@ const CustomerSchema = mongoose.Schema({
     "password": {
         type: mongoose.Schema.Types.String,
         required: true,
-        minlenght: 6
+        // minlenght: 6
     },
     "phone_number": {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        optional: true
+    },
+    "email": {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    "isEmailVerified": {
+        type: Boolean,
+        default: false,
     },
 
-
+}, {
+    timestamps: true
 })
 
 CustomerSchema.set("toJSON", schemaTransform);

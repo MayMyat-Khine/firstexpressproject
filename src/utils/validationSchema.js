@@ -116,6 +116,17 @@ export const createCustomerValidationScheme = {
             errorMessage: "Region must not be empty"
         },
     },
+    email: {
+        in: ["body"],
+        isEmail: {
+            errorMessage: "Email must be valid"
+        },
+        notEmpty: {
+            errorMessage: "Email must not be empty"
+        },
+        trim: true,
+        normalizeEmail: true
+    },
     phone_number: {
         in: ["body"],
         isString: {
@@ -140,6 +151,35 @@ export const createCustomerValidationScheme = {
             errorMessage: "Password must be at least 6 characters"
         }
     },
+    otp: {
+        in: ["body"],
+        isString: {
+            errorMessage: "OTP Must be String"
+        },
+        notEmpty: {
+            errorMessage: "OTP not be Empty"
+        },
+        isLength: {
+            options: {
+                min: 6
+            },
+            errorMessage: "OTP must be at least 6 characters"
+        }
+    },
+    purpose: {
+        in: ["body"],
+        isString: {
+            errorMessage: "Purpose Must be String"
+        },
+        notEmpty: {
+            errorMessage: "Purpose not be Empty"
+        },
+        isIn: {
+            options: [["REGISTER", "FORGOT_PASSWORD"]],
+            errorMessage: "Purpose must be REGISTER or FORGOT_PASSWORD",
+        },
+
+    }
 }
 
 export const updateCustomerValidationScheme = {

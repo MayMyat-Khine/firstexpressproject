@@ -26,6 +26,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.0",
     "multer": "^2.2.0",
+    "nodemailer": "^10.0.9",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0",

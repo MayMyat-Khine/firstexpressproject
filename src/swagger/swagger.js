@@ -15,7 +15,7 @@ import { currencyRatePaths } from "./paths/currency_rate.swagger.js";
 import { categoryPaths } from "./paths/category.swagger.js";
 import { brandPaths } from "./paths/brand.swagger.js";
 import { ProductCreateRequestSchema, ProductSchema, ProductUpdateRequestSchema, PricePairSchema } from "./schemas/product.schema.js";
-import { CustomerAuthResponseSchema, CustomerLoginRequestSchema, RefreshTokenRequestSchema, UserAuthResponseSchema, UserLoginRequestSchema } from "./schemas/auth.schema.js";
+import { CustomerAuthResponseSchema, CustomerLoginRequestSchema, RefreshTokenRequestSchema, UserAuthResponseSchema, UserLoginRequestSchema, SendOTPRequestSchema, VerifyOTPRequestSchema } from "./schemas/auth.schema.js";
 import { BranchCreateRequestSchema, BranchSchema, BranchUpdateRequestSchema } from "./schemas/branch.schema.js";
 import { CustomerCreateRequestSchema, CustomerSchema } from "./schemas/customer.schema.js";
 import { OrderCreateRequestSchema, OrderSchema, OrderUpdateRequestSchema } from "./schemas/order.schema.js";
@@ -77,6 +77,8 @@ const options = {
                 CustomerLoginRequest: CustomerLoginRequestSchema,
                 UserLoginRequest: UserLoginRequestSchema,
                 RefreshTokenRequest: RefreshTokenRequestSchema,
+                SendOTPRequest: SendOTPRequestSchema,
+                VerifyOTPRequest: VerifyOTPRequestSchema,
                 CustomerAuthResponse: CustomerAuthResponseSchema,
                 UserAuthResponse: UserAuthResponseSchema,
                 Branch: BranchSchema,

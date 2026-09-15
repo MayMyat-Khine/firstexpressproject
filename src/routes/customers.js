@@ -32,4 +32,5 @@ router.patch("/customer",
 
 router.delete('/customer/:id', deleteCustomerController)
 
+
 export default router;

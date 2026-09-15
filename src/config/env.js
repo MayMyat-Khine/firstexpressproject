@@ -49,7 +49,9 @@ const envSchema = z.object({
 
     ACCESS_TOKEN_EXPIRES: z.string(),
     REFRESH_TOKEN_EXPIRES: z.string(),
-    API_VERSION: z.string()
+    API_VERSION: z.string(),
+    EMAIL: z.email(),
+    EMAIL_PASSWORD: z.string().min(16),
 
 });
 
