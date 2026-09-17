@@ -22,6 +22,22 @@ export async function findCustomerByPhone(phone) {
 
 }
 
+export async function findCustomerByEmail(email) {
+
+    return await Customer.findOne({
+        email: email
+    });
+
+}
+export async function findCustomerByEmailPhoneRepo(email, phone) {
+
+    return await Customer.findOne({
+        email: email,
+        phone_number: phone
+    });
+
+}
+
 
 export const deleteCustomerRepo = async (id) => {
     const deletedCustomer = await Customer.findOneAndDelete({ id: id });
@@ -36,4 +52,13 @@ export const updateCustomerRepo = async (id, customerData) => {
         { $set: customerData }, { new: true });
 
     return updatedCustomer;
+}
+
+export const updatePassword = async (email, password) => {
+    const updateCustomer = await Customer.findOneAndUpdate(
+        { email: email },
+        { $set: { password: password } },
+        { new: true }
+    )
+    return updateCustomer;
 }

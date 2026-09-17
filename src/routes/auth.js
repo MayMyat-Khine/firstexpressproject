@@ -2,7 +2,7 @@ import { Router } from "express"
 import { validate, validateAllowedFields, validatePatchBody } from "../middlewares/validate.middleware.js";
 import { loginCustomerValidaionSchema, loginUserValidaionSchema, refreshTokenValidaionSchema } from "../utils/validationSchema.js";
 import { checkSchema } from "express-validator";
-import { loginCustomerController, loginUserController, refreshTokenController, sendOTP } from "../controllers/auth.controller.js";
+import { loginCustomerController, loginUserController, refreshTokenController, resetPassword, sendOTP, verifyOTP } from "../controllers/auth.controller.js";
 
 const router = Router();
 
@@ -32,6 +32,8 @@ router.post("/verify-email",
     sendOTP
 )
 
+router.post("/verify-otp", verifyOTP)
+router.post("/reset-password", resetPassword)
 // router.post("/verify-email",
 //     sendOTP
 // )

@@ -1,14 +1,28 @@
 import { Otp } from "../mongoose/schemas/otp.js";
 import { generateOTP } from "../utils/otpGenerator.util.js";
-import { sentMailUtil } from "../utils/mail.util.js";
+import { sendMailUtil } from "../utils/mail.util.js";
 import AppErrors from "../utils/appErrors.js";
+import { findCustomerByEmail } from "../repositories/customer.repostiory.js";
 
 
 export async function otpSend(email, purpose) {
 
     try {
-        console.log("email", email)
-        console.log("purpose", purpose)
+
+
+
+        const foundCustomer = await findCustomerByEmail(email)
+
+
+        if (purpose === "FORGET_PASSWORD") {
+
+            if (!foundCustomer) throw new AppErrors("Email Not Found")
+        }
+
+        if (purpose === "REGISTER") {
+            if (foundCustomer) throw new AppErrors("Email Already Exised")
+        }
+
         const otp = generateOTP();
         await Otp.create({
             email,
@@ -17,11 +31,11 @@ export async function otpSend(email, purpose) {
             expiredAt: new Date(Date.now() + 2 * 60 * 1000),
         });
 
-        await sentMailUtil(email, otp);
-
+        await sendMailUtil(email, otp);
+        return otp;
     } catch (error) {
         console.log(error)
-        return new AppErrors(error);
+        throw new AppErrors(error);
     }
 
 }

@@ -1,7 +1,9 @@
 
+import { success } from "zod";
 import { loginCustomer, loginUser, refreshToken } from "../services/auth.service.js";
-import { otpSend } from "../services/otp.service.js";
+import { otpSend, otpVerify } from "../services/otp.service.js";
 import { generateOTP } from "../utils/otpGenerator.util.js";
+import { updatePassword } from "../services/customer.service.js";
 
 export async function loginCustomerController(req, res, next) {
     try {
@@ -36,8 +38,26 @@ export async function refreshTokenController(req, res, next) {
 export async function sendOTP(req, res, next) {
     try {
 
-        await otpSend(req.body.email, req.body.purpose);
-        res.json({ success: true, message: "Already send OTP to your mail, please check it." })
+        const otp = await otpSend(req.body.email, req.body.purpose);
+        res.json({ success: true, message: `Used this OTP for now ${otp} \n Already send OTP to your mail, please check it.` })
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function verifyOTP(req, res, next) {
+    try {
+
+        await otpVerify(req.body.email, req.body.otp, req.body.purpose)
+        res.json({ success: true })
+    } catch (error) {
+        next(error);
+    }
+}
+export async function resetPassword(req, res, next) {
+    try {
+        await updatePassword(req.body.email, req.body.password)
+        res.json({ success: true, message: "Successfully update your password" })
     } catch (error) {
         next(error);
     }

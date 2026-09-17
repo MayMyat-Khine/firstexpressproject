@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
     },
 })
 
-export async function sentMailUtil(email, otp) {
+export async function sendMailUtil(email, otp) {
     await transporter.sendMail({
         from: env.EMAIL,
         to: email,

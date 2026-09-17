@@ -11,11 +11,13 @@ import { otpVerify } from "./otp.service.js";
 
 export const createCustomer = async (registerData) => {
     try {
-        console.log("Customer Data", registerData)
+
+
         await otpVerify(registerData.email, registerData.otp, registerData.purpose);
         const hashedPassword = await bcrypt.hash(registerData.password, 10);
         const dialCode = await getDialCodeByCountryId(registerData.region);
         const phoneWithRegionId = dialCode.dialCode + registerData.phone_number
+        await findCustomeByPhone(phoneWithRegionId);
         const savedCustomer = await customerRepo.createCustomerRepo({ ...registerData, id: uuidv4(), password: hashedPassword, phone_number: phoneWithRegionId, isEmailVerified: true });
         const token = generateToken({ id: savedCustomer.id })
         const refreshToken = generateRefreshToken({ id: savedCustomer.id, type: "CUSTOMER" })
@@ -26,7 +28,8 @@ export const createCustomer = async (registerData) => {
             customer: savedCustomer
         }
     } catch (error) {
-        throw error;
+        console.log("Error", error)
+        throw new AppErrors(error);
     }
 };
 
@@ -42,6 +45,16 @@ export const deleteCustomer = async (id) => {
     return await customerRepo.deleteCustomerRepo(id);
 }
 
+
+export const findCustomeByPhone = async (phone) => {
+
+    const hasCustomer = await customerRepo.findCustomerByPhone(phone);
+
+    if (hasCustomer) {
+        throw new AppErrors("This phone is already used")
+    }
+    return hasCustomer;
+}
 
 
 export const updateCustomer = async (customer, customerData) => {
@@ -64,4 +77,9 @@ export const updateCustomer = async (customer, customerData) => {
         return await customerRepo.updateCustomerRepo(customer.id, { ...customerData, password: hashPassword });
     }
     return await customerRepo.updateCustomerRepo(customer.id, customerData);
+}
+
+export const updatePassword = async (email, password) => {
+    const hashPassword = await bcrypt.hash(password, 10);
+    return await customerRepo.updatePassword(email, hashPassword);
 }
